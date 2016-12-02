@@ -1,10 +1,3 @@
-# [![bitmovin](https://cloudfront-prod.bitmovin.com/wp-content/themes/Bitmovin-V-0.1/images/logo3.png)](http://www.bitmovin.com)
-Golang-Client which enables you to seamlessly integrate the Bitmovin API into your existing projects
-
-Example
------
-The following example creates a simple transcoding job and transfers it to a GCS output location ([CreateSimpleEncoding.php](https://github.com/bitmovin/bitmovin-php/tree/master/examples/CreateSimpleEncoding.php)):
-```go
 package main
 
 import (
@@ -285,7 +278,3 @@ func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
 		fmt.Println("api error")
 	}
 }
-
-```
-
-For more examples go to our [example page](https://github.com/bitmovin/bitmovin-go/tree/master/examples/).

@@ -1,0 +1,225 @@
+package models
+
+import "github.com/bitmovin/bitmovin-go/bitmovintypes"
+
+type AsperaInput struct {
+	ID           string                 `json:"id,omitempty"`
+	Name         string                 `json:"name,omitempty"`
+	Description  string                 `json:"description,omitempty"`
+	CustomData   map[string]interface{} `json:"customData,omitempty"`
+	Host         string                 `json:"host,omitempty"`
+	UserName     string                 `json:"username,omitempty"`
+	Password     string                 `json:"password,omitempty"`
+	MinBandwidth string                 `json:"minBandwidth,omitempty"`
+	MaxBandwidth string                 `json:"maxBandwidth,omitempty"`
+}
+
+type AzureInput struct {
+	ID          string                 `json:"id,omitempty"`
+	Name        string                 `json:"name,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	AccountName string                 `json:"accountName,omitempty"`
+	AccountKey  string                 `json:"accountKey,omitempty"`
+	Container   string                 `json:"container,omitempty"`
+}
+
+type FTPInput struct {
+	ID          string                 `json:"id,omitempty"`
+	Name        string                 `json:"name,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        string                 `json:"host,omitempty"`
+	UserName    string                 `json:"username,omitempty"`
+	Password    string                 `json:"password,omitempty"`
+	Passive     bool                   `json:"passive,omitempty"`
+}
+
+type GCSInput struct {
+	ID          string                          `json:"id,omitempty"`
+	Name        string                          `json:"name,omitempty"`
+	Description string                          `json:"description,omitempty"`
+	CustomData  map[string]interface{}          `json:"customData,omitempty"`
+	AccessKey   bool                            `json:"accessKey,omitempty"`
+	SecretKey   bool                            `json:"secretKey,omitempty"`
+	BucketName  bool                            `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion,omitempty"`
+}
+
+type HTTPInput struct {
+	ID          string                 `json:"id,omitempty"`
+	Name        string                 `json:"name,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        string                 `json:"host,omitempty"`
+	UserName    string                 `json:"username,omitempty"`
+	Password    string                 `json:"password,omitempty"`
+}
+
+type HTTPInputItem struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Host        string `json:"host,omitempty"`
+	CreatedAt   string `json:"createdAt,omitempty"`
+	UpdatedAt   string `json:"updatedAt,omitempty"`
+}
+
+type HTTPInputData struct {
+	//Success fields
+	Result   HTTPInputItem `json:"result,omitempty"`
+	Messages []Message     `json:"messages,omitempty"`
+
+	//Error fields
+	Code             int64    `json:"code,omitempty"`
+	Message          string   `json:"message,omitempty"`
+	DeveloperMessage string   `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type HTTPInputResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      HTTPInputData                `json:"data,omitempty"`
+}
+
+type HTTPInputListResult struct {
+	TotalCount int64           `json:"totalCount,omitempty"`
+	Previous   string          `json:"previous,omitempty"`
+	Next       string          `json:"next,omitempty"`
+	Items      []HTTPInputItem `json:"items,omitempty"`
+}
+
+type HTTPInputListData struct {
+	Result S3InputListResult `json:"result,omitempty"`
+}
+
+type HTTPInputListResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
+}
+
+type HTTPSInput struct {
+	ID          string                 `json:"id,omitempty"`
+	Name        string                 `json:"name,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        string                 `json:"host,omitempty"`
+	UserName    string                 `json:"username,omitempty"`
+	Password    string                 `json:"password,omitempty"`
+}
+
+type HTTPSInputItem struct {
+	ID          string `json:"id,omitempty"`
+	Name        string `json:"name,omitempty"`
+	Description string `json:"description,omitempty"`
+	Host        string `json:"host,omitempty"`
+	CreatedAt   string `json:"createdAt,omitempty"`
+	UpdatedAt   string `json:"updatedAt,omitempty"`
+}
+
+type HTTPSInputData struct {
+	//Success fields
+	Result   HTTPSInputItem `json:"result,omitempty"`
+	Messages []Message      `json:"messages,omitempty"`
+
+	//Error fields
+	Code             int64    `json:"code,omitempty"`
+	Message          string   `json:"message,omitempty"`
+	DeveloperMessage string   `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type HTTPSInputResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      HTTPSInputData               `json:"data,omitempty"`
+}
+
+type HTTPSInputListResult struct {
+	TotalCount int64            `json:"totalCount,omitempty"`
+	Previous   string           `json:"previous,omitempty"`
+	Next       string           `json:"next,omitempty"`
+	Items      []HTTPSInputItem `json:"items,omitempty"`
+}
+
+type HTTPSInputListData struct {
+	Result S3InputListResult `json:"result,omitempty"`
+}
+
+type HTTPSInputListResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
+}
+
+type S3Input struct {
+	ID          string                       `json:"id,omitempty"`
+	Name        string                       `json:"name,omitempty"`
+	Description string                       `json:"description,omitempty"`
+	CustomData  map[string]interface{}       `json:"customData,omitempty"`
+	AccessKey   string                       `json:"accessKey,omitempty"`
+	SecretKey   string                       `json:"secretKey,omitempty"`
+	BucketName  string                       `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
+}
+
+type S3InputItem struct {
+	ID          string                       `json:"id,omitempty"`
+	Name        string                       `json:"name,omitempty"`
+	Description string                       `json:"description,omitempty"`
+	BucketName  string                       `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
+	CreatedAt   string                       `json:"createdAt,omitempty"`
+	UpdatedAt   string                       `json:"updatedAt,omitempty"`
+}
+
+type S3InputData struct {
+	//Success fields
+	Result   S3InputItem `json:"result,omitempty"`
+	Messages []Message   `json:"messages,omitempty"`
+
+	//Error fields
+	Code             int64    `json:"code,omitempty"`
+	Message          string   `json:"message,omitempty"`
+	DeveloperMessage string   `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type S3InputResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      S3InputData                  `json:"data,omitempty"`
+}
+
+type S3InputListResult struct {
+	TotalCount int64         `json:"totalCount,omitempty"`
+	Previous   string        `json:"previous,omitempty"`
+	Next       string        `json:"next,omitempty"`
+	Items      []S3InputItem `json:"items,omitempty"`
+}
+
+type S3InputListData struct {
+	Result S3InputListResult `json:"result,omitempty"`
+}
+
+type S3InputListResponse struct {
+	RequestID string                       `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
+}
+
+type SFTPInput struct {
+	ID          string                 `json:"id,omitempty"`
+	Name        string                 `json:"name,omitempty"`
+	Description string                 `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        string                 `json:"host,omitempty"`
+	UserName    string                 `json:"username,omitempty"`
+	Password    string                 `json:"password,omitempty"`
+	Passive     bool                   `json:"passive,omitempty"`
+}
