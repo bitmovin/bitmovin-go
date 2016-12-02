@@ -3,7 +3,7 @@ Golang-Client which enables you to seamlessly integrate the Bitmovin API into yo
 
 Example
 -----
-The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/tree/master/examples/create_simple_encoding.php)):
+The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/tree/master/examples/create_simple_encoding.go)):
 ```go
 package main
 
