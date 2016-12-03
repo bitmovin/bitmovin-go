@@ -1,6 +1,13 @@
 # [![bitmovin](https://cloudfront-prod.bitmovin.com/wp-content/themes/Bitmovin-V-0.1/images/logo3.png)](http://www.bitmovin.com)
 Golang-Client which enables you to seamlessly integrate the Bitmovin API into your existing projects
 
+Installation 
+------------
+ 
+Run `go get github.com/bitmovin/bitmovin-go`
+
+Also feel free to use your favorite go dependency manager such as glide.
+
 Example
 -----
 The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/tree/master/examples/create_simple_encoding.go)):
