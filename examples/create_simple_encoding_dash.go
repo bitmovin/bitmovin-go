@@ -220,7 +220,7 @@ func CreateDash() {
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
 		MuxingID:    videoMuxing1080pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
-		SegmentPath: StringToPtr("golang_test/video/1080p"),
+		SegmentPath: StringToPtr("../video/1080p"),
 	}
 	fmp4Rep1080Resp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep1080)
 	ErrorHandler(fmp4Rep1080Resp.Status, err)
@@ -229,7 +229,7 @@ func CreateDash() {
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
 		MuxingID:    videoMuxing720pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
-		SegmentPath: StringToPtr("golang_test/video/720p"),
+		SegmentPath: StringToPtr("../video/720p"),
 	}
 	fmp4Rep720Resp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep720)
 	ErrorHandler(fmp4Rep720Resp.Status, err)
@@ -238,7 +238,7 @@ func CreateDash() {
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
 		MuxingID:    audioMuxingResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
-		SegmentPath: StringToPtr("golang_test/audio"),
+		SegmentPath: StringToPtr("../audio"),
 	}
 	fmp4RepAudioResp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, fmp4RepAudio)
 	ErrorHandler(fmp4RepAudioResp.Status, err)

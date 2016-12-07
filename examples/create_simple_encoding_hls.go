@@ -209,7 +209,7 @@ func CreateHLS() {
 		Autoselect:      BoolToPtr(false),
 		Forced:          BoolToPtr(false),
 		Characteristics: []string{"public.accessibility.describes-video"},
-		SegmentPath:     StringToPtr("golang_hls_test/audio"),
+		SegmentPath:     StringToPtr("../audio"),
 		EncodingID:      encodingResp.Data.Result.ID,
 		StreamID:        aacStreamResp.Data.Result.ID,
 		MuxingID:        audioMuxingResp.Data.Result.ID,
@@ -219,7 +219,7 @@ func CreateHLS() {
 
 	video1080pStreamInfo := &models.StreamInfo{
 		Audio:       StringToPtr("audio_group"),
-		SegmentPath: StringToPtr("golang_hls_test/video/1080p"),
+		SegmentPath: StringToPtr("../video/1080p"),
 		URI:         StringToPtr("video_hi.m3u8"),
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream1080pResp.Data.Result.ID,
@@ -230,7 +230,7 @@ func CreateHLS() {
 
 	video720pStreamInfo := &models.StreamInfo{
 		Audio:       StringToPtr("audio_group"),
-		SegmentPath: StringToPtr("golang_hls_test/video/720p"),
+		SegmentPath: StringToPtr("../video/720p"),
 		URI:         StringToPtr("video_lo.m3u8"),
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream720pResp.Data.Result.ID,
