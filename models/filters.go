@@ -5,32 +5,32 @@ import (
 )
 
 type Filter struct {
-	ID          string                 `json:"id"`
-	Name        string                 `json:"name"`
-	Description string                 `json:"description"`
+	ID          *string                `json:"id"`
+	Name        *string                `json:"name"`
+	Description *string                `json:"description"`
 	CustomData  map[string]interface{} `json:"customData"`
 }
 
 type WatermarkFilter struct {
 	Filter
-	Image  string `json:"image"`
-	Left   int64  `json:"left"`
-	Right  int64  `json:"right"`
-	Top    int64  `json:"top"`
-	Bottom int64  `json:"bottom"`
+	Image  *string `json:"image"`
+	Left   *int64  `json:"left"`
+	Right  *int64  `json:"right"`
+	Top    *int64  `json:"top"`
+	Bottom *int64  `json:"bottom"`
 }
 
 type CropFilter struct {
 	Filter
-	Left   int64 `json:"left"`
-	Right  int64 `json:"right"`
-	Top    int64 `json:"top"`
-	Bottom int64 `json:"bottom"`
+	Left   *int64 `json:"left"`
+	Right  *int64 `json:"right"`
+	Top    *int64 `json:"top"`
+	Bottom *int64 `json:"bottom"`
 }
 
 type RotationFilter struct {
 	Filter
-	Rotation int64 `json:"rotation"`
+	Rotation *int64 `json:"rotation"`
 }
 
 type DeinterlacingFilter struct {
