@@ -10,6 +10,14 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func TestNewRestService(t *testing.T) {
+	b := bitmovin.NewBitmovinDefaultTimeout("apikey", "someURL")
+	r := NewRestService(b)
+	if r == nil {
+		t.Errorf("RestService should not be created nil")
+	}
+}
+
 func TestCreatePasses(t *testing.T) {
 	rawInput, err := ioutil.ReadFile("fixtures/h264_codec_configuration_create.json")
 	if err != nil {
@@ -89,20 +97,20 @@ func TestCreateRetrieveDeleteFailsOn404(t *testing.T) {
 func handlers() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/create/path/passes", respondWithFileHandler("fixtures/h264_codec_configuration_create_response.json", http.StatusCreated)).Methods("POST")
-	r.HandleFunc("/retrieve/path/passes/{id}", respondWithFileHandler("fixtures/h264_codec_configuration_retrieve_response.json", http.StatusOK)).Methods("GET")
-	r.HandleFunc("/delete/path/passes/{id}", respondWithFileHandler("fixtures/h264_codec_configuration_delete_response.json", http.StatusOK)).Methods("DELETE")
+	r.HandleFunc("/create/path/passes", RespondWithFileHandler("fixtures/h264_codec_configuration_create_response.json", http.StatusCreated)).Methods("POST")
+	r.HandleFunc("/retrieve/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_retrieve_response.json", http.StatusOK)).Methods("GET")
+	r.HandleFunc("/delete/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_delete_response.json", http.StatusOK)).Methods("DELETE")
 
 	return r
 }
 
-func respondWithFileHandler(filename string, httpStatus int) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
-		rawResponse, err := ioutil.ReadFile("fixtures/h264_codec_configuration_create_response.json")
-		if err != nil {
-			panic("couldn't load fixture")
-		}
-		w.WriteHeader(httpStatus)
-		w.Write(rawResponse)
-	}
-}
+// func respondWithFileHandler(filename string, httpStatus int) func(http.ResponseWriter, *http.Request) {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		rawResponse, err := ioutil.ReadFile("fixtures/h264_codec_configuration_create_response.json")
+// 		if err != nil {
+// 			panic("couldn't load fixture")
+// 		}
+// 		w.WriteHeader(httpStatus)
+// 		w.Write(rawResponse)
+// 	}
+// }
