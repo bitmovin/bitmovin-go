@@ -1,0 +1,35 @@
+{
+  "requestId": "6d84e126-d10c-4e52-bbfb-bd4c92bc8333",
+  "status": "SUCCESS",
+  "data": {
+    "result": {
+      "name": "iPad",
+      "description": "iPad configuration",
+      "bitrate": 10000000,
+      "rate": 23.97,
+      "profile": "BASELINE",
+      "bFrames": 3,
+      "refFrames": 5,
+      "qpMin": 0,
+      "qpMax": 69,
+      "mvPredictionMode": "SPATIAL",
+      "mvSearchRangeMax": 16,
+      "cabac": true,
+      "maxBitrate": 0,
+      "minBitrate": 0,
+      "bufsize": 0,
+      "minGop": 0,
+      "maxGop": 0,
+      "level": "1",
+      "id": "cb90b80c-8867-4e3b-8479-174aa2843f62"
+    },
+    "messages": [
+      {
+        "date": "2016-06-25T20:09:23.69Z",
+        "id": "cb90b80c-8867-4e3b-8479-174aa2843f62",
+        "type": "INFO",
+        "text": "H264/AVC video codec configuration created successfully"
+      }
+    ]
+  }
+}

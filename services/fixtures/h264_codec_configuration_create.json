@@ -1,0 +1,20 @@
+{
+  "name": "iPad",
+  "description": "iPad configuration",
+  "bitrate": 10000000,
+  "rate": 23.97,
+  "profile": "BASELINE",
+  "bFrames": 3,
+  "refFrames": 5,
+  "qpMin": 0,
+  "qpMax": 69,
+  "mvPredictionMode": "SPATIAL",
+  "mvSearchRangeMax": 16,
+  "cabac": true,
+  "maxBitrate": 0,
+  "minBitrate": 0,
+  "bufsize": 0,
+  "minGop": 0,
+  "maxGop": 0,
+  "level": "1"
+}
