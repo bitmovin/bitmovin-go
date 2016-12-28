@@ -12,7 +12,7 @@ type HTTPSInputService struct {
 }
 
 const (
-	HTTPSInputEndpoint string = "encoding/inputs/https"
+	HTTPSInputEndpoint string = "/encoding/inputs/https"
 )
 
 func NewHTTPSInputService(bitmovin *bitmovin.Bitmovin) *HTTPSInputService {

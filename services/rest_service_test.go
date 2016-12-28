@@ -23,7 +23,7 @@ func TestCreatePasses(t *testing.T) {
 	if err != nil {
 		t.Errorf("couldn't load fixture file")
 	}
-	svr := httptest.NewServer(handlers())
+	svr := httptest.NewServer(restHandlers())
 	b := bitmovin.NewBitmovinDefaultTimeout("apikey", svr.URL)
 	r := NewRestService(b)
 	_, err = r.Create("/create/path/passes", rawInput)
@@ -33,7 +33,7 @@ func TestCreatePasses(t *testing.T) {
 }
 
 func TestRetrievePasses(t *testing.T) {
-	svr := httptest.NewServer(handlers())
+	svr := httptest.NewServer(restHandlers())
 	b := bitmovin.NewBitmovinDefaultTimeout("apikey", svr.URL)
 	r := NewRestService(b)
 	_, err := r.Retrieve("/retrieve/path/passes/thisismyid")
@@ -43,7 +43,7 @@ func TestRetrievePasses(t *testing.T) {
 }
 
 func TestDeletePasses(t *testing.T) {
-	svr := httptest.NewServer(handlers())
+	svr := httptest.NewServer(restHandlers())
 	b := bitmovin.NewBitmovinDefaultTimeout("apikey", svr.URL)
 	r := NewRestService(b)
 	_, err := r.Delete("/retrieve/path/passes/thisismyid")
@@ -94,12 +94,12 @@ func TestCreateRetrieveDeleteFailsOn404(t *testing.T) {
 	}
 }
 
-func handlers() *mux.Router {
+func restHandlers() *mux.Router {
 	r := mux.NewRouter()
 
-	r.HandleFunc("/create/path/passes", RespondWithFileHandler("fixtures/h264_codec_configuration_create_response.json", http.StatusCreated)).Methods("POST")
-	r.HandleFunc("/retrieve/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_retrieve_response.json", http.StatusOK)).Methods("GET")
-	r.HandleFunc("/delete/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_delete_response.json", http.StatusOK)).Methods("DELETE")
+	r.HandleFunc("create/path/passes", RespondWithFileHandler("fixtures/h264_codec_configuration_create_response.json", http.StatusCreated)).Methods("POST")
+	r.HandleFunc("retrieve/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_retrieve_response.json", http.StatusOK)).Methods("GET")
+	r.HandleFunc("delete/path/passes/{id}", RespondWithFileHandler("fixtures/h264_codec_configuration_delete_response.json", http.StatusOK)).Methods("DELETE")
 
 	return r
 }

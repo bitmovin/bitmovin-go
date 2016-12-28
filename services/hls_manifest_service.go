@@ -13,7 +13,7 @@ type HLSManifestService struct {
 }
 
 const (
-	HLSManifestEndpoint string = "encoding/manifests/hls"
+	HLSManifestEndpoint string = "/encoding/manifests/hls"
 )
 
 func NewHLSManifestService(bitmovin *bitmovin.Bitmovin) *HLSManifestService {

@@ -12,7 +12,7 @@ type CodecConfigurationService struct {
 }
 
 const (
-	CodecConfigurationEndpoint string = "configurations"
+	CodecConfigurationEndpoint string = "/configurations"
 )
 
 func NewCodecConfigurationService(bitmovin *bitmovin.Bitmovin) *CodecConfigurationService {

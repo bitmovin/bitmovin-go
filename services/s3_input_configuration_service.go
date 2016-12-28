@@ -12,7 +12,7 @@ type S3InputService struct {
 }
 
 const (
-	S3InputEndpoint string = "encoding/inputs/s3"
+	S3InputEndpoint string = "/encoding/inputs/s3"
 )
 
 func NewS3InputService(bitmovin *bitmovin.Bitmovin) *S3InputService {

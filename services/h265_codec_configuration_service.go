@@ -12,7 +12,7 @@ type H265CodecConfigurationService struct {
 }
 
 const (
-	H265CodecConfigurationEndpoint string = "encoding/configurations/video/h265"
+	H265CodecConfigurationEndpoint string = "/encoding/configurations/video/h265"
 )
 
 func NewH265CodecConfigurationService(bitmovin *bitmovin.Bitmovin) *H265CodecConfigurationService {

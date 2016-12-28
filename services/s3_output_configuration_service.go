@@ -12,7 +12,7 @@ type S3OutputService struct {
 }
 
 const (
-	S3OutputEndpoint string = "encoding/outputs/s3"
+	S3OutputEndpoint string = "/encoding/outputs/s3"
 )
 
 func NewS3OutputService(bitmovin *bitmovin.Bitmovin) *S3OutputService {

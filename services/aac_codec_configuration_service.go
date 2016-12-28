@@ -12,7 +12,7 @@ type AACCodecConfigurationService struct {
 }
 
 const (
-	AACCodecConfigurationEndpoint string = "encoding/configurations/audio/aac"
+	AACCodecConfigurationEndpoint string = "/encoding/configurations/audio/aac"
 )
 
 func NewAACCodecConfigurationService(bitmovin *bitmovin.Bitmovin) *AACCodecConfigurationService {

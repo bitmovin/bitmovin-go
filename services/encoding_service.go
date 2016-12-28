@@ -12,7 +12,7 @@ type EncodingService struct {
 }
 
 const (
-	EncodingEndpoint string = "encoding/encodings"
+	EncodingEndpoint string = "/encoding/encodings"
 )
 
 func NewEncodingService(bitmovin *bitmovin.Bitmovin) *EncodingService {

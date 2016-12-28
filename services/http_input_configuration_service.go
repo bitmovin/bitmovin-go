@@ -12,7 +12,7 @@ type HTTPInputService struct {
 }
 
 const (
-	HTTPInputEndpoint string = "encoding/inputs/http"
+	HTTPInputEndpoint string = "/encoding/inputs/http"
 )
 
 func NewHTTPInputService(bitmovin *bitmovin.Bitmovin) *HTTPInputService {

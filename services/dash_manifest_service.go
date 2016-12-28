@@ -12,7 +12,7 @@ type DashManifestService struct {
 }
 
 const (
-	DashManifestEndpoint string = "encoding/manifests/dash"
+	DashManifestEndpoint string = "/encoding/manifests/dash"
 )
 
 func NewDashManifestService(bitmovin *bitmovin.Bitmovin) *DashManifestService {
