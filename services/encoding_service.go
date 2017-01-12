@@ -315,6 +315,80 @@ func (s *EncodingService) RetrieveTSMuxingCustomData(encodingID string, tsID str
 	return &r, nil
 }
 
+func (s *EncodingService) AddMP4Muxing(encodingID string, a *models.MP4Muxing) (*models.MP4MuxingResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/mp4"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.MP4MuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveMP4Muxing(encodingID string, mp4ID string) (*models.MP4MuxingResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/mp4" + "/" + mp4ID
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.MP4MuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) DeleteMP4Muxing(encodingID string, mp4ID string) (*models.MP4MuxingResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/mp4" + "/" + mp4ID
+	o, err := s.RestService.Delete(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.MP4MuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) ListMP4Muxing(encodingID string, offset int64, limit int64) (*models.MP4MuxingListResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/mp4"
+	o, err := s.RestService.List(path, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.MP4MuxingListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveMP4MuxingCustomData(encodingID string, mp4ID string, offset int64, limit int64) (*models.CustomDataResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/mp4" + "/" + mp4ID
+	o, err := s.RestService.RetrieveCustomData(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CustomDataResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *EncodingService) Start(encodingID string) (*models.StartResponse, error) {
 	path := EncodingEndpoint + "/" + encodingID + "/start"
 	o, err := s.RestService.Create(path, nil)
