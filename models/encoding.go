@@ -213,7 +213,7 @@ type MP4Muxing struct {
 	CustomData       map[string]interface{} `json:"customData,omitempty"`
 	Streams          []StreamItem           `json:"streams,omitempty"`
 	Outputs          []Output               `json:"outputs,omitempty"`
-	FileName         *string                `json:"fileName,omitempty"`
+	Filename         *string                `json:"filename,omitempty"`
 	FragmentDuration *int64                 `json:"fragmentDuration,omitempty"`
 }
 
