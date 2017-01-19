@@ -270,7 +270,7 @@ type StartData struct {
 	Details          []Detail `json:"details,omitempty"`
 }
 
-type StartResponse struct {
+type StartStopResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      StartData                    `json:"data,omitempty"`

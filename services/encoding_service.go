@@ -389,13 +389,28 @@ func (s *EncodingService) RetrieveMP4MuxingCustomData(encodingID string, mp4ID s
 	return &r, nil
 }
 
-func (s *EncodingService) Start(encodingID string) (*models.StartResponse, error) {
+func (s *EncodingService) Start(encodingID string) (*models.StartStopResponse, error) {
 	path := EncodingEndpoint + "/" + encodingID + "/start"
 	o, err := s.RestService.Create(path, nil)
 	if err != nil {
 		return nil, err
 	}
-	var r models.StartResponse
+	var r models.StartStopResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+// Stop and Start use the same model
+func (s *EncodingService) Stop(encodingID string) (*models.StartStopResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/stop"
+	o, err := s.RestService.Create(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
 		return nil, err
