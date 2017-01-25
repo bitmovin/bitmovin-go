@@ -5,10 +5,10 @@ import (
 )
 
 type Encoding struct {
-	ID             *string                       `json:"id,omitempty"`
-	Name           *string                       `json:"name,omitempty"`
-	Description    *string                       `json:"description,omitempty"`
-	CustomData     map[string]interface{}        `json:"customData,omitempty"`
+	ID             *string                      `json:"id,omitempty"`
+	Name           *string                      `json:"name,omitempty"`
+	Description    *string                      `json:"description,omitempty"`
+	CustomData     map[string]interface{}       `json:"customData,omitempty"`
 	EncoderVersion bitmovintypes.EncoderVersion `json:"encoderVersion,omitempty"`
 	CloudRegion    bitmovintypes.CloudRegion    `json:"cloudRegion,omitempty"`
 }
@@ -27,9 +27,9 @@ type EncodingData struct {
 }
 
 type EncodingResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      EncodingData                  `json:"data,omitempty"`
+	Data      EncodingData                 `json:"data,omitempty"`
 }
 
 type EncodingListResult struct {
@@ -44,20 +44,20 @@ type EncodingListData struct {
 }
 
 type EncodingListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      EncodingListData              `json:"data,omitempty"`
+	Data      EncodingListData             `json:"data,omitempty"`
 }
 
 type InputStream struct {
-	InputID       *string                      `json:"inputId,omitempty"`
-	InputPath     *string                      `json:"inputPath,omitempty"`
+	InputID       *string                     `json:"inputId,omitempty"`
+	InputPath     *string                     `json:"inputPath,omitempty"`
 	SelectionMode bitmovintypes.SelectionMode `json:"selectionMode,omitempty"`
-	Position      *int64                       `json:"position,omitempty"`
+	Position      *int64                      `json:"position,omitempty"`
 }
 
 type ACLItem struct {
-	Scope      *string                      `json:"scope,omitempty"`
+	Scope      *string                     `json:"scope,omitempty"`
 	Permission bitmovintypes.ACLPermission `json:"permission,omitempty"`
 }
 
@@ -91,9 +91,9 @@ type StreamData struct {
 }
 
 type StreamResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      StreamData                    `json:"data,omitempty"`
+	Data      StreamData                   `json:"data,omitempty"`
 }
 
 type StreamListResult struct {
@@ -137,9 +137,9 @@ type FMP4MuxingData struct {
 }
 
 type FMP4MuxingResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      FMP4MuxingData                `json:"data,omitempty"`
+	Data      FMP4MuxingData               `json:"data,omitempty"`
 }
 
 type FMP4MuxingListResult struct {
@@ -154,9 +154,9 @@ type FMP4MuxingListData struct {
 }
 
 type FMP4MuxingListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      FMP4MuxingListData            `json:"data,omitempty"`
+	Data      FMP4MuxingListData           `json:"data,omitempty"`
 }
 
 type TSMuxing struct {
@@ -184,9 +184,9 @@ type TSMuxingData struct {
 }
 
 type TSMuxingResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      TSMuxingData                  `json:"data,omitempty"`
+	Data      TSMuxingData                 `json:"data,omitempty"`
 }
 
 type TSMuxingListResult struct {
@@ -201,9 +201,56 @@ type TSMuxingListData struct {
 }
 
 type TSMuxingListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      TSMuxingListData              `json:"data,omitempty"`
+	Data      TSMuxingListData             `json:"data,omitempty"`
+}
+
+type MP4Muxing struct {
+	ID               *string                `json:"id,omitempty"`
+	Name             *string                `json:"name,omitempty"`
+	Description      *string                `json:"description,omitempty"`
+	CustomData       map[string]interface{} `json:"customData,omitempty"`
+	Streams          []StreamItem           `json:"streams,omitempty"`
+	Outputs          []Output               `json:"outputs,omitempty"`
+	Filename         *string                `json:"filename,omitempty"`
+	FragmentDuration *int64                 `json:"fragmentDuration,omitempty"`
+}
+
+type MP4MuxingData struct {
+	//Success fields
+	Result   MP4Muxing `json:"result,omitempty"`
+	Messages []Message `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type MP4MuxingResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      MP4MuxingData                `json:"data,omitempty"`
+}
+
+type MP4MuxingListResult struct {
+	TotalCount *int64      `json:"totalCount,omitempty"`
+	Previous   *string     `json:"previous,omitempty"`
+	Next       *string     `json:"next,omitempty"`
+	Items      []MP4Muxing `json:"items,omitempty"`
+}
+
+type MP4MuxingListData struct {
+	Result MP4MuxingListResult `json:"result,omitempty"`
+}
+
+type MP4MuxingListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      MP4MuxingListData            `json:"data,omitempty"`
 }
 
 type StartResult struct {
@@ -223,10 +270,10 @@ type StartData struct {
 	Details          []Detail `json:"details,omitempty"`
 }
 
-type StartResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+type StartStopResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      StartData                     `json:"data,omitempty"`
+	Data      StartData                    `json:"data,omitempty"`
 }
 
 type Subtask struct {
@@ -258,7 +305,7 @@ type StatusData struct {
 }
 
 type StatusResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      StatusData                    `json:"data,omitempty"`
+	Data      StatusData                   `json:"data,omitempty"`
 }
