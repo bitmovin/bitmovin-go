@@ -29,6 +29,8 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", fullURL, bytes.NewBuffer(input))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	req.Header.Set("X-Api-Client", ClientName)
+	req.Header.Set("X-Api-Client-Version", Version)
 
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
@@ -53,6 +55,8 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	req.Header.Set("X-Api-Client", ClientName)
+	req.Header.Set("X-Api-Client-Version", Version)
 
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
@@ -76,6 +80,8 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("DELETE", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	req.Header.Set("X-Api-Client", ClientName)
+	req.Header.Set("X-Api-Client-Version", Version)
 
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
@@ -98,6 +104,8 @@ func (r *RestService) List(relativeURL string, offset int64, limit int64) ([]byt
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	req.Header.Set("X-Api-Client", ClientName)
+	req.Header.Set("X-Api-Client-Version", Version)
 
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
@@ -121,6 +129,8 @@ func (r *RestService) RetrieveCustomData(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	req.Header.Set("X-Api-Client", ClientName)
+	req.Header.Set("X-Api-Client-Version", Version)
 
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {

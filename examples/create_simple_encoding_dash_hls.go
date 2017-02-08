@@ -1,20 +1,3 @@
-# [![bitmovin](https://cloudfront-prod.bitmovin.com/wp-content/themes/Bitmovin-V-0.1/images/logo3.png)](http://www.bitmovin.com)
-Golang-Client which enables you to seamlessly integrate the [Bitmovin API](https://bitmovin.com/video-infrastructure-service-bitmovin-api/) into your projects.
-Using this API client requires an active account. [Sign up for a Bitmovin API key](https://bitmovin.com/bitmovins-video-api/).
-
-The full [Bitmovin API reference](https://bitmovin.com/encoding-documentation/bitmovin-api/) can be found on our website.
-
-Installation 
-------------
- 
-Run `go get github.com/bitmovin/bitmovin-go`
-
-Also feel free to use your favorite go dependency manager such as glide.
-
-Example
------
-The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/tree/master/examples/create_simple_encoding.go)):
-```go
 package main
 
 import (
@@ -153,35 +136,62 @@ func main() {
 		ACL:        acl,
 	}
 
-	videoMuxing1080p := &models.FMP4Muxing{
+	videoFMP4Muxing1080p := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
 		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 		InitSegmentName: stringToPtr("init.mp4"),
 		Streams:         []models.StreamItem{videoMuxingStream1080p},
 		Outputs:         []models.Output{videoMuxing1080pOutput},
 	}
-	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing1080p)
-	errorHandler(videoMuxing1080pResp.Status, err)
+	videoFMP4Muxing1080pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoFMP4Muxing1080p)
+	errorHandler(videoFMP4Muxing1080pResp.Status, err)
 
-	videoMuxing720p := &models.FMP4Muxing{
+	videoFMP4Muxing720p := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
 		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 		InitSegmentName: stringToPtr("init.mp4"),
 		Streams:         []models.StreamItem{videoMuxingStream720p},
 		Outputs:         []models.Output{videoMuxing720pOutput},
 	}
-	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing720p)
-	errorHandler(videoMuxing720pResp.Status, err)
+	videoFMP4Muxing720pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoFMP4Muxing720p)
+	errorHandler(videoFMP4Muxing720pResp.Status, err)
 
-	audioMuxing := &models.FMP4Muxing{
+	audioFMP4Muxing := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
 		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 		InitSegmentName: stringToPtr("init.mp4"),
 		Streams:         []models.StreamItem{audioMuxingStream},
 		Outputs:         []models.Output{audioMuxingOutput},
 	}
-	audioMuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, audioMuxing)
-	errorHandler(audioMuxingResp.Status, err)
+	audioFMP4MuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, audioFMP4Muxing)
+	errorHandler(audioFMP4MuxingResp.Status, err)
+
+	videoTSMuxing1080p := &models.TSMuxing{
+		SegmentLength: floatToPtr(4.0),
+		SegmentNaming: stringToPtr("seg_%number%.ts"),
+		Streams:       []models.StreamItem{videoMuxingStream1080p},
+		Outputs:       []models.Output{videoMuxing1080pOutput},
+	}
+	videoTSMuxing1080pResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, videoTSMuxing1080p)
+	errorHandler(videoTSMuxing1080pResp.Status, err)
+
+	videoTSMuxing720p := &models.TSMuxing{
+		SegmentLength: floatToPtr(4.0),
+		SegmentNaming: stringToPtr("seg_%number%.ts"),
+		Streams:       []models.StreamItem{videoMuxingStream720p},
+		Outputs:       []models.Output{videoMuxing720pOutput},
+	}
+	videoTSMuxing720pResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, videoTSMuxing720p)
+	errorHandler(videoTSMuxing720pResp.Status, err)
+
+	audioTSMuxing := &models.TSMuxing{
+		SegmentLength: floatToPtr(4.0),
+		SegmentNaming: stringToPtr("seg_%number%.ts"),
+		Streams:       []models.StreamItem{audioMuxingStream},
+		Outputs:       []models.Output{audioMuxingOutput},
+	}
+	audioTSMuxingResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, audioTSMuxing)
+	errorHandler(audioTSMuxingResp.Status, err)
 
 	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
@@ -235,7 +245,7 @@ func main() {
 
 	fmp4Rep1080 := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
-		MuxingID:    videoMuxing1080pResp.Data.Result.ID,
+		MuxingID:    videoFMP4Muxing1080pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/1080p"),
 	}
@@ -244,7 +254,7 @@ func main() {
 
 	fmp4Rep720 := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
-		MuxingID:    videoMuxing720pResp.Data.Result.ID,
+		MuxingID:    videoFMP4Muxing720pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/720p"),
 	}
@@ -253,7 +263,7 @@ func main() {
 
 	fmp4RepAudio := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
-		MuxingID:    audioMuxingResp.Data.Result.ID,
+		MuxingID:    audioFMP4MuxingResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../audio"),
 	}
@@ -267,6 +277,73 @@ func main() {
 	for status != "FINISHED" {
 		time.Sleep(5 * time.Second)
 		statusResp, err := dashService.RetrieveStatus(*dashManifestResp.Data.Result.ID)
+		if err != nil {
+			fmt.Println("error in Manifest Status")
+			fmt.Println(err)
+			return
+		}
+		// Polling and Printing out the response
+		fmt.Printf("%+v\n", statusResp)
+		status = *statusResp.Data.Result.Status
+		if status == "ERROR" {
+			fmt.Println("error in Manifest Status")
+			fmt.Printf("%+v\n", statusResp)
+			return
+		}
+	}
+
+	hlsManifest := &models.HLSManifest{
+		ManifestName: stringToPtr("your_manifest_name.m3u8"),
+		Outputs:      []models.Output{manifestOutput},
+	}
+	hlsService := services.NewHLSManifestService(bitmovin)
+	hlsManifestResp, err := hlsService.Create(hlsManifest)
+	errorHandler(hlsManifestResp.Status, err)
+
+	audioMediaInfo := &models.MediaInfo{
+		Type:            bitmovintypes.MediaTypeAudio,
+		URI:             stringToPtr("audio.m3u8"),
+		GroupID:         stringToPtr("audio_group"),
+		Language:        stringToPtr("en"),
+		Name:            stringToPtr("Rendition Description"),
+		IsDefault:       boolToPtr(false),
+		Autoselect:      boolToPtr(false),
+		Forced:          boolToPtr(false),
+		Characteristics: []string{"public.accessibility.describes-video"},
+		SegmentPath:     stringToPtr("../audio"),
+		EncodingID:      encodingResp.Data.Result.ID,
+		StreamID:        aacStreamResp.Data.Result.ID,
+		MuxingID:        audioTSMuxingResp.Data.Result.ID,
+	}
+	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
+	errorHandler(audioMediaInfoResp.Status, err)
+
+	video1080pStreamInfo := &models.StreamInfo{
+		Audio:       stringToPtr("audio_group"),
+		SegmentPath: stringToPtr("../video/1080p"),
+		URI:         stringToPtr("video_hi.m3u8"),
+		EncodingID:  encodingResp.Data.Result.ID,
+		StreamID:    videoStream1080pResp.Data.Result.ID,
+		MuxingID:    videoTSMuxing1080pResp.Data.Result.ID,
+	}
+	video1080pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video1080pStreamInfo)
+	errorHandler(video1080pStreamInfoResponse.Status, err)
+
+	video720pStreamInfo := &models.StreamInfo{
+		Audio:       stringToPtr("audio_group"),
+		SegmentPath: stringToPtr("../video/720p"),
+		URI:         stringToPtr("video_lo.m3u8"),
+		EncodingID:  encodingResp.Data.Result.ID,
+		StreamID:    videoStream720pResp.Data.Result.ID,
+		MuxingID:    videoTSMuxing720pResp.Data.Result.ID,
+	}
+	video720pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video720pStreamInfo)
+	errorHandler(video720pStreamInfoResponse.Status, err)
+
+	status = ""
+	for status != "FINISHED" {
+		time.Sleep(5 * time.Second)
+		statusResp, err := hlsService.RetrieveStatus(*hlsManifestResp.Data.Result.ID)
 		if err != nil {
 			fmt.Println("error in Manifest Status")
 			fmt.Println(err)
@@ -311,7 +388,3 @@ func boolToPtr(b bool) *bool {
 func floatToPtr(f float64) *float64 {
 	return &f
 }
-
-```
-
-For more examples go to our [example page](https://github.com/bitmovin/bitmovin-go/tree/master/examples/).

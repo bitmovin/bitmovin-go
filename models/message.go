@@ -5,8 +5,8 @@ import (
 )
 
 type Message struct {
-	Date string                    `json:"date"`
-	ID   string                    `json:"id"`
+	Date *string                    `json:"date"`
+	ID   *string                    `json:"id"`
 	Type bitmovintypes.MessageType `json:"type"`
-	Text string                    `json:"text"`
+	Text *string                    `json:"text"`
 }

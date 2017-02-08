@@ -251,13 +251,13 @@ func (s *DashManifestService) DeleteFMP4Representation(manifestID string, period
 	return &r, nil
 }
 
-func (s *DashManifestService) Start(manifestID string) (*models.StartResponse, error) {
+func (s *DashManifestService) Start(manifestID string) (*models.StartStopResponse, error) {
 	path := DashManifestEndpoint + "/" + manifestID + "/start"
 	o, err := s.RestService.Create(path, nil)
 	if err != nil {
 		return nil, err
 	}
-	var r models.StartResponse
+	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
 		return nil, err
