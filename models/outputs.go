@@ -28,9 +28,9 @@ type GCSOutput struct {
 	Name        *string                         `json:"name"`
 	Description *string                         `json:"description"`
 	CustomData  map[string]interface{}          `json:"customData"`
-	AccessKey   *bool                           `json:"accessKey"`
-	SecretKey   *bool                           `json:"secretKey"`
-	BucketName  *bool                           `json:"bucketName"`
+	AccessKey   *string                         `json:"accessKey"`
+	SecretKey   *string                         `json:"secretKey"`
+	BucketName  *string                         `json:"bucketName"`
 	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion"`
 }
 

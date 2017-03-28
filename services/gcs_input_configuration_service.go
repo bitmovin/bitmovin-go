@@ -15,9 +15,8 @@ const (
 	GcsInputEndpoint string = "encoding/inputs/gcs"
 )
 
-func NewGcsInputService(bitmovin *bitmovin.Bitmovin) *GcsInputService {
+func NewGCSInputService(bitmovin *bitmovin.Bitmovin) *GcsInputService {
 	r := NewRestService(bitmovin)
-
 	return &GcsInputService{RestService: r}
 }
 

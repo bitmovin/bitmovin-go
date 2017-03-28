@@ -40,9 +40,9 @@ type GCSInput struct {
 	Name        *string                         `json:"name,omitempty"`
 	Description *string                         `json:"description,omitempty"`
 	CustomData  map[string]interface{}          `json:"customData,omitempty"`
-	AccessKey   *bool                           `json:"accessKey,omitempty"`
-	SecretKey   *bool                           `json:"secretKey,omitempty"`
-	BucketName  *bool                           `json:"bucketName,omitempty"`
+	AccessKey   *string                         `json:"accessKey,omitempty"`
+	SecretKey   *string                         `json:"secretKey,omitempty"`
+	BucketName  *string                         `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion,omitempty"`
 }
 
