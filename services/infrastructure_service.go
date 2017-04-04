@@ -57,7 +57,7 @@ func (s *InfrastructureService) List(offset int64, limit int64) (*[]models.Infra
 }
 
 func MarshalSingleResponse(responseString []byte) (*models.InfrastructureDetail, error) {
-	var responseValue models.InfrastructureReponse
+	var responseValue models.InfrastructureResponse
 	err := json.Unmarshal(responseString, &responseValue)
 	if err != nil {
 		return nil, err

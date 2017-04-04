@@ -20,7 +20,7 @@ type InfrastructureResponseData struct {
 	Result InfrastructureDetail `json:"Result"`
 }
 
-type InfrastructureReponse struct {
+type InfrastructureResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      InfrastructureResponseData   `json:"data,omitempty"`
