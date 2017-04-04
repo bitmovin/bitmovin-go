@@ -36,14 +36,60 @@ type FTPInput struct {
 }
 
 type GCSInput struct {
-	ID          *string                          `json:"id,omitempty"`
-	Name        *string                          `json:"name,omitempty"`
-	Description *string                          `json:"description,omitempty"`
-	CustomData  map[string]interface{}           `json:"customData,omitempty"`
-	AccessKey   *bool                            `json:"accessKey,omitempty"`
-	SecretKey   *bool                            `json:"secretKey,omitempty"`
-	BucketName  *bool                            `json:"bucketName,omitempty"`
+	ID          *string                         `json:"id,omitempty"`
+	Name        *string                         `json:"name,omitempty"`
+	Description *string                         `json:"description,omitempty"`
+	CustomData  map[string]interface{}          `json:"customData,omitempty"`
+	AccessKey   *string                         `json:"accessKey,omitempty"`
+	SecretKey   *string                         `json:"secretKey,omitempty"`
+	BucketName  *string                         `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion,omitempty"`
+}
+
+type GCSInputItem struct {
+	ID          *string                      `json:"id,omitempty"`
+	Name        *string                      `json:"name,omitempty"`
+	Description *string                      `json:"description,omitempty"`
+	BucketName  *string                      `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
+	CreatedAt   *string                      `json:"createdAt,omitempty"`
+	UpdatedAt   *string                      `json:"updatedAt,omitempty"`
+}
+
+type GCSInputData struct {
+	//Success fields
+	Result   GCSInputItem `json:"result,omitempty"`
+	Messages []Message    `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type GCSInputResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      GCSInputData                 `json:"data,omitempty"`
+}
+
+type GCSInputListResult struct {
+	TotalCount *int64         `json:"totalCount,omitempty"`
+	Previous   *string        `json:"previous,omitempty"`
+	Next       *string        `json:"next,omitempty"`
+	Items      []GCSInputItem `json:"items,omitempty"`
+}
+
+type GCSInputListData struct {
+	Result GCSInputListResult `json:"result,omitempty"`
+}
+
+type GCSInputListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      GCSInputListData             `json:"data,omitempty"`
 }
 
 type HTTPInput struct {
@@ -79,9 +125,9 @@ type HTTPInputData struct {
 }
 
 type HTTPInputResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      HTTPInputData                 `json:"data,omitempty"`
+	Data      HTTPInputData                `json:"data,omitempty"`
 }
 
 type HTTPInputListResult struct {
@@ -96,9 +142,9 @@ type HTTPInputListData struct {
 }
 
 type HTTPInputListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputListData               `json:"data,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
 }
 
 type HTTPSInput struct {
@@ -134,9 +180,9 @@ type HTTPSInputData struct {
 }
 
 type HTTPSInputResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      HTTPSInputData                `json:"data,omitempty"`
+	Data      HTTPSInputData               `json:"data,omitempty"`
 }
 
 type HTTPSInputListResult struct {
@@ -151,30 +197,30 @@ type HTTPSInputListData struct {
 }
 
 type HTTPSInputListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputListData               `json:"data,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
 }
 
 type S3Input struct {
-	ID          *string                       `json:"id,omitempty"`
-	Name        *string                       `json:"name,omitempty"`
-	Description *string                       `json:"description,omitempty"`
-	CustomData  map[string]interface{}        `json:"customData,omitempty"`
-	AccessKey   *string                       `json:"accessKey,omitempty"`
-	SecretKey   *string                       `json:"secretKey,omitempty"`
-	BucketName  *string                       `json:"bucketName,omitempty"`
+	ID          *string                      `json:"id,omitempty"`
+	Name        *string                      `json:"name,omitempty"`
+	Description *string                      `json:"description,omitempty"`
+	CustomData  map[string]interface{}       `json:"customData,omitempty"`
+	AccessKey   *string                      `json:"accessKey,omitempty"`
+	SecretKey   *string                      `json:"secretKey,omitempty"`
+	BucketName  *string                      `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
 }
 
 type S3InputItem struct {
-	ID          *string                       `json:"id,omitempty"`
-	Name        *string                       `json:"name,omitempty"`
-	Description *string                       `json:"description,omitempty"`
-	BucketName  *string                       `json:"bucketName,omitempty"`
+	ID          *string                      `json:"id,omitempty"`
+	Name        *string                      `json:"name,omitempty"`
+	Description *string                      `json:"description,omitempty"`
+	BucketName  *string                      `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
-	CreatedAt   *string                       `json:"createdAt,omitempty"`
-	UpdatedAt   *string                       `json:"updatedAt,omitempty"`
+	CreatedAt   *string                      `json:"createdAt,omitempty"`
+	UpdatedAt   *string                      `json:"updatedAt,omitempty"`
 }
 
 type S3InputData struct {
@@ -191,9 +237,9 @@ type S3InputData struct {
 }
 
 type S3InputResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputData                   `json:"data,omitempty"`
+	Data      S3InputData                  `json:"data,omitempty"`
 }
 
 type S3InputListResult struct {
@@ -208,9 +254,9 @@ type S3InputListData struct {
 }
 
 type S3InputListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputListData               `json:"data,omitempty"`
+	Data      S3InputListData              `json:"data,omitempty"`
 }
 
 type SFTPInput struct {

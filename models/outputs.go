@@ -28,10 +28,56 @@ type GCSOutput struct {
 	Name        *string                         `json:"name"`
 	Description *string                         `json:"description"`
 	CustomData  map[string]interface{}          `json:"customData"`
-	AccessKey   *bool                           `json:"accessKey"`
-	SecretKey   *bool                           `json:"secretKey"`
-	BucketName  *bool                           `json:"bucketName"`
+	AccessKey   *string                         `json:"accessKey"`
+	SecretKey   *string                         `json:"secretKey"`
+	BucketName  *string                         `json:"bucketName"`
 	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion"`
+}
+
+type GCSOutputItem struct {
+	ID          *string                      `json:"id,omitempty"`
+	Name        *string                      `json:"name,omitempty"`
+	Description *string                      `json:"description,omitempty"`
+	BucketName  *string                      `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
+	CreatedAt   *string                      `json:"createdAt,omitempty"`
+	UpdatedAt   *string                      `json:"updatedAt,omitempty"`
+}
+
+type GCSOutputData struct {
+	//Success fields
+	Result   GCSOutputItem `json:"result,omitempty"`
+	Messages []Message     `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type GCSOutputResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      GCSOutputData                `json:"data,omitempty"`
+}
+
+type GCSOutputListResult struct {
+	TotalCount *int64          `json:"totalCount,omitempty"`
+	Previous   *string         `json:"previous,omitempty"`
+	Next       *string         `json:"next,omitempty"`
+	Items      []GCSOutputItem `json:"items,omitempty"`
+}
+
+type GCSOutputListData struct {
+	Result GCSOutputListResult `json:"result,omitempty"`
+}
+
+type GCSOutputListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      GCSOutputListData            `json:"data,omitempty"`
 }
 
 type S3Output struct {
