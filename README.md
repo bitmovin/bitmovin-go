@@ -315,3 +315,8 @@ func floatToPtr(f float64) *float64 {
 ```
 
 For more examples go to our [example page](https://github.com/bitmovin/bitmovin-go/tree/master/examples/).
+
+Contributing
+------------
+
+bitmovin-go is licensed under the MIT license. If you want to contribute feel free to send Pull-Requests.
