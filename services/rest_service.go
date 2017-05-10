@@ -46,12 +46,7 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 		return nil, err
 	}
 	if resp.StatusCode > 399 {
-		data, err := unmarshalError(body)
-		if err != nil {
-			return nil, err
-		}
-		str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
-		return nil, errors.New(str)
+		return nil, formatError(body)
 	}
 
 	return body, nil
@@ -80,12 +75,7 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 	}
 
 	if resp.StatusCode > 399 {
-		data, err := unmarshalError(body)
-		if err != nil {
-			return nil, err
-		}
-		str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
-		return nil, errors.New(str)
+		return nil, formatError(body)
 	}
 
 	return body, nil
@@ -114,12 +104,7 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 	}
 
 	if resp.StatusCode > 399 {
-		data, err := unmarshalError(body)
-		if err != nil {
-			return nil, err
-		}
-		str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
-		return nil, errors.New(str)
+		return nil, formatError(body)
 	}
 
 	return body, nil
@@ -181,4 +166,13 @@ func unmarshalError(body []byte) (*models.DataEnvelope, error) {
 		return nil, err
 	}
 	return &d, nil
+}
+
+func formatError(body []byte) error {
+	data, err := unmarshalError(body)
+	if err != nil {
+		return err
+	}
+	str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
+	return errors.New(str)
 }
