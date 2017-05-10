@@ -2,12 +2,15 @@ package services
 
 import (
 	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
+	"github.com/bitmovin/bitmovin-go/models"
 )
 
 type RestService struct {
@@ -42,6 +45,9 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if resp.StatusCode > 399 {
+		return nil, formatError(body)
+	}
 
 	return body, nil
 }
@@ -68,6 +74,10 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode > 399 {
+		return nil, formatError(body)
+	}
+
 	return body, nil
 }
 
@@ -91,6 +101,10 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.StatusCode > 399 {
+		return nil, formatError(body)
 	}
 
 	return body, nil
@@ -143,4 +157,22 @@ func (r *RestService) RetrieveCustomData(relativeURL string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func unmarshalError(body []byte) (*models.DataEnvelope, error) {
+	var d models.DataEnvelope
+	err := json.Unmarshal(body, &d)
+	if err != nil {
+		return nil, err
+	}
+	return &d, nil
+}
+
+func formatError(body []byte) error {
+	data, err := unmarshalError(body)
+	if err != nil {
+		return err
+	}
+	str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
+	return errors.New(str)
 }
