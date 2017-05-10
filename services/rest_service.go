@@ -113,6 +113,15 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.StatusCode > 399 {
+		data, err := unmarshalError(body)
+		if err != nil {
+			return nil, err
+		}
+		str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
+		return nil, errors.New(str)
+	}
+
 	return body, nil
 }
 

@@ -44,6 +44,17 @@ func TestRetrieve(t *testing.T) {
 	}
 }
 
+func TestDelete(t *testing.T) {
+	svc := createClient()
+	_, err := svc.Delete(`encoding/inputs/gcs/invalid-id`)
+	if err == nil {
+		t.Fatal("Expected to receive error - got nil")
+	}
+	if err.Error() != "ERROR 1001: Input with the given id was not found in our system" {
+		t.Fatalf("Expected error message - got %s", err.Error())
+	}
+}
+
 func stringToPtr(s string) *string {
 	return &s
 }
