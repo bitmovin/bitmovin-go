@@ -10,9 +10,13 @@ import (
 
 const apiKey = "INSERT_API_KEY"
 
-func TestCreateError(t *testing.T) {
+func createClient() *RestService {
 	bitmovin := bitmovin.NewBitmovinDefaultTimeout(apiKey, "https://api.bitmovin.com/v1/")
-	svc := NewRestService(bitmovin)
+	return NewRestService(bitmovin)
+}
+
+func TestCreate(t *testing.T) {
+	svc := createClient()
 	gcsInput := &models.GCSInput{
 		AccessKey:  stringToPtr(""),
 		SecretKey:  stringToPtr(""),
@@ -25,6 +29,17 @@ func TestCreateError(t *testing.T) {
 		t.Fatal("Expected to receive error")
 	}
 	if err.Error() != "ERROR 1000: One or more fields are not present or invalid" {
+		t.Fatalf("Expected error message - got %s", err.Error())
+	}
+}
+
+func TestRetrieve(t *testing.T) {
+	svc := createClient()
+	_, err := svc.Retrieve(`encoding/inputs/gcs/invalid-id`)
+	if err == nil {
+		t.Fatal("Expected to receive error - got nil")
+	}
+	if err.Error() != "ERROR 1001: Input with the given id was not found in our system" {
 		t.Fatalf("Expected error message - got %s", err.Error())
 	}
 }
