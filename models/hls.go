@@ -24,9 +24,15 @@ type HLSManifestData struct {
 }
 
 type HLSManifestResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      HLSManifestData               `json:"data,omitempty"`
+	Data      HLSManifestData              `json:"data,omitempty"`
+}
+
+type LiveHLSManifest struct {
+	ManifestID *string `json:"manifestId,omitempty"`
+	// TODO is this an int?
+	TimeShift *float64 `json:"timeShift,omitempty"`
 }
 
 type StreamInfo struct {
@@ -59,31 +65,31 @@ type StreamInfoData struct {
 }
 
 type StreamInfoResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      StreamInfoData                `json:"data,omitempty"`
+	Data      StreamInfoData               `json:"data,omitempty"`
 }
 
 type MediaInfo struct {
-	ID                 *string                  `json:"id,omitempty"`
+	ID                 *string                 `json:"id,omitempty"`
 	Type               bitmovintypes.MediaType `json:"type,omitempty"`
-	URI                *string                  `json:"uri,omitempty"`
-	GroupID            *string                  `json:"groupId,omitempty"`
-	Language           *string                  `json:"language,omitempty"`
-	AssociatedLanguage *string                  `json:"assocLanguage,omitempty"`
-	Name               *string                  `json:"name,omitempty"`
-	IsDefault          *bool                    `json:"isDefault,omitempty"`
-	Autoselect         *bool                    `json:"autoselect,omitempty"`
-	Forced             *bool                    `json:"forced,omitempty"`
-	InstreamID         *string                  `json:"instreamId,omitempty"`
-	Characteristics    []string                 `json:"characteristics,omitempty"`
-	SegmentPath        *string                  `json:"segmentPath,omitempty"`
-	EncodingID         *string                  `json:"encodingId,omitempty"`
-	StreamID           *string                  `json:"streamId,omitempty"`
-	MuxingID           *string                  `json:"muxingId,omitempty"`
-	DRMID              *string                  `json:"drmId,omitempty"`
-	StartSegmentNumber *int64                   `json:"startSegmentNumber,omitempty"`
-	EndSegmentNumber   *int64                   `json:"endSegmentNumber,omitempty"`
+	URI                *string                 `json:"uri,omitempty"`
+	GroupID            *string                 `json:"groupId,omitempty"`
+	Language           *string                 `json:"language,omitempty"`
+	AssociatedLanguage *string                 `json:"assocLanguage,omitempty"`
+	Name               *string                 `json:"name,omitempty"`
+	IsDefault          *bool                   `json:"isDefault,omitempty"`
+	Autoselect         *bool                   `json:"autoselect,omitempty"`
+	Forced             *bool                   `json:"forced,omitempty"`
+	InstreamID         *string                 `json:"instreamId,omitempty"`
+	Characteristics    []string                `json:"characteristics,omitempty"`
+	SegmentPath        *string                 `json:"segmentPath,omitempty"`
+	EncodingID         *string                 `json:"encodingId,omitempty"`
+	StreamID           *string                 `json:"streamId,omitempty"`
+	MuxingID           *string                 `json:"muxingId,omitempty"`
+	DRMID              *string                 `json:"drmId,omitempty"`
+	StartSegmentNumber *int64                  `json:"startSegmentNumber,omitempty"`
+	EndSegmentNumber   *int64                  `json:"endSegmentNumber,omitempty"`
 }
 
 type MediaInfoData struct {
@@ -100,7 +106,7 @@ type MediaInfoData struct {
 }
 
 type MediaInfoResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      MediaInfoData                 `json:"data,omitempty"`
+	Data      MediaInfoData                `json:"data,omitempty"`
 }

@@ -309,3 +309,9 @@ type StatusResponse struct {
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      StatusData                   `json:"data,omitempty"`
 }
+
+type LiveStreamConfiguration struct {
+	StreamKey     *string            `json:"requestId,omitempty"`
+	HLSManifests  []LiveHLSManifest  `json:"hlsManifests,omitempty"`
+	DashManifests []LiveDashManifest `json:"dashManifests,omitempty"`
+}

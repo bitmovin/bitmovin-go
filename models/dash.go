@@ -24,9 +24,16 @@ type DashManifestData struct {
 }
 
 type DashManifestResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      DashManifestData              `json:"data,omitempty"`
+	Data      DashManifestData             `json:"data,omitempty"`
+}
+
+type LiveDashManifest struct {
+	ManifestID *string `json:"manifestId,omitempty"`
+	// TODO are these ints?
+	TimeShift      *float64 `json:"timeShift,omitempty"`
+	LiveEdgeOffset *float64 `json:"liveEdgeOffset,omitempty"`
 }
 
 type Period struct {
@@ -49,9 +56,9 @@ type PeriodData struct {
 }
 
 type PeriodResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      PeriodData                    `json:"data,omitempty"`
+	Data      PeriodData                   `json:"data,omitempty"`
 }
 
 type CustomAttribute struct {
@@ -79,9 +86,9 @@ type AudioAdaptationSetData struct {
 }
 
 type AudioAdaptationSetResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      AudioAdaptationSetData        `json:"data,omitempty"`
+	Data      AudioAdaptationSetData       `json:"data,omitempty"`
 }
 
 type VideoAdaptationSet struct {
@@ -103,18 +110,18 @@ type VideoAdaptationSetData struct {
 }
 
 type VideoAdaptationSetResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      VideoAdaptationSetData        `json:"data,omitempty"`
+	Data      VideoAdaptationSetData       `json:"data,omitempty"`
 }
 
 type FMP4Representation struct {
-	ID                 *string                               `json:"id,omitempty"`
+	ID                 *string                              `json:"id,omitempty"`
 	Type               bitmovintypes.FMP4RepresentationType `json:"type,omitempty"`
-	MuxingID           *string                               `json:"muxingId,omitempty"`
-	EncodingID         *string                               `json:"encodingId,omitempty"`
-	StartSegmentNumber *int64                                `json:"startSegmentNumber,omitempty"`
-	SegmentPath        *string                               `json:"segmentPath,omitempty"`
+	MuxingID           *string                              `json:"muxingId,omitempty"`
+	EncodingID         *string                              `json:"encodingId,omitempty"`
+	StartSegmentNumber *int64                               `json:"startSegmentNumber,omitempty"`
+	SegmentPath        *string                              `json:"segmentPath,omitempty"`
 }
 
 type FMP4RepresentationData struct {
@@ -131,7 +138,7 @@ type FMP4RepresentationData struct {
 }
 
 type FMP4RepresentationResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      FMP4RepresentationData        `json:"data,omitempty"`
+	Data      FMP4RepresentationData       `json:"data,omitempty"`
 }
