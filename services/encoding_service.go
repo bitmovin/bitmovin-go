@@ -465,7 +465,7 @@ func (s *EncodingService) StopLive(encodingID string) (*models.StartStopResponse
 }
 
 func (s *EncodingService) RetrieveLiveStatus(encodingID string) (*models.LiveStatusResponse, error) {
-	path := EncodingEndpoint + "/" + encodingID + "/live/status"
+	path := EncodingEndpoint + "/" + encodingID + "/live"
 	o, err := s.RestService.Retrieve(path)
 	if err != nil {
 		return nil, err
