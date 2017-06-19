@@ -311,7 +311,7 @@ type StatusResponse struct {
 }
 
 type LiveStreamConfiguration struct {
-	StreamKey     *string            `json:"requestId,omitempty"`
+	StreamKey     *string            `json:"streamKey,omitempty"`
 	HLSManifests  []LiveHLSManifest  `json:"hlsManifests,omitempty"`
 	DashManifests []LiveDashManifest `json:"dashManifests,omitempty"`
 }
