@@ -30,9 +30,8 @@ type HLSManifestResponse struct {
 }
 
 type LiveHLSManifest struct {
-	ManifestID *string `json:"manifestId,omitempty"`
-	// TODO is this an int?
-	TimeShift *float64 `json:"timeShift,omitempty"`
+	ManifestID *string  `json:"manifestId,omitempty"`
+	TimeShift  *float64 `json:"timeShift,omitempty"`
 }
 
 type StreamInfo struct {

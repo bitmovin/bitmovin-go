@@ -30,8 +30,7 @@ type DashManifestResponse struct {
 }
 
 type LiveDashManifest struct {
-	ManifestID *string `json:"manifestId,omitempty"`
-	// TODO are these ints?
+	ManifestID     *string  `json:"manifestId,omitempty"`
 	TimeShift      *float64 `json:"timeShift,omitempty"`
 	LiveEdgeOffset *float64 `json:"liveEdgeOffset,omitempty"`
 }
