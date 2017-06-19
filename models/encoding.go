@@ -315,3 +315,27 @@ type LiveStreamConfiguration struct {
 	HLSManifests  []LiveHLSManifest  `json:"hlsManifests,omitempty"`
 	DashManifests []LiveDashManifest `json:"dashManifests,omitempty"`
 }
+
+type LiveStatusResult struct {
+	StreamKey *string `json:"streamKey,omitempty"`
+	EncoderIP *string `json:"encoderIp,omitempty"`
+}
+
+type LiveStatusData struct {
+	//Success fields
+	Result   LiveStatusResult `json:"result,omitempty"`
+	Messages []Message        `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type LiveStatusResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      LiveStatusData               `json:"data,omitempty"`
+}

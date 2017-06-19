@@ -463,3 +463,17 @@ func (s *EncodingService) StopLive(encodingID string) (*models.StartStopResponse
 	}
 	return &r, nil
 }
+
+func (s *EncodingService) RetrieveLiveStatus(encodingID string) (*models.LiveStatusResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/live/status"
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.LiveStatusResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
