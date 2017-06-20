@@ -269,3 +269,47 @@ type SFTPInput struct {
 	Password    *string                `json:"password,omitempty"`
 	Passive     *bool                  `json:"passive,omitempty"`
 }
+
+type RTMPInputItem struct {
+	ID          *string `json:"id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	CreatedAt   *string `json:"createdAt,omitempty"`
+	UpdatedAt   *string `json:"updatedAt,omitempty"`
+}
+
+type RTMPInputData struct {
+	//Success fields
+	Result   RTMPInputItem `json:"result,omitempty"`
+	Messages []Message     `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type RTMPInputResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      RTMPInputData                `json:"data,omitempty"`
+}
+
+type RTMPInputListResult struct {
+	TotalCount *int64          `json:"totalCount,omitempty"`
+	Previous   *string         `json:"previous,omitempty"`
+	Next       *string         `json:"next,omitempty"`
+	Items      []RTMPInputItem `json:"items,omitempty"`
+}
+
+type RTMPInputListData struct {
+	Result RTMPInputListResult `json:"result,omitempty"`
+}
+
+type RTMPInputListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      RTMPInputListData            `json:"data,omitempty"`
+}
