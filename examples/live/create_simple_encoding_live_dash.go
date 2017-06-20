@@ -46,6 +46,8 @@ func main() {
 	encodingResp, err := encodingS.Create(encoding)
 	errorHandler(encodingResp.Status, err)
 
+	encodingID := *encodingResp.Data.Result.ID
+
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
 	video1080pConfig := &models.H264CodecConfiguration{
 		Name:      stringToPtr("example_video_codec_configuration_1080p"),
@@ -100,9 +102,9 @@ func main() {
 		InputStreams:         vis,
 	}
 
-	videoStream1080pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream1080p)
+	videoStream1080pResp, err := encodingS.AddStream(encodingID, videoStream1080p)
 	errorHandler(videoStream1080pResp.Status, err)
-	videoStream720pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream720p)
+	videoStream720pResp, err := encodingS.AddStream(encodingID, videoStream720p)
 	errorHandler(videoStream720pResp.Status, err)
 
 	ais := []models.InputStream{audioInputStream}
@@ -110,7 +112,7 @@ func main() {
 		CodecConfigurationID: aacResp.Data.Result.ID,
 		InputStreams:         ais,
 	}
-	aacStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
+	aacStreamResp, err := encodingS.AddStream(encodingID, audioStream)
 	errorHandler(aacStreamResp.Status, err)
 
 	aclEntry := models.ACLItem{
@@ -151,7 +153,7 @@ func main() {
 		Streams:         []models.StreamItem{videoMuxingStream1080p},
 		Outputs:         []models.Output{videoMuxing1080pOutput},
 	}
-	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing1080p)
+	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing1080p)
 	errorHandler(videoMuxing1080pResp.Status, err)
 
 	videoMuxing720p := &models.FMP4Muxing{
@@ -161,7 +163,7 @@ func main() {
 		Streams:         []models.StreamItem{videoMuxingStream720p},
 		Outputs:         []models.Output{videoMuxing720pOutput},
 	}
-	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing720p)
+	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing720p)
 	errorHandler(videoMuxing720pResp.Status, err)
 
 	audioMuxing := &models.FMP4Muxing{
@@ -171,7 +173,7 @@ func main() {
 		Streams:         []models.StreamItem{audioMuxingStream},
 		Outputs:         []models.Output{audioMuxingOutput},
 	}
-	audioMuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, audioMuxing)
+	audioMuxingResp, err := encodingS.AddFMP4Muxing(encodingID, audioMuxing)
 	errorHandler(audioMuxingResp.Status, err)
 
 	manifestOutput := models.Output{
@@ -238,12 +240,12 @@ func main() {
 		DashManifests: []models.LiveDashManifest{liveDashManifest},
 	}
 
-	startResp, err := encodingS.StartLive(*encodingResp.Data.Result.ID, liveStreamConfig)
+	startResp, err := encodingS.StartLive(encodingID, liveStreamConfig)
 	errorHandler(startResp.Status, err)
 	numRetries := 0
 	for numRetries < MaxRetries {
 		time.Sleep(10 * time.Second)
-		statusResp, err := encodingS.RetrieveLiveStatus(*encodingResp.Data.Result.ID)
+		statusResp, err := encodingS.RetrieveLiveStatus(encodingID)
 		if err != nil {
 			if err.Error() != "ERROR 2023: Live encoding details not available!" {
 				fmt.Println("Error in starting live encoding")
@@ -253,7 +255,8 @@ func main() {
 			fmt.Println("Encoding details not ready yet.")
 			numRetries++
 			continue
-		} else if statusResp != nil {
+		}
+		if statusResp != nil {
 			if statusResp.Data.Result.EncoderIP == nil {
 				fmt.Println("Encoder IP detail empty, encoding failed")
 				return
@@ -264,7 +267,7 @@ func main() {
 			}
 			fmt.Println("---------------")
 			fmt.Println("Live Stream set up successfully:")
-			fmt.Printf("Encoding ID ... %v \n", *encodingResp.Data.Result.ID)
+			fmt.Printf("Encoding ID ... %v \n", encodingID)
 			fmt.Printf("Encoder IP .... %v \n", *statusResp.Data.Result.EncoderIP)
 			fmt.Printf("Stream Key .... %v \n", *statusResp.Data.Result.StreamKey)
 			fmt.Printf("Stream URL: ... rtmp://%v/live \n", *statusResp.Data.Result.EncoderIP)
