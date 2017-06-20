@@ -242,8 +242,8 @@ func main() {
 
 	startResp, err := encodingS.StartLive(encodingID, liveStreamConfig)
 	errorHandler(startResp.Status, err)
-	numRetries := 0
-	for numRetries < MaxRetries {
+
+	for numRetries := 0; numRetries < MaxRetries; numRetries++ {
 		time.Sleep(10 * time.Second)
 		statusResp, err := encodingS.RetrieveLiveStatus(encodingID)
 		if err != nil {
@@ -253,7 +253,6 @@ func main() {
 				return
 			}
 			fmt.Println("Encoding details not ready yet.")
-			numRetries++
 			continue
 		}
 		if statusResp != nil {
@@ -274,7 +273,6 @@ func main() {
 			fmt.Println("---------------")
 			return
 		}
-		numRetries++
 	}
 	fmt.Println("Maximum number of retries reached.")
 }
