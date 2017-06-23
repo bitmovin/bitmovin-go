@@ -431,3 +431,49 @@ func (s *EncodingService) RetrieveStatus(encodingID string) (*models.StatusRespo
 	}
 	return &r, nil
 }
+
+func (s *EncodingService) StartLive(encodingID string, a *models.LiveStreamConfiguration) (*models.StartStopResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/live/start"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StartStopResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) StopLive(encodingID string) (*models.StartStopResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/live/stop"
+	o, err := s.RestService.Create(path, nil)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StartStopResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveLiveStatus(encodingID string) (*models.LiveStatusResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/live"
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.LiveStatusResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
