@@ -13,7 +13,7 @@ Also feel free to use your favorite go dependency manager such as glide.
 
 Example
 -----
-The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/tree/master/examples/create_simple_encoding.go)):
+The following example creates a simple transcoding job with a HTTP Input and a S3 Output ([create_simple_encoding.go](https://github.com/bitmovin/bitmovin-go/blob/master/examples/create_simple_encoding_dash.go)):
 ```go
 package main
 
