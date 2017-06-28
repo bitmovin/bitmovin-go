@@ -3,35 +3,35 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type AzureOutput struct {
-	ID          *string                `json:"id"`
-	Name        *string                `json:"name"`
-	Description *string                `json:"description"`
-	CustomData  map[string]interface{} `json:"customData"`
-	AccountName *string                `json:"accountName"`
-	AccountKey  *string                `json:"accountKey"`
-	Container   *string                `json:"container"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	AccountName *string                `json:"accountName,omitempty"`
+	AccountKey  *string                `json:"accountKey,omitempty"`
+	Container   *string                `json:"container,omitempty"`
 }
 
 type FTPOutput struct {
-	ID          *string                `json:"id"`
-	Name        *string                `json:"name"`
-	Description *string                `json:"description"`
-	CustomData  map[string]interface{} `json:"customData"`
-	Host        *string                `json:"host"`
-	UserName    *string                `json:"username"`
-	Password    *string                `json:"password"`
-	Passive     *bool                  `json:"passive"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        *string                `json:"host,omitempty"`
+	UserName    *string                `json:"username,omitempty"`
+	Password    *string                `json:"password,omitempty"`
+	Passive     *bool                  `json:"passive,omitempty"`
 }
 
 type GCSOutput struct {
-	ID          *string                         `json:"id"`
-	Name        *string                         `json:"name"`
-	Description *string                         `json:"description"`
-	CustomData  map[string]interface{}          `json:"customData"`
-	AccessKey   *string                         `json:"accessKey"`
-	SecretKey   *string                         `json:"secretKey"`
-	BucketName  *string                         `json:"bucketName"`
-	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion"`
+	ID          *string                         `json:"id,omitempty"`
+	Name        *string                         `json:"name,omitempty"`
+	Description *string                         `json:"description,omitempty"`
+	CustomData  map[string]interface{}          `json:"customData,omitempty"`
+	AccessKey   *string                         `json:"accessKey,omitempty"`
+	SecretKey   *string                         `json:"secretKey,omitempty"`
+	BucketName  *string                         `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion,omitempty"`
 }
 
 type GCSOutputItem struct {
@@ -81,14 +81,14 @@ type GCSOutputListResponse struct {
 }
 
 type S3Output struct {
-	ID          *string                      `json:"id"`
-	Name        *string                      `json:"name"`
-	Description *string                      `json:"description"`
-	CustomData  map[string]interface{}       `json:"customData"`
-	AccessKey   *string                      `json:"accessKey"`
-	SecretKey   *string                      `json:"secretKey"`
-	BucketName  *string                      `json:"bucketName"`
-	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion"`
+	ID          *string                      `json:"id,omitempty"`
+	Name        *string                      `json:"name,omitempty"`
+	Description *string                      `json:"description,omitempty"`
+	CustomData  map[string]interface{}       `json:"customData,omitempty"`
+	AccessKey   *string                      `json:"accessKey,omitempty"`
+	SecretKey   *string                      `json:"secretKey,omitempty"`
+	BucketName  *string                      `json:"bucketName,omitempty"`
+	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
 }
 
 type S3OutputItem struct {
@@ -138,12 +138,12 @@ type S3OutputListResponse struct {
 }
 
 type SFTPOutput struct {
-	ID          *string                `json:"id"`
-	Name        *string                `json:"name"`
-	Description *string                `json:"description"`
-	CustomData  map[string]interface{} `json:"customData"`
-	Host        *string                `json:"host"`
-	UserName    *string                `json:"username"`
-	Password    *string                `json:"password"`
-	Passive     *bool                  `json:"passive"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        *string                `json:"host,omitempty"`
+	UserName    *string                `json:"username,omitempty"`
+	Password    *string                `json:"password,omitempty"`
+	Passive     *bool                  `json:"passive,omitempty"`
 }
