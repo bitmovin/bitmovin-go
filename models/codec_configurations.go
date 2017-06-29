@@ -97,6 +97,9 @@ type H264CodecConfiguration struct {
 	MinGOP           *int64                         `json:"minGop,omitempty"`
 	MaxGOP           *int64                         `json:"maxGop,omitempty"`
 	Level            bitmovintypes.H264Level        `json:"level,omitempty"`
+	Trellis          bitmovintypes.Trellis          `json:"trellis,omitempty"`
+	RcLookahead      *int64                         `json:"rcLookahead,omitempty"`
+	Partitions       []bitmovintypes.Partition      `json:"partitions,omitempty"`
 }
 
 type H264CodecConfigurationData struct {

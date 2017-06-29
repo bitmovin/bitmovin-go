@@ -11,6 +11,7 @@ type Encoding struct {
 	CustomData     map[string]interface{}       `json:"customData,omitempty"`
 	EncoderVersion bitmovintypes.EncoderVersion `json:"encoderVersion,omitempty"`
 	CloudRegion    bitmovintypes.CloudRegion    `json:"cloudRegion,omitempty"`
+	Status         string                       `json:"status,omitempty"`
 }
 
 type EncodingData struct {
