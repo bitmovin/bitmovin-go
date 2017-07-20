@@ -18,4 +18,5 @@ const (
 	CloudRegionGoogleUSEast1     CloudRegion = "GOOGLE_US_EAST_1"
 	CloudRegionGoogleUSCentral1  CloudRegion = "GOOGLE_US_CENTRAL_1"
 	CloudRegionGoogleAsiaEast1   CloudRegion = "GOOGLE_ASIA_EAST_1"
+	CloudRegionExternal          CloudRegion = "EXTERNAL"
 )
