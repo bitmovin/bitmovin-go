@@ -7,8 +7,8 @@ type Thumbnail struct {
 	Description  *string                     `json:"description,omitempty"`
 	Height       int                         `json:"height,omitempty"`
 	PositionUnit *bitmovintypes.PositionUnit `json:"unit,omitempty"`
-	Positions    []float64                   `json:"positions"`
-	Pattern      *string                     `json:"pattern"`
+	Positions    []float64                   `json:"positions,omitempty"`
+	Pattern      *string                     `json:"pattern,omitempty"`
 	Outputs      []Output                    `json:"outputs,omitempty"`
 }
 

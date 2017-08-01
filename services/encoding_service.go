@@ -479,12 +479,12 @@ func (s *EncodingService) RetrieveLiveStatus(encodingID string) (*models.LiveSta
 }
 
 func (s *EncodingService) AddThumbnail(encodingID, streamID string, thumb *models.Thumbnail) (*models.ThumbnailResponse, error) {
-	payload, err := json.Marshal(*thumb)
+	payload, err := json.Marshal(thumb)
 	if err != nil {
 		return nil, err
 	}
 
-	path := EncodingEndpoint + "/" + encodingID + "/" + streamID + "/thumbnails"
+	path := EncodingEndpoint + "/" + encodingID + "/streams/" + streamID + "/thumbnails"
 	resp, err := s.RestService.Create(path, payload)
 	if err != nil {
 		return nil, err
