@@ -3,13 +3,13 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type Thumbnail struct {
-	Name         *string                     `json:"name,omitempty"`
-	Description  *string                     `json:"description,omitempty"`
-	Height       int                         `json:"height,omitempty"`
-	PositionUnit *bitmovintypes.PositionUnit `json:"unit,omitempty"`
-	Positions    []float64                   `json:"positions,omitempty"`
-	Pattern      *string                     `json:"pattern,omitempty"`
-	Outputs      []Output                    `json:"outputs,omitempty"`
+	Name         *string                    `json:"name,omitempty"`
+	Description  *string                    `json:"description,omitempty"`
+	Height       int                        `json:"height,omitempty"`
+	PositionUnit bitmovintypes.PositionUnit `json:"unit,omitempty"`
+	Positions    []float64                  `json:"positions,omitempty"`
+	Pattern      *string                    `json:"pattern,omitempty"`
+	Outputs      []Output                   `json:"outputs,omitempty"`
 }
 
 type ThumbnailData struct {

@@ -19,7 +19,7 @@ func (t *ThumbnailBuilder) Height(h int) *ThumbnailBuilder {
 	t.Thumbnail.Height = h
 	return t
 }
-func (t *ThumbnailBuilder) PositionUnit(u *bitmovintypes.PositionUnit) *ThumbnailBuilder {
+func (t *ThumbnailBuilder) PositionUnit(u bitmovintypes.PositionUnit) *ThumbnailBuilder {
 	t.Thumbnail.PositionUnit = u
 	return t
 }
