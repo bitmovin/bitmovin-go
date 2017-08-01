@@ -50,7 +50,7 @@ After a few seconds the Infrastructure in the Bitmovin Dashboard will also turn 
 
 To encode Videos on your newly created and connected cluster simply take note of the Cluster-ID and start encodings with the same API Calls you would for a regular Bitmovin Cloud encoding. Just specify the **CloudRegion: External** and your **InfrastructureID**.
 
-```
+```go
 encodingS := services.NewEncodingService(bitmovin)
 encoding := &models.Encoding{
 	Name:             stringToPtr("Example Encoding"),
