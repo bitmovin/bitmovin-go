@@ -10,7 +10,7 @@ type Stream struct {
 	InputStreams         []InputStream          `json:"inputStreams,omitempty"`
 	CodecConfigurationID *string                `json:"codecConfigId,omitempty"`
 	Outputs              []Output               `json:"outputs,omitempty"`
-	Conditions           StreamCondition        `json:"conditions,omitempty"`
+	Conditions           *StreamCondition       `json:"conditions,omitempty"`
 }
 
 type StreamCondition struct {
