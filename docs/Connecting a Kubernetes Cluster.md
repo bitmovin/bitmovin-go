@@ -59,3 +59,8 @@ encoding := &models.Encoding{
 }
 encodingResp, err := encodingS.Create(encoding)
 ```
+
+## Deleting a Google Container Engine Cluster
+
+If you don't need the Kubernetes cluster at the moment you can just delete it from your [GKE Console](https://console.cloud.google.com/kubernetes/list). The Infrastructure will show up as Offline and Disconnected after a few seconds in the Bitmovin Dashboard. If you want to continue encoding at a later date you can just create a new Container Cluster and re-install the Bitmovin Agent - no need to create a new Infrastructure in the Bitmovin API.
+(Since the Infrastructure ID is not changing in the case you don't have to change anything in your Integrations)
