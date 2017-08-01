@@ -17,7 +17,7 @@ As the name implies `models.AttributeConditions` represent a Condition check on 
 
 Declaration:
 
-```
+```go
 NewAttributeCondition(attribute bitmovintypes.ConditionAttribute, operator, value string) StreamCondition
 ```
 
@@ -32,7 +32,7 @@ The following condition translated to:
 
 You can also define logical Conjunctions and Disjunctions (AND and OR) by chaining the Conditions together:
 
-```
+```go
 models.NewAndConjunction(
   models.NewAttributeCondition(bitmovintypes.ConditionAttributeHeight, "==", "1080"),
   models.NewAttributeCondition(bitmovintypes.ConditionAttributeWidth, "==", "1920"),
@@ -49,7 +49,7 @@ The same goes for the `models.NewOrDisjunction` just that it represents a logica
 
 A full usage example with a Stream would look like this:
 
-```
+```go
 inputStream := models.InputStream{
   InputID:        inputID, // ID of the Input Resource (bucket)
   InputPath:      stringToPtr("/path/to/file.mp4"),
