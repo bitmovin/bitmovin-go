@@ -495,3 +495,17 @@ func (s *EncodingService) AddThumbnail(encodingID, streamID string, thumb *model
 	}
 	return &r, nil
 }
+
+func (s *EncodingService) ListThumbnails(encodingID, streamID string, offset, limit int64) (*models.ThumbnailListResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + streamID + "/thumbnails"
+	o, err := s.RestService.List(path, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ThumbnailListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}

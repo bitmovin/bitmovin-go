@@ -23,6 +23,13 @@ type ThumbnailResponse struct {
 	Data      ThumbnailData                `json:"data,omitempty"`
 }
 
+type ThumbnailListResponse struct {
+	TotalCount *int64      `json:"totalCount,omitempty"`
+	Previous   *string     `json:"previous,omitempty"`
+	Next       *string     `json:"next,omitempty"`
+	Items      []Thumbnail `json:"items,omitempty"`
+}
+
 func NewThumbnail(height int, positions []float64, outputs []Output) *Thumbnail {
 	return &Thumbnail{
 		Height:    height,
