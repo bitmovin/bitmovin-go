@@ -31,7 +31,7 @@ func NewAttributeCondition(attribute bitmovintypes.ConditionAttribute, operator,
 	}
 }
 
-// NewAndConjunction creates a AND Condjunction of all the condition parameters
+// NewAndConjunction creates a logical Conjunction (AND) of all the condition parameters
 func NewAndConjunction(conditions ...StreamCondition) StreamCondition {
 	return StreamCondition{
 		Type:       bitmovintypes.ConditionTypeAnd,
@@ -39,8 +39,8 @@ func NewAndConjunction(conditions ...StreamCondition) StreamCondition {
 	}
 }
 
-// NewOrConjunction creates a OR Condjunction of all the condition parameters
-func NewOrConjunction(conditions ...StreamCondition) StreamCondition {
+// NewOrDisjunction creates a logical Disjunction (OR) of all the condition parameters
+func NewOrDisjunction(conditions ...StreamCondition) StreamCondition {
 	return StreamCondition{
 		Type:       bitmovintypes.ConditionTypeOr,
 		Conditions: conditions,

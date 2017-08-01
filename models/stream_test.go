@@ -42,8 +42,8 @@ func TestNewAndConjunction(t *testing.T) {
 	testCondition(condition, t)
 }
 
-func TestNewOrConjunction(t *testing.T) {
-	cond := NewOrConjunction(
+func TestNewOrDisjunction(t *testing.T) {
+	cond := NewOrDisjunction(
 		NewAttributeCondition(bitmovintypes.ConditionAttributeFPS, "==", "25"),
 	)
 	if cond.Type != bitmovintypes.ConditionTypeOr {
@@ -58,7 +58,7 @@ func TestNewOrConjunction(t *testing.T) {
 }
 
 func buildNestedCondition() StreamCondition {
-	return NewOrConjunction(
+	return NewOrDisjunction(
 		NewAndConjunction(
 			NewAttributeCondition(bitmovintypes.ConditionAttributeFPS, "==", "25"),
 			NewAttributeCondition(bitmovintypes.ConditionAttributeBitrate, "==", "14000"),
