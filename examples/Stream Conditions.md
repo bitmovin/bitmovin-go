@@ -1,10 +1,9 @@
 # Stream Conditions
 
-Stream Conditions allow you to define conditions when a Stream should be included in a Encoding or not.
-
+Stream Conditions allow you to define conditions if a Stream should be included in a Encoding or not.
 More information about why Stream Conditions are useful can be found in [our Blogpost](https://bitmovin.com/stream-conditions-video-encoding-workflows/).
 
-Usage in GoLang:
+## Usage
 
 StreamConditions are part of the `models.Stream` Object that gets sent to `POST /v1/encoding/encodings/<encodingId>/streams` and get created through the following Methods:
 
