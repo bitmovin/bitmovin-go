@@ -12,6 +12,17 @@ type Thumbnail struct {
 	Outputs      []Output                    `json:"outputs,omitempty"`
 }
 
+type ThumbnailData struct {
+	Result   Thumbnail `json:"result,omitempty"`
+	Messages []Message `json:"messages,omitempty"`
+}
+
+type ThumbnailResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      ThumbnailData                `json:"data,omitempty"`
+}
+
 func NewThumbnail(height int, positions []float64, outputs []Output) *Thumbnail {
 	return &Thumbnail{
 		Height:    height,
