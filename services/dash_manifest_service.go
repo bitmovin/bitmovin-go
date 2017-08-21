@@ -251,6 +251,52 @@ func (s *DashManifestService) DeleteFMP4Representation(manifestID string, period
 	return &r, nil
 }
 
+func (s *DashManifestService) AddDrmFMP4Representation(manifestID string, periodID string, adaptationSetID string, a *models.DrmFMP4Representation) (*models.DrmFMP4RepresentationResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + "/" + periodID + "/adaptationsets/" + adaptationSetID + "/representations/fmp4/drm"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.DrmFMP4RepresentationResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *DashManifestService) RetrieveDrmFMP4Representation(manifestID string, periodID string, adaptationSetID string, representationID string) (*models.DrmFMP4RepresentationResponse, error) {
+	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + "/" + periodID + "/adaptationsets/" + adaptationSetID + "/representations/fmp4/drm/" + representationID
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.DrmFMP4RepresentationResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *DashManifestService) DeleteDrmFMP4Representation(manifestID string, periodID string, adaptationSetID string, representationID string) (*models.DrmFMP4RepresentationResponse, error) {
+	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + "/" + periodID + "/adaptationsets/" + adaptationSetID + "/representations/fmp4/drm/" + representationID
+	o, err := s.RestService.Delete(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.DrmFMP4RepresentationResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *DashManifestService) Start(manifestID string) (*models.StartStopResponse, error) {
 	path := DashManifestEndpoint + "/" + manifestID + "/start"
 	o, err := s.RestService.Create(path, nil)
@@ -272,6 +318,26 @@ func (s *DashManifestService) RetrieveStatus(manifestID string) (*models.StatusR
 		return nil, err
 	}
 	var r models.StatusResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *DashManifestService) AddContentProtectionToAdaptationSet(manifestID string, periodID string, adaptationSetID string, a *models.AdaptationSetContentProtection) (*models.AdaptationSetContentProtectionResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+
+	path := DashManifestEndpoint + "/" + manifestID + "/periods/" + periodID + "/adaptationsets/" + adaptationSetID + "/contentprotection"
+
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.AdaptationSetContentProtectionResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
 		return nil, err

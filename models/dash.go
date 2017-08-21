@@ -141,3 +141,58 @@ type FMP4RepresentationResponse struct {
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      FMP4RepresentationData       `json:"data,omitempty"`
 }
+
+type DrmFMP4Representation struct {
+	ID                 *string                              `json:"id,omitempty"`
+	Type               bitmovintypes.FMP4RepresentationType `json:"type,omitempty"`
+	MuxingID           *string                              `json:"muxingId,omitempty"`
+	EncodingID         *string                              `json:"encodingId,omitempty"`
+	StartSegmentNumber *string                              `json:"startSegmentNumber,omitempty"`
+	EndSegmentNumber   *string                              `json:"endSegmentNumber,omitempty"`
+	SegmentPath        *string                              `json:"segmentPath,omitempty"`
+	DrmID              *string                              `json:"drmId,omitempty"`
+}
+
+type DrmFMP4RepresentationData struct {
+	//Success fields
+	Result   DrmFMP4Representation `json:"result,omitempty"`
+	Messages []Message             `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type DrmFMP4RepresentationResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      DrmFMP4RepresentationData    `json:"data,omitempty"`
+}
+
+type AdaptationSetContentProtection struct {
+	EncodingId *string `json:"encodingId,omitempty"`
+	MuxingId   *string `json:"muxingId,omitempty"`
+	DrmId      *string `json:"drmId"`
+}
+
+type AdaptationSetContentProtectionData struct {
+	//Success fields
+	Result   AdaptationSetContentProtection `json:"result,omitempty"`
+	Messages []Message                      `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type AdaptationSetContentProtectionResponse struct {
+	RequestID *string                            `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus       `json:"status,omitempty"`
+	Data      AdaptationSetContentProtectionData `json:"data,omitempty"`
+}
