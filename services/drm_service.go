@@ -1,12 +1,12 @@
 package services
 
 import (
-	"github.com/bitmovin/bitmovin-go/models"
-	"github.com/bitmovin/bitmovin-go/bitmovin"
-	"strings"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/bitmovin/bitmovin-go/bitmovin"
+	"github.com/bitmovin/bitmovin-go/models"
+	"strings"
 )
 
 type DrmService struct {
@@ -109,7 +109,7 @@ func (s *DrmService) CreateFmp4Drm(encodingId string, fmp4MuxingId string, drm i
 
 	default:
 		err := fmt.Sprintf("FMP4 DRM type %T is not supported!\n", v)
-		return nil,  errors.New(err)
+		return nil, errors.New(err)
 	}
 }
 
@@ -143,6 +143,6 @@ func (s *DrmService) CreateTsDrm(encodingId string, tsMuxingId string, drm inter
 
 	default:
 		err := fmt.Sprintf("TS DRM type %T is not supported!\n", v)
-		return nil,  errors.New(err)
+		return nil, errors.New(err)
 	}
 }

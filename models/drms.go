@@ -3,63 +3,63 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type PlayReadyDrm struct {
-	ID          *string                			`json:"id,omitempty"`
-	Name        *string                			`json:"name,omitempty"`
-	Description *string                			`json:"description,omitempty"`
-	CustomData  map[string]interface{} 			`json:"customData,omitempty"`
-	Key 		*string				   			`json:"key,omitempty"`
-	KID 		*string				   			`json:"kid,omitempty"`
-	KeySeed		*string				   			`json:"keySeed,omitempty"`
-	LaUrl		*string				   			`json:"laUrl,omitempty"`
-	Method		bitmovintypes.EncryptionMethod	`json:"method,omitempty"`
-	Outputs		[]Output			   			`json:"outputs,omitempty"`
+	ID          *string                        `json:"id,omitempty"`
+	Name        *string                        `json:"name,omitempty"`
+	Description *string                        `json:"description,omitempty"`
+	CustomData  map[string]interface{}         `json:"customData,omitempty"`
+	Key         *string                        `json:"key,omitempty"`
+	KID         *string                        `json:"kid,omitempty"`
+	KeySeed     *string                        `json:"keySeed,omitempty"`
+	LaUrl       *string                        `json:"laUrl,omitempty"`
+	Method      bitmovintypes.EncryptionMethod `json:"method,omitempty"`
+	Outputs     []Output                       `json:"outputs,omitempty"`
 }
 
 type FairPlayDrm struct {
-	ID          *string                			`json:"id,omitempty"`
-	Name        *string                			`json:"name,omitempty"`
-	Description *string                			`json:"description,omitempty"`
-	CustomData  map[string]interface{} 			`json:"customData,omitempty"`
-	Key			*string							`json:"key,omitempty"`
-	IV			*string				   			`json:"iv,omitempty"`
-	URI 		*string				   			`json:"uri,omitempty"`
-	Outputs		[]Output			   			`json:"outputs,omitempty"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Key         *string                `json:"key,omitempty"`
+	IV          *string                `json:"iv,omitempty"`
+	URI         *string                `json:"uri,omitempty"`
+	Outputs     []Output               `json:"outputs,omitempty"`
 }
 
 type WidevineDrm struct {
-	ID          *string                			`json:"id,omitempty"`
-	Name        *string                			`json:"name,omitempty"`
-	Description *string                			`json:"description,omitempty"`
-	CustomData  map[string]interface{} 			`json:"customData,omitempty"`
-	Key			*string				   			`json:"key,omitempty"`
-	KID 		*string				   			`json:"kid,omitempty"`
-	PSSH 		*string				   			`json:"pssh,omitempty"`
-	Outputs		[]Output	  					`json:"outputs,omitempty"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Key         *string                `json:"key,omitempty"`
+	KID         *string                `json:"kid,omitempty"`
+	PSSH        *string                `json:"pssh,omitempty"`
+	Outputs     []Output               `json:"outputs,omitempty"`
 }
 
 type WidevineCencDrm struct {
-	PSSH 		*string `json:"pssh,omitempty"`
+	PSSH *string `json:"pssh,omitempty"`
 }
 
 type PlayReadyCencDrm struct {
-	LaURL		*string `json:"laUrl,omitEmpty"`
-	PSSH 		*string `json:"pssh,omitEmpty"`
+	LaURL *string `json:"laUrl,omitEmpty"`
+	PSSH  *string `json:"pssh,omitEmpty"`
 }
 
 type CencDrm struct {
-	ID          *string                			`json:"id,omitempty"`
-	Name        *string                			`json:"name,omitempty"`
-	Description *string                			`json:"description,omitempty"`
-	CustomData  map[string]interface{} 			`json:"customData,omitempty"`
-	Key			*string				   			`json:"key,omitempty"`
-	KID 		*string				   			`json:"kid,omitempty"`
-	Outputs		[]Output	  					`json:"outputs,omitempty"`
-	Widevine	WidevineCencDrm					`json:"widevine,omitempty"`
-	PlayReady 	PlayReadyCencDrm				`json:"playReady,omitEmpty"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Key         *string                `json:"key,omitempty"`
+	KID         *string                `json:"kid,omitempty"`
+	Outputs     []Output               `json:"outputs,omitempty"`
+	Widevine    WidevineCencDrm        `json:"widevine,omitempty"`
+	PlayReady   PlayReadyCencDrm       `json:"playReady,omitEmpty"`
 }
 
 type DrmResponseData struct {
-	Messages []Message          `json:"messages,omitempty"`
+	Messages []Message `json:"messages,omitempty"`
 
 	//Error fields
 	Code             *int64   `json:"code,omitempty"`

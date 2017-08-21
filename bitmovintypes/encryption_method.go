@@ -4,5 +4,5 @@ type EncryptionMethod string
 
 const (
 	EncryptionMethodMpegCenc EncryptionMethod = "MPEG_CENC"
-	EncryptionMethodPiffCtr	 EncryptionMethod = "PIFF_CTR"
+	EncryptionMethodPiffCtr  EncryptionMethod = "PIFF_CTR"
 )

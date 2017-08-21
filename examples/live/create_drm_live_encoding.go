@@ -30,10 +30,10 @@ func main() {
 
 	gcsOutputService := services.NewGCSOutputService(bitmovin)
 	gcsOutput := &models.GCSOutput{
-		AccessKey: 		stringToPtr("YOUR_ACCESS_KEY"),
-		SecretKey: 		stringToPtr("YOUR_SECRET_KEY"),
-		BucketName: 	stringToPtr("YOUR_BUCKET_NAME"),
-		CloudRegion: 	bitmovintypes.GoogleCloudRegionEuropeWest1,
+		AccessKey:   stringToPtr("YOUR_ACCESS_KEY"),
+		SecretKey:   stringToPtr("YOUR_SECRET_KEY"),
+		BucketName:  stringToPtr("YOUR_BUCKET_NAME"),
+		CloudRegion: bitmovintypes.GoogleCloudRegionEuropeWest1,
 	}
 
 	t := time.Now()
@@ -53,8 +53,8 @@ func main() {
 	encodingID := *encodingResp.Data.Result.ID
 
 	/*
-	H264 Codec Configurations
-	 */
+		H264 Codec Configurations
+	*/
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
 	video1080pConfig := &models.H264CodecConfiguration{
 		Name:      stringToPtr("example_video_codec_configuration_1080p"),
@@ -87,8 +87,8 @@ func main() {
 	errorHandler(aacResp.Status, err)
 
 	/*
-	Input Streams
-	 */
+		Input Streams
+	*/
 	videoInputStream := models.InputStream{
 		InputID:       rtmpInputListResp.Data.Result.Items[0].ID,
 		InputPath:     stringToPtr("live"),
@@ -140,10 +140,9 @@ func main() {
 		StreamID: aacStreamResp.Data.Result.ID,
 	}
 
-
 	/*
-	DASH FMP4 Muxings
-	 */
+		DASH FMP4 Muxings
+	*/
 	fmt.Println("Creating DASH FMP4 Muxings...")
 	videoMuxing1080p := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
@@ -174,12 +173,12 @@ func main() {
 	fmt.Println("Successfully created DASH FMP4 Muxings!")
 
 	/*
-	HLS TS Muxings
-	 */
+		HLS TS Muxings
+	*/
 	fmt.Println("Creating HLS TS Muxings...")
 	videoTsMuxing1080p := &models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
-		Streams: []models.StreamItem{videoMuxingStream1080p},
+		Streams:       []models.StreamItem{videoMuxingStream1080p},
 	}
 
 	videoTsMuxing1080Resp, err := encodingS.AddTSMuxing(encodingID, videoTsMuxing1080p)
@@ -187,21 +186,21 @@ func main() {
 
 	videoTsMuxing720p := &models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
-		Streams: []models.StreamItem{videoMuxingStream720p},
+		Streams:       []models.StreamItem{videoMuxingStream720p},
 	}
 	videoTsMuxing720Resp, err := encodingS.AddTSMuxing(encodingID, videoTsMuxing720p)
 	errorHandler(videoTsMuxing720Resp.Status, err)
 
 	audioTsMuxing := &models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
-		Streams: []models.StreamItem{audioMuxingStream},
+		Streams:       []models.StreamItem{audioMuxingStream},
 	}
 	audioTsMuxingResp, err := encodingS.AddTSMuxing(encodingID, audioTsMuxing)
 	errorHandler(audioTsMuxingResp.Status, err)
 
 	/*
-	Outputs for DRM FMP4 Muxings
-	 */
+		Outputs for DRM FMP4 Muxings
+	*/
 	videoMuxing1080pOutput := models.Output{
 		OutputID:   gcsOutputResponse.Data.Result.ID,
 		OutputPath: stringToPtr(outputBasePath + "/video/1080p"),
@@ -220,8 +219,8 @@ func main() {
 	fmt.Println("Successfully created HLS TS Muxings!")
 
 	/*
-	Widevine and Playready CENC DRM
-	 */
+		Widevine and Playready CENC DRM
+	*/
 	fmt.Println("Creating Widevine and PlayReady CENC DRMs...")
 	widevine := models.WidevineCencDrm{
 		PSSH: stringToPtr("WIDEVINE_PSSSH"),
@@ -232,10 +231,10 @@ func main() {
 	}
 
 	cencDrm := models.CencDrm{
-		Key: 	stringToPtr("YOUR_CENC_DRM_KEY"),
-		KID: 	stringToPtr("YOUR_CENC_DRM_KID"),
-		Name: 	stringToPtr("My CENC DRM"),
-		Widevine: widevine,
+		Key:       stringToPtr("YOUR_CENC_DRM_KEY"),
+		KID:       stringToPtr("YOUR_CENC_DRM_KID"),
+		Name:      stringToPtr("My CENC DRM"),
+		Widevine:  widevine,
 		PlayReady: playready,
 	}
 
@@ -271,14 +270,14 @@ func main() {
 	fmt.Println("Successfully created Widevine and PlayReady CENC DRMs!")
 
 	/*
-	FairPlay DRM
-	 */
+		FairPlay DRM
+	*/
 	fmt.Println("Creating Fairplay DRMs for HLS...")
 	fairPlayDrm := models.FairPlayDrm{
-		IV:		stringToPtr("YOUR_FAIRPLAY_IV"),
-		URI: 	stringToPtr("YOUR_FAIRPLAY_URI"),
-		Key: 	stringToPtr("YOUR_FAIRPLAY_KEY"),
-		Name:	stringToPtr("My Fairplay DRM"),
+		IV:   stringToPtr("YOUR_FAIRPLAY_IV"),
+		URI:  stringToPtr("YOUR_FAIRPLAY_URI"),
+		Key:  stringToPtr("YOUR_FAIRPLAY_KEY"),
+		Name: stringToPtr("My Fairplay DRM"),
 	}
 
 	fairPlayDrm.Outputs = []models.Output{videoMuxing720pOutput}
@@ -291,8 +290,8 @@ func main() {
 	fmt.Println("Successfully created Fairplay DRMs for HLS!")
 
 	/*
-	DASH Manifest creation
-	 */
+		DASH Manifest creation
+	*/
 	fmt.Println("Creating Live DASH Manifest...")
 
 	manifestOutput := models.Output{
@@ -302,7 +301,7 @@ func main() {
 	}
 
 	dashManifest := &models.DashManifest{
-		Name: 		  stringToPtr("your_manifest_name.mpd"),
+		Name:         stringToPtr("your_manifest_name.mpd"),
 		ManifestName: stringToPtr("your_manifest_name.mpd"),
 		Outputs:      []models.Output{manifestOutput},
 	}
@@ -315,25 +314,25 @@ func main() {
 	errorHandler(periodResp.Status, err)
 
 	/*
-	Video AdaptationSet
-	 */
+		Video AdaptationSet
+	*/
 	vas := &models.VideoAdaptationSet{}
 	vasResp, err := dashService.AddVideoAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, vas)
 	errorHandler(vasResp.Status, err)
 
 	fmt.Println("Adding content protection to video adaptation set...")
 	vcp := &models.AdaptationSetContentProtection{
-		DrmId: cencDrm1080Response.Data.Result.ID,
+		DrmId:      cencDrm1080Response.Data.Result.ID,
 		EncodingId: stringToPtr(encodingID),
-		MuxingId: videoMuxing1080pResp.Data.Result.ID,
+		MuxingId:   videoMuxing1080pResp.Data.Result.ID,
 	}
 	vcpResp, err := dashService.AddContentProtectionToAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, vcp)
 	errorHandler(vcpResp.Status, err)
 	fmt.Println("Successfully added content protection to vide adaptation set!")
 
 	/*
-	Audio AdaptationSet
-	 */
+		Audio AdaptationSet
+	*/
 	aas := &models.AudioAdaptationSet{
 		Language: stringToPtr("en"),
 	}
@@ -342,23 +341,23 @@ func main() {
 
 	fmt.Println("Adding content protection to audio adaptation set...")
 	acp := &models.AdaptationSetContentProtection{
-		DrmId: cencDrmAudioResponse.Data.Result.ID,
+		DrmId:      cencDrmAudioResponse.Data.Result.ID,
 		EncodingId: stringToPtr(encodingID),
-		MuxingId: audioMuxingResp.Data.Result.ID,
+		MuxingId:   audioMuxingResp.Data.Result.ID,
 	}
 	acpResp, err := dashService.AddContentProtectionToAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, acp)
 	errorHandler(acpResp.Status, err)
 	fmt.Println("Successfully added content protection to audio adaptation set!")
 
 	/*
-	DRM Representations
-	 */
+		DRM Representations
+	*/
 	fmp4Rep1080 := &models.DrmFMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
 		MuxingID:    videoMuxing1080pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/1080p"),
-		DrmID:		 cencDrm1080Response.Data.Result.ID,
+		DrmID:       cencDrm1080Response.Data.Result.ID,
 	}
 	fmp4Rep1080Resp, err := dashService.AddDrmFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep1080)
 	errorHandler(fmp4Rep1080Resp.Status, err)
@@ -368,7 +367,7 @@ func main() {
 		MuxingID:    videoMuxing720pResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/720p"),
-		DrmID:		 cencDrm720Response.Data.Result.ID,
+		DrmID:       cencDrm720Response.Data.Result.ID,
 	}
 	fmp4Rep720Resp, err := dashService.AddDrmFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep720)
 	errorHandler(fmp4Rep720Resp.Status, err)
@@ -378,7 +377,7 @@ func main() {
 		MuxingID:    audioMuxingResp.Data.Result.ID,
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../audio"),
-		DrmID:		 cencDrmAudioResponse.Data.Result.ID,
+		DrmID:       cencDrmAudioResponse.Data.Result.ID,
 	}
 	fmp4RepAudioResp, err := dashService.AddDrmFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, fmp4RepAudio)
 	errorHandler(fmp4RepAudioResp.Status, err)
@@ -390,8 +389,8 @@ func main() {
 	fmt.Println("Successfully created Live DASH Manifest!")
 
 	/*
-	Live HLS manifest
-	 */
+		Live HLS manifest
+	*/
 	fmt.Println("Creating Live HLS Manifest...")
 
 	hlsManifest := &models.HLSManifest{
@@ -443,19 +442,19 @@ func main() {
 	errorHandler(video720pStreamInfoResponse.Status, err)
 
 	liveHlsManifest := models.LiveHLSManifest{
-		ManifestID:     hlsManifestResp.Data.Result.ID,
+		ManifestID: hlsManifestResp.Data.Result.ID,
 	}
 
 	fmt.Println("Successfully created Live HLS Manifest!")
 
 	/*
-	Live Stream
-	 */
+		Live Stream
+	*/
 	fmt.Println("Waiting for live encoding to be ready...")
 	liveStreamConfig := &models.LiveStreamConfiguration{
 		StreamKey:     stringToPtr("bitmovin"),
 		DashManifests: []models.LiveDashManifest{liveDashManifest},
-		HLSManifests: []models.LiveHLSManifest{liveHlsManifest},
+		HLSManifests:  []models.LiveHLSManifest{liveHlsManifest},
 	}
 
 	startResp, err := encodingS.StartLive(encodingID, liveStreamConfig)
