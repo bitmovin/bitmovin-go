@@ -167,7 +167,7 @@ type DrmFMP4RepresentationData struct {
 }
 
 type DrmFMP4RepresentationResponse struct {
-	RequestId *string                      `json:"requestId,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      DrmFMP4RepresentationData    `json:"data,omitempty"`
 }
@@ -192,7 +192,7 @@ type AdaptationSetContentProtectionData struct {
 }
 
 type AdaptationSetContentProtectionResponse struct {
-	RequestId *string                            `json:"requestId,omitempty"`
+	RequestID *string                            `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus       `json:"status,omitempty"`
 	Data      AdaptationSetContentProtectionData `json:"data,omitempty"`
 }
