@@ -128,7 +128,7 @@ func (s *DrmService) CreateTsDrm(encodingId string, tsMuxingId string, drm inter
 			return nil, err
 		}
 
-		enpointUrl := requestUrl + "/fairlplay"
+		enpointUrl := requestUrl + "/fairplay"
 		response, err := s.RestService.Create(enpointUrl, b)
 		if err != nil {
 			return nil, err
