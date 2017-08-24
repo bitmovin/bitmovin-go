@@ -11,7 +11,7 @@ func TestConditionBuilder(t *testing.T) {
 	testCondition(condition, t)
 }
 
-func testCondition(condition StreamCondition, t *testing.T) {
+func testCondition(condition *StreamCondition, t *testing.T) {
 	if condition.Type != bitmovintypes.ConditionTypeCondition {
 		t.Errorf("Wanted ConditionType Condition got %v", condition.Type)
 	}
@@ -57,7 +57,7 @@ func TestNewOrDisjunction(t *testing.T) {
 	testCondition(condition, t)
 }
 
-func buildNestedCondition() StreamCondition {
+func buildNestedCondition() *StreamCondition {
 	return NewOrDisjunction(
 		NewAndConjunction(
 			NewAttributeCondition(bitmovintypes.ConditionAttributeFPS, "==", "25"),

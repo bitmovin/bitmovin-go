@@ -8,6 +8,7 @@ const (
 	ConditionAttributeFPS         ConditionAttribute = "FPS"
 	ConditionAttributeBitrate     ConditionAttribute = "BITRATE"
 	ConditionAttributeAspectRatio ConditionAttribute = "ASPECTRATIO"
+	ConditionAttributeInputStream ConditionAttribute = "INPUTSTREAM"
 )
 
 type ConditionType string
