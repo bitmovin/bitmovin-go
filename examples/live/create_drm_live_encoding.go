@@ -451,7 +451,7 @@ func main() {
 		EncodingID:      encodingResp.Data.Result.ID,
 		StreamID:        aacStreamResp.Data.Result.ID,
 		MuxingID:        audioTsMuxingResp.Data.Result.ID,
-		DRMID:		     tsDrmAudio.Data.Result.ID,
+		DRMID:           tsDrmAudio.Data.Result.ID,
 	}
 	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
 	errorHandler(audioMediaInfoResp.Status, err)
@@ -463,7 +463,7 @@ func main() {
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream1080pResp.Data.Result.ID,
 		MuxingID:    videoTsMuxing1080Resp.Data.Result.ID,
-		DRMID:		 tsDrm1080p.Data.Result.ID,
+		DRMID:       tsDrm1080p.Data.Result.ID,
 	}
 	video1080pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video1080pStreamInfo)
 	errorHandler(video1080pStreamInfoResponse.Status, err)
@@ -475,7 +475,7 @@ func main() {
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream720pResp.Data.Result.ID,
 		MuxingID:    videoTsMuxing720Resp.Data.Result.ID,
-		DRMID:		 tsDrm720p.Data.Result.ID,
+		DRMID:       tsDrm720p.Data.Result.ID,
 	}
 	video720pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video720pStreamInfo)
 	errorHandler(video720pStreamInfoResponse.Status, err)
