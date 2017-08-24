@@ -18,7 +18,7 @@ type StreamCondition struct {
 	Operator   string                           `json:"operator,omitempty"`
 	Value      string                           `json:"value,omitempty"`
 	Type       bitmovintypes.ConditionType      `json:"type"`
-	Conditions []*StreamCondition                `json:"conditions,omitempty"`
+	Conditions []*StreamCondition               `json:"conditions,omitempty"`
 }
 
 // NewAttributeCondition creates a Condition that tests an attribute against a value given the operator

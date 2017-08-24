@@ -127,8 +127,8 @@ func main() {
 	}
 
 	/*
-	FMP4 MUXINGS
-	 */
+		FMP4 MUXINGS
+	*/
 	videoFMP4Muxing1080pOutput := models.Output{
 		OutputID:   gcsOutputResp.Data.Result.ID,
 		OutputPath: stringToPtr(outputBasePath + "/video/dash/1080p"),
@@ -176,8 +176,8 @@ func main() {
 	errorHandler(audioFMP4MuxingResp.Status, err)
 
 	/*
-	TS MUXINGS
-	 */
+		TS MUXINGS
+	*/
 	videoTSMuxing1080pOutput := models.Output{
 		OutputID:   gcsOutputResp.Data.Result.ID,
 		OutputPath: stringToPtr(outputBasePath + "/video/hls/1080p"),
@@ -221,10 +221,9 @@ func main() {
 	audioMuxingResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, audioMuxing)
 	errorHandler(audioMuxingResp.Status, err)
 
-
 	/*
-	START ENCODING AND WAIT TO FOR IT TO BE FINISHED
-	 */
+		START ENCODING AND WAIT TO FOR IT TO BE FINISHED
+	*/
 	fmt.Printf("Starting encoding with id %s...\n", *encodingResp.Data.Result.ID)
 
 	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
@@ -253,8 +252,8 @@ func main() {
 	fmt.Println("Encoding finished successfully!")
 
 	/*
-	MANIFEST GENERATION
-	 */
+		MANIFEST GENERATION
+	*/
 	manifestOutput := models.Output{
 		OutputID:   gcsOutputResp.Data.Result.ID,
 		OutputPath: stringToPtr(outputBasePath + "/manifest"),
@@ -262,8 +261,8 @@ func main() {
 	}
 
 	/*
-	DASH MANIFEST
-	 */
+		DASH MANIFEST
+	*/
 	dashManifest := &models.DashManifest{
 		ManifestName: stringToPtr("your_manifest_name.mpd"),
 		Outputs:      []models.Output{manifestOutput},
@@ -339,8 +338,8 @@ func main() {
 	fmt.Println("DASH manifest created successfully!")
 
 	/*
-	HLS MANIFEST
-	 */
+		HLS MANIFEST
+	*/
 	hlsManifest := &models.HLSManifest{
 		ManifestName: stringToPtr("your_manifest_name.m3u8"),
 		Outputs:      []models.Output{manifestOutput},
