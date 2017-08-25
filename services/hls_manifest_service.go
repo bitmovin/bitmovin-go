@@ -2,7 +2,6 @@ package services
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
 	"github.com/bitmovin/bitmovin-go/models"
@@ -129,6 +128,5 @@ func (s *HLSManifestService) RetrieveStatus(manifestID string) (*models.StatusRe
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(o))
 	return &r, nil
 }
