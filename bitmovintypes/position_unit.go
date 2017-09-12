@@ -4,5 +4,5 @@ type PositionUnit string
 
 const (
 	PositionSeconds  PositionUnit = "SECONDS"
-	PositionPercents PositionUnit = "PERCENT"
+	PositionPercents PositionUnit = "PERCENTS"
 )
