@@ -173,6 +173,6 @@ func formatError(body []byte) error {
 	if err != nil {
 		return err
 	}
-	str := fmt.Sprintf("%s %d: %s", data.Status, data.Data.Code, data.Data.Message)
+	str := fmt.Sprintf("%s %d (ReqId#%s): %s", data.Status, data.Data.Code, data.RequestID, data.Data.Message)
 	return errors.New(str)
 }
