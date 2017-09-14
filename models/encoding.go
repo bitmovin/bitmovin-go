@@ -113,7 +113,7 @@ type FMP4Muxing struct {
 	SegmentLength   *float64               `json:"segmentLength,omitempty"`
 	SegmentNaming   *string                `json:"segmentNaming,omitempty"`
 	InitSegmentName *string                `json:"initSegmentName,omitempty"`
-	AvgBitrate		*int				   `json:"avgBitrate"`
+	AvgBitrate      *int                   `json:"avgBitrate,omitempty"`
 }
 
 type FMP4MuxingData struct {

@@ -15,17 +15,17 @@ const MAX_COMPLEXITY_FACTOR = 1.5
 const MIN_COMPLEXITY_FACTOR = 0.5
 
 type H264CodecConfigDefinition struct {
-	height *int64
+	height  *int64
 	bitrate *int64
-	fps *float64
+	fps     *float64
 }
 
 type EncodingConfig struct {
-	codecConfigDef *H264CodecConfigDefinition
+	codecConfigDef  *H264CodecConfigDefinition
 	codecConfigResp *models.H264CodecConfigurationResponse
-	streamResp *models.StreamResponse
-	fmp4MuxingResp *models.FMP4MuxingResponse
-	tsMuxingResp *models.TSMuxingResponse
+	streamResp      *models.StreamResponse
+	fmp4MuxingResp  *models.FMP4MuxingResponse
+	tsMuxingResp    *models.TSMuxingResponse
 }
 
 func main() {
@@ -74,7 +74,7 @@ func main() {
 	fmt.Println("Creating Analysis Encoding")
 	encodingS := services.NewEncodingService(bitmovin)
 	analysisEncoding := models.Encoding{
-		Name: stringToPtr("Per title analysis encoding"),
+		Name:        stringToPtr("Per title analysis encoding"),
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	analysisEncodingResp, err := encodingS.Create(&analysisEncoding)
@@ -84,9 +84,9 @@ func main() {
 	fmt.Println("Creating Codec Configuration")
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
 	analysisH264CodecConfig := models.H264CodecConfiguration{
-		Name: stringToPtr("H264 Per Title Analysis Configuration"),
-		CRF: floatToPtr(23.0),
-		Height: intToPtr(360),
+		Name:    stringToPtr("H264 Per Title Analysis Configuration"),
+		CRF:     floatToPtr(23.0),
+		Height:  intToPtr(360),
 		Profile: bitmovintypes.H264ProfileMain,
 	}
 	analysisH264CodecConfigResp, err := h264S.Create(&analysisH264CodecConfig)
@@ -103,7 +103,7 @@ func main() {
 	analysisVideoStream := &models.Stream{
 		CodecConfigurationID: analysisH264CodecConfigResp.Data.Result.ID,
 		InputStreams:         vis,
-		Name: stringToPtr("Per Title Analysis Stream"),
+		Name:                 stringToPtr("Per Title Analysis Stream"),
 	}
 	fmt.Println("Created Streams!")
 
@@ -126,12 +126,12 @@ func main() {
 	}
 
 	analysisMuxing := models.FMP4Muxing{
-		SegmentLength: floatToPtr(4.0),
-		SegmentNaming: stringToPtr("seg_%number%.m4s"),
+		SegmentLength:   floatToPtr(4.0),
+		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 		InitSegmentName: stringToPtr("init.mp4"),
-		Streams: []models.StreamItem{analysisMuxingStream},
-		Outputs: []models.Output{analysisMuxingOutput},
-		Name: stringToPtr("Per Title Analysis Muxing"),
+		Streams:         []models.StreamItem{analysisMuxingStream},
+		Outputs:         []models.Output{analysisMuxingOutput},
+		Name:            stringToPtr("Per Title Analysis Muxing"),
 	}
 	analysisMuxingResp, err := encodingS.AddFMP4Muxing(*analysisEncodingResp.Data.Result.ID, &analysisMuxing)
 	errorHandler(analysisMuxingResp.Status, err)
@@ -141,7 +141,6 @@ func main() {
 	startResp, err := encodingS.Start(*analysisEncodingResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
 	fmt.Println("Started Analysis Encoding!")
-
 
 	fmt.Println("Waiting for Analysis Encoding to be finished...")
 	waitForEncodingToBeFinished(analysisEncodingResp, encodingS)
@@ -160,10 +159,9 @@ func main() {
 	fmt.Printf("Used values for calculation -> avgBitrate %d, medianBitrate %d\n", *analysisMuxing.AvgBitrate, MEDIAN_BITRATE)
 	fmt.Printf("Got complexity factor of %f\n", complexityFactor)
 
-
 	fmt.Println("Creating the Encoding...")
 	realEncoding := models.Encoding{
-		Name: stringToPtr("Golang - Per Title Encoding"),
+		Name:        stringToPtr("Golang - Per Title Encoding"),
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	realEncodingResp, err := encodingS.Create(&realEncoding)
@@ -180,8 +178,8 @@ func main() {
 	fmt.Println("Creating AAC Configuration...")
 	aacS := services.NewAACCodecConfigurationService(bitmovin)
 	audioCodecConfiguration := models.AACCodecConfiguration{
-		Name: stringToPtr("AAC Codec Configuration"),
-		Bitrate: intToPtr(128000),
+		Name:         stringToPtr("AAC Codec Configuration"),
+		Bitrate:      intToPtr(128000),
 		SamplingRate: floatToPtr(48000),
 	}
 	audioCodecConfigurationResp, err := aacS.Create(&audioCodecConfiguration)
@@ -193,7 +191,7 @@ func main() {
 	audioConfigurationStream := &models.Stream{
 		CodecConfigurationID: audioCodecConfigurationResp.Data.Result.ID,
 		InputStreams:         ais,
-		Name: stringToPtr("Audio Stream"),
+		Name:                 stringToPtr("Audio Stream"),
 	}
 	audioStreamResp, err := encodingS.AddStream(*realEncodingResp.Data.Result.ID, audioConfigurationStream)
 	errorHandler(audioStreamResp.Status, err)
@@ -211,12 +209,12 @@ func main() {
 	}
 
 	audioFmp4Muxing := models.FMP4Muxing{
-		SegmentLength: floatToPtr(4.0),
-		SegmentNaming: stringToPtr("seg_%number%.m4s"),
+		SegmentLength:   floatToPtr(4.0),
+		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 		InitSegmentName: stringToPtr("init.mp4"),
-		Streams: []models.StreamItem{audioMuxingStream},
-		Outputs: []models.Output{audioMuxingOutput},
-		Name: stringToPtr("Audio FMP4 Muxing"),
+		Streams:         []models.StreamItem{audioMuxingStream},
+		Outputs:         []models.Output{audioMuxingOutput},
+		Name:            stringToPtr("Audio FMP4 Muxing"),
 	}
 	audioFmp4MuxingResp, err := encodingS.AddFMP4Muxing(*realEncodingResp.Data.Result.ID, &audioFmp4Muxing)
 	errorHandler(audioFmp4MuxingResp.Status, err)
@@ -232,9 +230,9 @@ func main() {
 	audioTsMuxing := models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
 		SegmentNaming: stringToPtr("seg_%number%.ts"),
-		Streams: []models.StreamItem{audioMuxingStream},
-		Outputs: []models.Output{audioTsMuxingOutput},
-		Name: stringToPtr("Audio Muxing"),
+		Streams:       []models.StreamItem{audioMuxingStream},
+		Outputs:       []models.Output{audioTsMuxingOutput},
+		Name:          stringToPtr("Audio Muxing"),
 	}
 	audioTsMuxingResp, err := encodingS.AddTSMuxing(*realEncodingResp.Data.Result.ID, &audioTsMuxing)
 	errorHandler(audioTsMuxingResp.Status, err)
@@ -304,8 +302,8 @@ func createDashManifest(
 	errorHandler(periodResp.Status, err)
 
 	/*
-	AUDIO
-	 */
+		AUDIO
+	*/
 	aas := &models.AudioAdaptationSet{
 		Language: stringToPtr("en"),
 	}
@@ -326,8 +324,8 @@ func createDashManifest(
 	errorHandler(fmp4RepAudioResp.Status, err)
 
 	/*
-	VIDEO
-	 */
+		VIDEO
+	*/
 	vas := &models.VideoAdaptationSet{}
 	vasResp, err := dashService.AddVideoAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, vas)
 	errorHandler(vasResp.Status, err)
@@ -399,8 +397,8 @@ func createHlsManifest(
 	errorHandler(hlsManifestResp.Status, err)
 
 	/*
-	AUDIO
-	 */
+		AUDIO
+	*/
 	audioMediaInfo := &models.MediaInfo{
 		Type:            bitmovintypes.MediaTypeAudio,
 		URI:             stringToPtr("audio.m3u8"),
@@ -419,10 +417,9 @@ func createHlsManifest(
 	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
 	errorHandler(audioMediaInfoResp.Status, err)
 
-
 	/*
-	VIDEO
-	 */
+		VIDEO
+	*/
 	for _, encodingConfig := range encodingConfigs {
 		videoStreamInfo := &models.StreamInfo{
 			Audio:       stringToPtr("audio_group"),
@@ -500,16 +497,16 @@ func createAndAddTsMuxingsToEncodingConfigs(
 		}
 		muxingOutput := models.Output{
 			OutputID:   outputResp.Data.Result.ID,
-			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath + "hls/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
+			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath+"hls/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
 			ACL:        []models.ACLItem{aclEntry},
 		}
 
 		muxing := models.TSMuxing{
 			SegmentLength: floatToPtr(4.0),
 			SegmentNaming: stringToPtr("seg_%number%.ts"),
-			Streams: []models.StreamItem{tsMuxingStream},
-			Outputs: []models.Output{muxingOutput},
-			Name: stringToPtr(fmt.Sprintf("TS Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
+			Streams:       []models.StreamItem{tsMuxingStream},
+			Outputs:       []models.Output{muxingOutput},
+			Name:          stringToPtr(fmt.Sprintf("TS Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
 		}
 		muxingResp, err := encodingS.AddTSMuxing(encodingId, &muxing)
 		errorHandler(muxingResp.Status, err)
@@ -536,17 +533,17 @@ func createAndAddFmp4MuxingsToEncodingConfigs(
 		}
 		muxingOutput := models.Output{
 			OutputID:   outputResp.Data.Result.ID,
-			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath + "dash/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
+			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath+"dash/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
 			ACL:        []models.ACLItem{aclEntry},
 		}
 
 		muxing := models.FMP4Muxing{
-			SegmentLength: floatToPtr(4.0),
-			SegmentNaming: stringToPtr("seg_%number%.m4s"),
+			SegmentLength:   floatToPtr(4.0),
+			SegmentNaming:   stringToPtr("seg_%number%.m4s"),
 			InitSegmentName: stringToPtr("init.mp4"),
-			Streams: []models.StreamItem{fmp4MuxingStream},
-			Outputs: []models.Output{muxingOutput},
-			Name: stringToPtr(fmt.Sprintf("FMP4 Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
+			Streams:         []models.StreamItem{fmp4MuxingStream},
+			Outputs:         []models.Output{muxingOutput},
+			Name:            stringToPtr(fmt.Sprintf("FMP4 Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
 		}
 		muxingResp, err := encodingS.AddFMP4Muxing(encodingId, &muxing)
 		errorHandler(muxingResp.Status, err)
@@ -583,11 +580,11 @@ func createAndAddH264CodecConfigurationsToEncodingConfigs(
 	for _, encodingConfig := range encodingConfigs {
 		fmt.Printf("Creating codec config (bitrate = %d, height = %d)\n", *encodingConfig.codecConfigDef.bitrate, *encodingConfig.codecConfigDef.height)
 		h264CodecConfig := models.H264CodecConfiguration{
-			Name: stringToPtr(fmt.Sprintf("H264 Configuration %dp %dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
-			Bitrate: intToPtr(*encodingConfig.codecConfigDef.bitrate * 1000),
-			Height: encodingConfig.codecConfigDef.height,
+			Name:      stringToPtr(fmt.Sprintf("H264 Configuration %dp %dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
+			Bitrate:   intToPtr(*encodingConfig.codecConfigDef.bitrate * 1000),
+			Height:    encodingConfig.codecConfigDef.height,
 			FrameRate: encodingConfig.codecConfigDef.fps,
-			Profile: bitmovintypes.H264ProfileHigh,
+			Profile:   bitmovintypes.H264ProfileHigh,
 		}
 		codecConfigResp, err := h264S.Create(&h264CodecConfig)
 		errorHandler(codecConfigResp.Status, err)
