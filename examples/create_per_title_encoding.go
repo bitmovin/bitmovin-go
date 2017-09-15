@@ -148,7 +148,7 @@ func main() {
 
 	analysisMuxingResp, err = encodingS.RetrieveFMP4Muxing(*analysisEncodingResp.Data.Result.ID, *analysisMuxingResp.Data.Result.ID)
 	analysisMuxing = analysisMuxingResp.Data.Result
-	complexityFactor := float64(*analysisMuxing.AvgBitrate / MEDIAN_BITRATE)
+	complexityFactor := float64(*analysisMuxing.AvgBitrate) / float64(MEDIAN_BITRATE)
 
 	if complexityFactor > MAX_COMPLEXITY_FACTOR {
 		complexityFactor = MAX_COMPLEXITY_FACTOR
