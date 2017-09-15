@@ -100,6 +100,7 @@ type H264CodecConfiguration struct {
 	Trellis          bitmovintypes.Trellis          `json:"trellis,omitempty"`
 	RcLookahead      *int64                         `json:"rcLookahead,omitempty"`
 	Partitions       []bitmovintypes.Partition      `json:"partitions,omitempty"`
+	CRF              *float64                       `json:"crf,omitempty"`
 }
 
 type H264CodecConfigurationData struct {
