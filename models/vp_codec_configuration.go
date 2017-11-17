@@ -2,8 +2,7 @@ package models
 
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
-// Base struct for both VP8 and VP9, it should never be used by itself
-type VPCodecConfiguration struct {
+type VP8CodecConfiguration struct {
 	ID          *string                `json:"id,omitempty"`
 	Name        *string                `json:"name,omitempty"`
 	Description *string                `json:"description,omitempty"`
@@ -27,10 +26,7 @@ type VPCodecConfiguration struct {
 	ARNRMaxFrames     *int64                   `json:"arnrMaxFrames,omitempty"`
 	ARNRStrength      *int64                   `json:"arnrStrength,omitempty"`
 	ARNRType          bitmovintypes.VPARNRType `json:"arnrType,omitempty"`
-}
 
-type VP8CodecConfiguration struct {
-	VPCodecConfiguration
 	NoiseSensitivity bitmovintypes.VP8NoiseSensitivity `json:"noiseSensitivity,omitempty"`
 }
 
@@ -71,7 +67,30 @@ type VP8CodecConfigurationListResponse struct {
 }
 
 type VP9CodecConfiguration struct {
-	VPCodecConfiguration
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+
+	Bitrate   *int64   `json:"bitrate,omitempty"`
+	FrameRate *float64 `json:"rate,omitempty"`
+	Width     *int64   `json:"width,omitempty"`
+	Height    *int64   `json:"height,omitempty"`
+
+	CRF               *float64                 `json:"crf,omitempty"`
+	LagInFrames       *int64                   `json:"lagInFrames,omitempty"`
+	MaxIntraRate      *int64                   `json:"maxIntraRate,omitempty"`
+	QPMin             *int64                   `json:"qpMin,omitempty"`
+	QPMax             *int64                   `json:"qpMax,omitempty"`
+	RateUndershootPct *int64                   `json:"rateUndershootPct,omitempty"`
+	RateOvershootPct  *int64                   `json:"rateUndershootPct,omitempty"`
+	Sharpness         *int64                   `json:"sharpness,omitempty"`
+	Quality           bitmovintypes.VPQuality  `json:"quality,omitempty"`
+	StaticThresh      *int64                   `json:"staticThresh,omitempty"`
+	ARNRMaxFrames     *int64                   `json:"arnrMaxFrames,omitempty"`
+	ARNRStrength      *int64                   `json:"arnrStrength,omitempty"`
+	ARNRType          bitmovintypes.VPARNRType `json:"arnrType,omitempty"`
+
 	TileColumns      *int64                  `json:"tileColumns,omitempty"`
 	TileRows         *int64                  `json:"tileRows,omitempty"`
 	FrameParallel    *bool                   `json:"frameParallel,omitempty"`
