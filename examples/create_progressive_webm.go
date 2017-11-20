@@ -44,7 +44,7 @@ func main() {
 	videoConfig := &models.VP8CodecConfiguration{
 		Name:      stringToPtr("example_vp8_codec_configuration"),
 		Bitrate:   intToPtr(1000000),
-		FrameRate: floatToPtr(29.7),
+		FrameRate: floatToPtr(25.0),
 		Width:     intToPtr(640),
 		Height:    intToPtr(360),
 	}
@@ -57,7 +57,7 @@ func main() {
 		Bitrate:      intToPtr(128000),
 		SamplingRate: floatToPtr(48000.0),
 	}
-	vorbisResp, err := vorbisS.Create(vorbisS)
+	vorbisResp, err := vorbisS.Create(vorbisConfig)
 	errorHandler(vorbisResp.Status, err)
 
 	videoInputStream := models.InputStream{
@@ -106,11 +106,12 @@ func main() {
 	}
 
 	webmMuxing := &models.ProgressiveWebMMuxing{
-		Streams: []models.StreamItem{videoMuxingStream, audioMuxingStream},
-		Outputs: []models.Output{videoMuxingOutput},
+		Streams:  []models.StreamItem{videoMuxingStream, audioMuxingStream},
+		Outputs:  []models.Output{videoMuxingOutput},
+		Filename: stringToPtr("yourfilename.webm"),
 	}
 	webmMuxingResp, err := encodingS.AddProgressiveWebMMuxing(*encodingResp.Data.Result.ID, webmMuxing)
-	errorHandler(webmMuxingResp, err)
+	errorHandler(webmMuxingResp.Status, err)
 
 	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
