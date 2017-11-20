@@ -12,7 +12,6 @@ type VP8CodecConfigurationService struct {
 }
 
 const (
-	// FIXME Need to verify this
 	VP8CodecConfigurationEndpoint string = "encoding/configurations/video/vp8"
 )
 

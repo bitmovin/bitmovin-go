@@ -12,7 +12,6 @@ type VP9CodecConfigurationService struct {
 }
 
 const (
-	// FIXME Need to verify this
 	VP9CodecConfigurationEndpoint string = "encoding/configurations/video/vp9"
 )
 
