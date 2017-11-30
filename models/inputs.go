@@ -138,13 +138,13 @@ type HTTPInputListResult struct {
 }
 
 type HTTPInputListData struct {
-	Result S3InputListResult `json:"result,omitempty"`
+	Result HTTPInputListResult `json:"result,omitempty"`
 }
 
 type HTTPInputListResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputListData              `json:"data,omitempty"`
+	Data      HTTPInputListData            `json:"data,omitempty"`
 }
 
 type HTTPSInput struct {
@@ -193,13 +193,13 @@ type HTTPSInputListResult struct {
 }
 
 type HTTPSInputListData struct {
-	Result S3InputListResult `json:"result,omitempty"`
+	Result HTTPSInputListResult `json:"result,omitempty"`
 }
 
 type HTTPSInputListResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      S3InputListData              `json:"data,omitempty"`
+	Data      HTTPSInputListData           `json:"data,omitempty"`
 }
 
 type S3Input struct {
