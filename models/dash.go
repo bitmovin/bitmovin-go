@@ -97,7 +97,7 @@ type VideoAdaptationSet struct {
 
 type VideoAdaptationSetData struct {
 	//Success fields
-	Result   AudioAdaptationSet `json:"result,omitempty"`
+	Result   VideoAdaptationSet `json:"result,omitempty"`
 	Messages []Message          `json:"messages,omitempty"`
 
 	//Error fields
