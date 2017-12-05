@@ -322,11 +322,11 @@ type ZixiInput struct {
 	Description    *string                `json:"description,omitempty"`
 	CustomData     map[string]interface{} `json:"customData,omitempty"`
 	Host           *string                `json:"host",omitempty"`
-	Port           *int                   `json:"port",omitempty"`
+	Port           *int64                 `json:"port",omitempty"`
 	Stream         *string                `json:"stream",omitempty`
 	Password       *string                `json:"password",omitempty`
-	Latency        *int                   `json:"latency",omitempty`
-	MinBitrate     *int                   `json:"minBitrate",omitempty`
+	Latency        *int64                 `json:"latency",omitempty`
+	MinBitrate     *int64                 `json:"minBitrate",omitempty`
 	DecryptionType *string                `json:"decryptionType",omitempty`
 	DecryptionKey  *string                `json:"decryptionKey",omitempty`
 }
@@ -337,10 +337,10 @@ type ZixiInputItem struct {
 	Description    *string                `json:"description,omitempty"`
 	CustomData     map[string]interface{} `json:"customData,omitempty"`
 	Host           *string                `json:"host",omitempty"`
-	Port           *int                   `json:"port",omitempty"`
+	Port           *int64                 `json:"port",omitempty"`
 	Stream         *string                `json:"stream",omitempty`
-	Latency        *int                   `json:"latency",omitempty`
-	MinBitrate     *int                   `json:"minBitrate",omitempty`
+	Latency        *int64                 `json:"latency",omitempty`
+	MinBitrate     *int64                 `json:"minBitrate",omitempty`
 	DecryptionType *string                `json:"decryptionType",omitempty`
 }
 

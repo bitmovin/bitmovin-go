@@ -10,6 +10,10 @@ type DashManifest struct {
 	ManifestName *string  `json:"manifestName"`
 }
 
+func (h *DashManifest) AddOutput(output *Output) {
+	h.Outputs = append(h.Outputs, *output)
+}
+
 type DashManifestData struct {
 	//Success fields
 	Result   DashManifest `json:"result,omitempty"`
