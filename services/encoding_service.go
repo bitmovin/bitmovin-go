@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
 	"github.com/bitmovin/bitmovin-go/models"
@@ -579,6 +580,25 @@ func (s *EncodingService) ListThumbnails(encodingID, streamID string, offset, li
 	var r models.ThumbnailListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) AddFilter(encodingID, streamID, filterID string, position int64) (*models.AddFilterResponse, error) {
+	path := fmt.Sprintf("%s/%s/streams/%s/filters", EncodingEndpoint, encodingID, streamID)
+	f := &models.AddFilter{ID: filterID, Position: &position}
+	payload, err := json.Marshal(f)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.RestService.Create(path, payload)
+	if err != nil {
+		return nil, err
+	}
+	var r models.AddFilterResponse
+	if err := json.Unmarshal(resp, &r); err != nil {
 		return nil, err
 	}
 	return &r, nil
