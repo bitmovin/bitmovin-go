@@ -14,7 +14,7 @@ func main() {
 	log.Printf("Creating Zixi Input")
 	zixiIS := services.NewZixiInputService(bitmovin)
 	zixiInput := &models.ZixiInput{
-		Name:   stringToPtr(`My test Zixi Input`),
+		Name:   stringToPtr("My test Zixi Input"),
 		Host:   stringToPtr("test.com"),
 		Port:   intToPtr(2088),
 		Stream: stringToPtr("test-stream"),
