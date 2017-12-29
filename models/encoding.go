@@ -258,8 +258,8 @@ type ProgressiveMOVMuxing struct {
 
 type ProgressiveMOVMuxingData struct {
 	//Success fields
-	Result   ProgressiveWebMMuxing `json:"result,omitempty"`
-	Messages []Message             `json:"messages,omitempty"`
+	Result   ProgressiveMOVMuxing `json:"result,omitempty"`
+	Messages []Message            `json:"messages,omitempty"`
 
 	//Error fields
 	Code             *int64   `json:"code,omitempty"`
@@ -272,24 +272,24 @@ type ProgressiveMOVMuxingData struct {
 type ProgressiveMOVMuxingResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      ProgressiveWebMMuxingData    `json:"data,omitempty"`
+	Data      ProgressiveMOVMuxingData     `json:"data,omitempty"`
 }
 
 type ProgressiveMOVMuxingListResult struct {
-	TotalCount *int64                  `json:"totalCount,omitempty"`
-	Previous   *string                 `json:"previous,omitempty"`
-	Next       *string                 `json:"next,omitempty"`
-	Items      []ProgressiveWebMMuxing `json:"items,omitempty"`
+	TotalCount *int64                 `json:"totalCount,omitempty"`
+	Previous   *string                `json:"previous,omitempty"`
+	Next       *string                `json:"next,omitempty"`
+	Items      []ProgressiveMOVMuxing `json:"items,omitempty"`
 }
 
 type ProgressiveMOVMuxingListData struct {
-	Result ProgressiveWebMMuxingListResult `json:"result,omitempty"`
+	Result ProgressiveMOVMuxingListResult `json:"result,omitempty"`
 }
 
 type ProgressiveMOVMuxingListResponse struct {
-	RequestID *string                       `json:"requestId,omitempty"`
-	Status    bitmovintypes.ResponseStatus  `json:"status,omitempty"`
-	Data      ProgressiveWebMMuxingListData `json:"data,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      ProgressiveMOVMuxingListData `json:"data,omitempty"`
 }
 
 type ProgressiveWebMMuxing struct {
