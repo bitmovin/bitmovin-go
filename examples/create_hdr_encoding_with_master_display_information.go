@@ -185,7 +185,7 @@ func floatToPtr(f float64) *float64 {
 func newHdrVideoConfig() *models.H265CodecConfiguration {
 
 	colorConfig := models.ColorConfig{
-		ColorTransfer:  bitmovintypes.ColorTransferBT2020_10,
+		ColorTransfer:  bitmovintypes.ColorTransferSMPTE2084,
 		ColorPrimaries: bitmovintypes.ColorPrimariesBT2020,
 		ColorSpace:     bitmovintypes.ColorSpaceBT2020_NCL,
 	}
