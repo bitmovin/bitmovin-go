@@ -270,7 +270,7 @@ type GenericS3Input struct {
 	SecretKey   *string                `json:"secretKey,omitempty"`
 	BucketName  *string                `json:"bucketName,omitempty"`
 	Host        *string                `json:"host,omitempty"`
-	Port        *string                `json:"port,omitempty"`
+	Port        *int64                 `json:"port,omitempty"`
 }
 
 type GenericS3InputItem struct {
@@ -279,7 +279,7 @@ type GenericS3InputItem struct {
 	Description *string `json:"description,omitempty"`
 	BucketName  *string `json:"bucketName,omitempty"`
 	Host        *string `json:"host,omitempty"`
-	Port        *string `json:"port,omitempty"`
+	Port        *int64  `json:"port,omitempty"`
 	CreatedAt   *string `json:"createdAt,omitempty"`
 	UpdatedAt   *string `json:"updatedAt,omitempty"`
 }
