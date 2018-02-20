@@ -239,6 +239,9 @@ func main() {
 	video720pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video720pStreamInfo)
 	errorHandler(video720pStreamInfoResponse.Status, err)
 
+	startResp, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
+	errorHandler(startResp.Status, err)
+	
 	status = ""
 	for status != "FINISHED" {
 		time.Sleep(5 * time.Second)
@@ -257,10 +260,6 @@ func main() {
 			return
 		}
 	}
-
-	// Delete Encoding
-	deleteResp, err := encodingS.Delete(*encodingResp.Data.Result.ID)
-	errorHandler(deleteResp.Status, err)
 }
 
 func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
