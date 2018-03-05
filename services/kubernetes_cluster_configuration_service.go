@@ -20,13 +20,13 @@ func NewKubernetesClusterConfigurationService(bitmovin *bitmovin.Bitmovin) *Kube
 	return &KubernetesClusterConfigurationService{RestService: r}
 }
 
-func (s *KubernetesClusterConfigurationService) Upsert(id string, i *models.KubernetesClusterConfigurationRequest) (*models.KubernetesClusterConfigurationResponse, error) {
-	b, err := json.Marshal(*i)
+func (s *KubernetesClusterConfigurationService) Upsert(ID string, configRequest *models.KubernetesClusterConfigurationRequest) (*models.KubernetesClusterConfigurationResponse, error) {
+	b, err := json.Marshal(*configRequest)
 	if err != nil {
 		return nil, err
 	}
 
-	path := KubernetesConfigurationEndpoint + "/" + id + "/" + "configuration"
+	path := KubernetesConfigurationEndpoint + "/" + ID + "/" + "configuration"
 	responseBody, err := s.RestService.Update(path, b)
 	if err != nil {
 		return nil, err
@@ -41,8 +41,8 @@ func (s *KubernetesClusterConfigurationService) Upsert(id string, i *models.Kube
 	return &responseValue, nil
 }
 
-func (s *KubernetesClusterConfigurationService) Retrieve(id string) (*models.KubernetesClusterConfigurationDetail, error) {
-	path := KubernetesConfigurationEndpoint + "/" + id + "/" + "configuration"
+func (s *KubernetesClusterConfigurationService) Retrieve(ID string) (*models.KubernetesClusterConfigurationDetail, error) {
+	path := KubernetesConfigurationEndpoint + "/" + ID + "/" + "configuration"
 
 	responseBody, err := s.RestService.Retrieve(path)
 	if err != nil {
