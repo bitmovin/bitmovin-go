@@ -293,7 +293,8 @@ type ProgressiveWebMMuxingListResponse struct {
 }
 
 type StartResult struct {
-	ID *string `json:"id,omitempty"`
+	ID         *string            `json:"id,omitempty"`
+	Scheduling *EncodingScheduling `json:"scheduling,omitempty"`
 }
 
 type StartData struct {
@@ -377,4 +378,8 @@ type LiveStatusResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      LiveStatusData               `json:"data,omitempty"`
+}
+
+type StartOptions struct {
+	Scheduling *EncodingScheduling `json:"scheduling,omitempty"`
 }
