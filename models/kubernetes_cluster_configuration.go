@@ -8,9 +8,6 @@ type KubernetesClusterConfigurationRequest struct {
 }
 
 type KubernetesClusterConfigurationDetail struct {
-	Name               string `json:"name"`
-	Description        string `json:"description"`
-	ID                 string `json:"id"`
 	ParallelEncodings  int64  `json:"parallelEncodings"`
 	WorkersPerEncoding int64  `json:"workersPerEncoding"`
 }

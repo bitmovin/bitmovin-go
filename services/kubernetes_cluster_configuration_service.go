@@ -41,8 +41,8 @@ func (s *KubernetesClusterConfigurationService) Upsert(kubernetesID string, i *m
 	return &responseValue, nil
 }
 
-func (s *KubernetesClusterConfigurationService) Retrieve(kubernetesID string, id string) (*models.KubernetesClusterConfigurationDetail, error) {
-	path := KubernetesConfigurationEndpoint + "/" + kubernetesID + "/" + "configuration" + "/" + id
+func (s *KubernetesClusterConfigurationService) Retrieve(kubernetesID string) (*models.KubernetesClusterConfigurationDetail, error) {
+	path := KubernetesConfigurationEndpoint + "/" + kubernetesID + "/" + "configuration"
 
 	responseBody, err := s.RestService.Retrieve(path)
 	if err != nil {
