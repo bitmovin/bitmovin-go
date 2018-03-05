@@ -380,6 +380,6 @@ type LiveStatusResponse struct {
 	Data      LiveStatusData               `json:"data,omitempty"`
 }
 
-type StartRequest struct {
+type StartOptions struct {
 	Scheduling *EncodingScheduling `json:"scheduling,omitempty"`
 }

@@ -477,7 +477,7 @@ func (s *EncodingService) Start(encodingID string) (*models.StartStopResponse, e
 	return &r, nil
 }
 
-func (s *EncodingService) StartWithRequestObject(encodingID string, a *models.StartRequest) (*models.StartStopResponse, error) {
+func (s *EncodingService) StartWithOptions(encodingID string, a *models.StartOptions) (*models.StartStopResponse, error) {
 	b, err := json.Marshal(*a)
 	if err != nil {
 		return nil, err

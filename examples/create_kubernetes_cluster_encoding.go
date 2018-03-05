@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"time"
+	"encoding/json"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
 	"github.com/bitmovin/bitmovin-go/models"
 	"github.com/bitmovin/bitmovin-go/services"
 	"github.com/bitmovin/bitmovin-go/bitmovintypes"
-	"github.com/bitmovin/bitmovin-go/utils"
 )
 
 func main() {
@@ -55,7 +55,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf("KubernetesClusterConfig Response: %s\n", utils.GetAsJsonString(*kubernetesConfigResp))
+	fmt.Printf("KubernetesClusterConfig Response: %s\n", getAsJsonString(*kubernetesConfigResp))
 
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
@@ -220,15 +220,15 @@ func main() {
 	audioTSMuxingResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, audioTSMuxing)
 	errorHandler(audioTSMuxingResp.Status, err)
 
-	startReq := &models.StartRequest{
+	startReq := &models.StartOptions{
 		Scheduling: &models.EncodingScheduling{
 			Priority: intToPtr(50),
 		},
 	}
-	startResp, err := encodingS.StartWithRequestObject(*encodingResp.Data.Result.ID, startReq)
+	startResp, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, startReq)
 	errorHandler(startResp.Status, err)
 
-	fmt.Printf("Start Response: %s\n", utils.GetAsJsonString(*startResp))
+	fmt.Printf("Start Response: %s\n", getAsJsonString(*startResp))
 
 	var status string
 	status = ""
@@ -242,12 +242,12 @@ func main() {
 		}
 
 		// Polling and Printing out the response
-		fmt.Printf("Status: %s\n", utils.GetAsJsonString(*statusResp))
+		fmt.Printf("Status: %s\n", getAsJsonString(*statusResp))
 
 		status = *statusResp.Data.Result.Status
 		if status == "ERROR" {
 			fmt.Println("error in Encoding Status")
-			fmt.Printf("Status %s\n", utils.GetAsJsonString(*statusResp))
+			fmt.Printf("Status %s\n", getAsJsonString(*statusResp))
 			return
 		}
 	}
@@ -319,11 +319,11 @@ func main() {
 			return
 		}
 		// Polling and Printing out the response
-		fmt.Printf("DASH manifest creation status: %s\n", utils.GetAsJsonString(statusResp))
+		fmt.Printf("DASH manifest creation status: %s\n", getAsJsonString(statusResp))
 		status = *statusResp.Data.Result.Status
 		if status == "ERROR" {
 			fmt.Println("error in Manifest Status")
-			fmt.Printf("%s\n", utils.GetAsJsonString(statusResp))
+			fmt.Printf("%s\n", getAsJsonString(statusResp))
 			return
 		}
 	}
@@ -388,11 +388,11 @@ func main() {
 			return
 		}
 		// Polling and Printing out the response
-		fmt.Printf("HLS manifest creation status: %s\n", utils.GetAsJsonString(statusResp))
+		fmt.Printf("HLS manifest creation status: %s\n", getAsJsonString(statusResp))
 		status = *statusResp.Data.Result.Status
 		if status == "ERROR" {
 			fmt.Println("error in Manifest Status")
-			fmt.Printf("%s\n", utils.GetAsJsonString(statusResp))
+			fmt.Printf("%s\n", getAsJsonString(statusResp))
 			return
 		}
 	}
@@ -425,4 +425,12 @@ func boolToPtr(b bool) *bool {
 
 func floatToPtr(f float64) *float64 {
 	return &f
+}
+
+func getAsJsonString(v interface{}) (string) {
+	j, err := json.MarshalIndent(v, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+	return string(j)
 }
