@@ -7,9 +7,9 @@ type Sprite struct {
 	SpriteName  *string  `json:"spriteName,omitempty"`
 	Description *string  `json:"description,omitempty"`
 	VTTName     *string  `json:"vttName,omitempty"`
-	Height      *int64   `json:"height,omitempty"`
-	Width       *int64   `json:"width,omitempty"`
-	Distance    *float64 `json:"distance,omitempty"`
+	Height      int64    `json:"height,omitempty"`
+	Width       int64    `json:"width,omitempty"`
+	Distance    float64  `json:"distance,omitempty"`
 	Outputs     []Output `json:"outputs,omitempty"`
 }
 
@@ -31,7 +31,7 @@ type SpriteListResponse struct {
 	Items      []Sprite `json:"items,omitempty"`
 }
 
-func NewSprite(name, spriteName, description, vttName *string, height, width *int64, distance *float64, outputs []Output) *Sprite {
+func NewSprite(name, spriteName, description, vttName *string, height, width int64, distance float64, outputs []Output) *Sprite {
 	return &Sprite{
 		Name:        name,
 		SpriteName:  spriteName,
