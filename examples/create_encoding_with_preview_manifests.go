@@ -294,7 +294,7 @@ func main() {
 
 	previewDashM := &models.DashManifest{
 		ManifestName: stringToPtr(previewDashManifestName),
-		Outputs: []models.Output{manifestOutput},
+		Outputs:      []models.Output{manifestOutput},
 	}
 	previewDashMResp, err := dashService.Create(previewDashM)
 	errorHandler(previewDashMResp.Status, err)
@@ -346,7 +346,7 @@ func main() {
 
 	previewHlsM := &models.HLSManifest{
 		ManifestName: stringToPtr(previewHlsManifestName),
-		Outputs: []models.Output{manifestOutput},
+		Outputs:      []models.Output{manifestOutput},
 	}
 	previewHlsMResp, err := hlsService.Create(previewHlsM)
 	errorHandler(previewHlsMResp.Status, err)
@@ -448,9 +448,9 @@ func main() {
 	}
 
 	options := &models.StartOptions{
-		VodHlsManifests: []models.VodHlsManifest{vodHls},
-		PreviewHlsManifests: []models.PreviewHlsManifest{previewHls},
-		VodDashManifests: []models.VodDashManifest{vodDash},
+		VodHlsManifests:      []models.VodHlsManifest{vodHls},
+		PreviewHlsManifests:  []models.PreviewHlsManifest{previewHls},
+		VodDashManifests:     []models.VodDashManifest{vodDash},
 		PreviewDashManifests: []models.PreviewDashManifest{previewDash},
 	}
 
