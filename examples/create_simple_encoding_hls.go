@@ -241,7 +241,7 @@ func main() {
 
 	startResp, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
-	
+
 	status = ""
 	for status != "FINISHED" {
 		time.Sleep(5 * time.Second)

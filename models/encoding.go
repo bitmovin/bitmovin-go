@@ -446,7 +446,7 @@ type ProgressiveWebMMuxingInformationResponse struct {
 }
 
 type StartResult struct {
-	ID         *string            `json:"id,omitempty"`
+	ID         *string             `json:"id,omitempty"`
 	Scheduling *EncodingScheduling `json:"scheduling,omitempty"`
 }
 
@@ -534,5 +534,9 @@ type LiveStatusResponse struct {
 }
 
 type StartOptions struct {
-	Scheduling *EncodingScheduling `json:"scheduling,omitempty"`
+	Scheduling           *EncodingScheduling   `json:"scheduling,omitempty"`
+	PreviewDashManifests []PreviewDashManifest `json:"previewDashManifests,omitempty"`
+	PreviewHlsManifests  []PreviewHlsManifest  `json:"previewHlsManifests,omitempty"`
+	VodDashManifests     []VodDashManifest     `json:"vodDashManifests,omitempty"`
+	VodHlsManifests      []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
 }

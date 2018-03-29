@@ -1,14 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
-	"encoding/json"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
+	"github.com/bitmovin/bitmovin-go/bitmovintypes"
 	"github.com/bitmovin/bitmovin-go/models"
 	"github.com/bitmovin/bitmovin-go/services"
-	"github.com/bitmovin/bitmovin-go/bitmovintypes"
 )
 
 func main() {
@@ -427,7 +427,7 @@ func floatToPtr(f float64) *float64 {
 	return &f
 }
 
-func getAsJsonString(v interface{}) (string) {
+func getAsJsonString(v interface{}) string {
 	j, err := json.MarshalIndent(v, "", "    ")
 	if err != nil {
 		panic(err)
