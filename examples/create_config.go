@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	bitmovin := bitmovin.NewBitmovin("YOUR API KEY")
+	bitmovin := bitmovin.NewBitmovinDefault("YOUR API KEY")
 
 	config := models.NewH264CodecConfigBuilder(`H264 Default Config`).
 		Width(1920).Height(1080).Bitrate(4500000).
@@ -24,5 +24,5 @@ func main() {
 
 	svc := services.NewH264CodecConfigurationService(bitmovin)
 	response, _ := svc.Create(config)
-	log.Printf("Created h264 Code Configuration with ID: %s", response.Data.Result.ID)
+	log.Printf("Created h264 Code Configuration with ID: %s With Name: %s", *response.Data.Result.ID, *response.Data.Result.Name)
 }

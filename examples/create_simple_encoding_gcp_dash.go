@@ -282,7 +282,7 @@ func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
 		fmt.Println(err)
 	} else if responseStatus == "ERROR" {
 		fmt.Println("api error")
-		fmt.Println("Received Error: %v", err)
+		fmt.Printf("Received Error: %s\n", err)
 		panic(err)
 	}
 }
