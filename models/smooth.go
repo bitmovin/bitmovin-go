@@ -8,8 +8,8 @@ type SmoothStreamingManifest struct {
 	Description        *string                `json:"description,omitempty"`
 	CustomData         map[string]interface{} `json:"customData,omitempty"`
 	Outputs            []Output               `json:"outputs,omitempty"`
-	ServerManifestName *string                 `json:"serverManifestName,omitempty"`
-	ClientManifestName *string                 `json:"clientManifestName,omitempty"`
+	ServerManifestName *string                `json:"serverManifestName,omitempty"`
+	ClientManifestName *string                `json:"clientManifestName,omitempty"`
 }
 
 type SmoothStreamingManifestData struct {
