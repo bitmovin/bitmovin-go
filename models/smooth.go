@@ -32,8 +32,8 @@ type SmoothStreamingMp4Representation struct {
 	ID          *string `json:"id,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	EncodingId  *string `json:"encodingId,omitempty"`
-	MuxingId    *string `json:"muxingId,omitempty"`
+	EncodingID  *string `json:"encodingId,omitempty"`
+	MuxingID    *string `json:"muxingId,omitempty"`
 	MediaFile   *string `json:"mediaFile,omitempty"`
 	Language    *string `json:"language,omitempty"`
 	TrackName   *string `json:"trackName,omitempty"`
@@ -59,9 +59,9 @@ type SmoothStreamingContentProtection struct {
 	ID          *string `json:"id,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"`
-	EncodingId  *string `json:"encodingId,omitempty"`
-	MuxingId    *string `json:"muxingId,omitempty"`
-	DrmId       *string `json:"drmId,omitempty"`
+	EncodingID  *string `json:"encodingId,omitempty"`
+	MuxingID    *string `json:"muxingId,omitempty"`
+	DrmID       *string `json:"drmId,omitempty"`
 }
 
 type SmoothStreamingContentProtectionData struct {
