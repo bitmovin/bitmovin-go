@@ -4,6 +4,11 @@ import (
 	"github.com/bitmovin/bitmovin-go/bitmovintypes"
 )
 
+type Infrastructure struct {
+	InfrastructureID *string                    `json:"infrastructureId,omitempty"`
+	CloudRegion      *bitmovintypes.CloudRegion `json:"cloudRegion,omitempty"`
+}
+
 type Encoding struct {
 	ID               *string                      `json:"id,omitempty"`
 	Name             *string                      `json:"name,omitempty"`
@@ -13,6 +18,7 @@ type Encoding struct {
 	CloudRegion      bitmovintypes.CloudRegion    `json:"cloudRegion,omitempty"`
 	Status           string                       `json:"status,omitempty"`
 	InfrastructureID *string                      `json:"infrastructureId,omitempty"`
+	Infrastructure   *Infrastructure              `json:"infrastructure,omitempty"`
 }
 
 type EncodingData struct {
