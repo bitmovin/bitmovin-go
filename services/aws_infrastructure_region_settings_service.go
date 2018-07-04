@@ -21,8 +21,8 @@ func NewAWSInfrastructureRegionSettingsService(bitmovin *bitmovin.Bitmovin) *AWS
 	return &AWSInfrastructureRegionSettingsService{RestService: r}
 }
 
-func (s *AWSInfrastructureRegionSettingsService) Create(insfrastructureID string, region bitmovintypes.AWSCloudRegion, i *models.CreateAWSInfrastructureRegionSettingsRequest) (*models.AWSInfrastructureRegionSettingsDetail, error) {
-	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + insfrastructureID + "/" + "regions/" + string(region)
+func (s *AWSInfrastructureRegionSettingsService) Create(infrastructureID string, region bitmovintypes.AWSCloudRegion, i *models.CreateAWSInfrastructureRegionSettingsRequest) (*models.AWSInfrastructureRegionSettingsDetail, error) {
+	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + infrastructureID + "/" + "regions/" + string(region)
 
 	b, err := json.Marshal(*i)
 	if err != nil {
@@ -36,8 +36,8 @@ func (s *AWSInfrastructureRegionSettingsService) Create(insfrastructureID string
 	return MarshalSingleResponseAWSRegionSetting(responseBody)
 }
 
-func (s *AWSInfrastructureRegionSettingsService) Retrieve(insfrastructureID string, region bitmovintypes.AWSCloudRegion) (*models.AWSInfrastructureRegionSettingsDetail, error) {
-	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + insfrastructureID + "/" + "regions/" + string(region)
+func (s *AWSInfrastructureRegionSettingsService) Retrieve(infrastructureID string, region bitmovintypes.AWSCloudRegion) (*models.AWSInfrastructureRegionSettingsDetail, error) {
+	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + infrastructureID + "/" + "regions/" + string(region)
 
 	responseBody, err := s.RestService.Retrieve(path)
 	if err != nil {
@@ -53,8 +53,8 @@ func (s *AWSInfrastructureRegionSettingsService) Retrieve(insfrastructureID stri
 	return &responseValue.Data.Result, nil
 }
 
-func (s *AWSInfrastructureRegionSettingsService) List(insfrastructureID string, offset int64, limit int64) (*[]models.AWSInfrastructureRegionSettingsDetail, error) {
-	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + insfrastructureID + "/" + "regions"
+func (s *AWSInfrastructureRegionSettingsService) List(infrastructureID string, offset int64, limit int64) (*[]models.AWSInfrastructureRegionSettingsDetail, error) {
+	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + infrastructureID + "/" + "regions"
 
 	o, err := s.RestService.List(path, offset, limit)
 	if err != nil {
@@ -68,8 +68,8 @@ func (s *AWSInfrastructureRegionSettingsService) List(insfrastructureID string, 
 	return &r.Data.Result.Items, nil
 }
 
-func (s *AWSInfrastructureRegionSettingsService) Delete(insfrastructureID string, region bitmovintypes.AWSCloudRegion) (*models.AWSInfrastructureRegionSettingsResponse, error) {
-	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + insfrastructureID + "/" + "regions/" + string(region)
+func (s *AWSInfrastructureRegionSettingsService) Delete(infrastructureID string, region bitmovintypes.AWSCloudRegion) (*models.AWSInfrastructureRegionSettingsResponse, error) {
+	path := AWSInfrastructureRegionSettingsConfigurationEndpoint + "/" + infrastructureID + "/" + "regions/" + string(region)
 	o, err := s.RestService.Delete(path)
 	if err != nil {
 		return nil, err
