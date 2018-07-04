@@ -3,8 +3,8 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type CreateAWSInfrastructureRequest struct {
-	Name          *string `json:"name"`
-	Description   *string `json:"description"`
+	Name          *string `json:"name,omitempty"`
+	Description   *string `json:"description,omitempty"`
 	AccessKey     string  `json:"accessKey"`
 	SecretKey     string  `json:"secretKey"`
 	AccountNumber string  `json:"accountNumber"`

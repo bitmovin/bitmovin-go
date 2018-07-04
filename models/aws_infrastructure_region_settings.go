@@ -3,23 +3,23 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type CreateAWSInfrastructureRegionSettingsRequest struct {
-	LimitParallelEncodings                      *int      `json:"limitParallelEncodings"`
-	MaximumAmountOfCoordinatorAndWorkerInRegion *int      `json:"maximumAmountOfCoordinatorAndWorkerInRegion"`
-	MaxMoneyToSpentPerMonth                     *int      `json:"maxMoneyToSpentPerMonth"`
+	LimitParallelEncodings                      *int      `json:"limitParallelEncodings,omitempty"`
+	MaximumAmountOfCoordinatorAndWorkerInRegion *int      `json:"maximumAmountOfCoordinatorAndWorkerInRegion,omitempty"`
+	MaxMoneyToSpentPerMonth                     *int      `json:"maxMoneyToSpentPerMonth,omitempty"`
 	SecurityGroupId                             string    `json:"securityGroupId"`
 	SubnetId                                    string    `json:"subnetId"`
-	MachineTypes                                *[]string `json:"machineTypes"`
-	SshPort                                     *string   `json:"sshPort"`
+	MachineTypes                                *[]string `json:"machineTypes,omitempty"`
+	SshPort                                     *string   `json:"sshPort,omitempty"`
 }
 
 type AWSInfrastructureRegionSettingsDetail struct {
-	LimitParallelEncodings                      *int                         `json:"limitParallelEncodings"`
-	MaximumAmountOfCoordinatorAndWorkerInRegion *int                         `json:"maximumAmountOfCoordinatorAndWorkerInRegion"`
-	MaxMoneyToSpentPerMonth                     *int                         `json:"maxMoneyToSpentPerMonth"`
+	LimitParallelEncodings                      int                          `json:"limitParallelEncodings"`
+	MaximumAmountOfCoordinatorAndWorkerInRegion int                          `json:"maximumAmountOfCoordinatorAndWorkerInRegion"`
+	MaxMoneyToSpentPerMonth                     int                          `json:"maxMoneyToSpentPerMonth"`
 	SecurityGroupId                             string                       `json:"securityGroupId"`
 	SubnetId                                    string                       `json:"subnetId"`
-	MachineTypes                                *[]string                    `json:"machineTypes"`
-	SshPort                                     *string                      `json:"sshPort"`
+	MachineTypes                                []string                     `json:"machineTypes"`
+	SshPort                                     string                       `json:"sshPort"`
 	Region                                      bitmovintypes.AWSCloudRegion `json:"region"`
 }
 
