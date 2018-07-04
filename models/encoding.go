@@ -5,8 +5,8 @@ import (
 )
 
 type Infrastructure struct {
-	InfrastructureID *string                    `json:"infrastructureId,omitempty"`
-	CloudRegion      *bitmovintypes.CloudRegion `json:"cloudRegion,omitempty"`
+	InfrastructureID *string                   `json:"infrastructureId,omitempty"`
+	CloudRegion      bitmovintypes.CloudRegion `json:"cloudRegion,omitempty"`
 }
 
 type Encoding struct {
