@@ -46,8 +46,22 @@ func (s *AnalyticsService) Stddev(a *models.Query) (*models.QueryResponse, error
 	return s.doAnalytics(a, "stddev")
 }
 
-func (s *AnalyticsService) Percentile(a *models.Query) (*models.QueryResponse, error) {
-	return s.doAnalytics(a, "percentile")
+func (s *AnalyticsService) Percentile(a *models.PercentileQuery) (*models.QueryResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	p := fmt.Sprintf("%spercentile", path)
+	o, err := s.RestService.Create(p, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.QueryResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
 }
 
 func (s *AnalyticsService) Variance(a *models.Query) (*models.QueryResponse, error) {

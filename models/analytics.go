@@ -13,6 +13,20 @@ type Query struct {
 	OrderBy    []OrderBy `json:"orderBy,omitempty"`
 }
 
+type PercentileQuery struct {
+	Dimension  string    `json:"dimension"`
+	Percentile int32     `json:"percentile"`
+	Start      string    `json:"start"`
+	End        string    `json:"end"`
+	Interval   *string   `json:"interval,omitempty"`
+	GroupBy    []string  `json:"groupBy,omitempty"`
+	Limit      *int32    `json:"limit,omitempty"`
+	Offset     *int32    `json:"offset,omitempty"`
+	LicenseKey *string   `json:"licenseKey,omitempty"`
+	Filters    []Filter  `json:"filters,omitempty"`
+	OrderBy    []OrderBy `json:"orderBy,omitempty"`
+}
+
 type Filters struct {
 	Name     string `json:"name"`
 	Operator string `json:"operator"`
@@ -25,25 +39,19 @@ type OrderBy struct {
 }
 
 type QueryResponse struct {
-	Data      Data_  `json:"data"`
-	RequestID string `json:"requestId"`
-	Status    string `json:"status"`
+	Data      AnalyticsData `json:"data"`
+	RequestID string        `json:"requestId"`
+	Status    string        `json:"status"`
 }
 
-type Data_ struct {
-	Result   Results    `json:"result"`
-	Messages []Messages `json:"messages"`
+type AnalyticsData struct {
+	Result   AnalyticsResult `json:"result"`
+	Messages []Messages      `json:"messages"`
 }
 
-type Results struct {
-	Rows         []interface{}  `json:"rows"`
-	RowCount     int32          `json:"rowCount"`
-	CollumnLabel []collumnLabel `json:"columnLabels"`
-}
-
-type collumnLabel struct {
-	Key   string `json:"key"`
-	label string `json:"label"`
+type AnalyticsResult struct {
+	Rows     []interface{} `json:"rows"`
+	RowCount int32         `json:"rowCount"`
 }
 
 type Messages struct {

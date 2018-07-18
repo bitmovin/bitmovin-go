@@ -26,7 +26,6 @@ func NewRestService(bitmovin *bitmovin.Bitmovin) *RestService {
 func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	fullURL := *r.Bitmovin.APIBaseURL + relativeURL
 	_, err := url.Parse(fullURL)
-
 	if err != nil {
 		return nil, err
 	}
