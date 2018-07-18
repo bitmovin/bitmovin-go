@@ -552,3 +552,7 @@ type StartOptions struct {
 	VodDashManifests       []VodDashManifest     `json:"vodDashManifests,omitempty"`
 	VodHlsManifests        []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
 }
+
+type RescheduleEncoding struct {
+	InfrastructureID *string `json:"infrastructureId,omitempty"`
+}
