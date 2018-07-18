@@ -545,9 +545,10 @@ type LiveStatusResponse struct {
 }
 
 type StartOptions struct {
-	Scheduling           *EncodingScheduling   `json:"scheduling,omitempty"`
-	PreviewDashManifests []PreviewDashManifest `json:"previewDashManifests,omitempty"`
-	PreviewHlsManifests  []PreviewHlsManifest  `json:"previewHlsManifests,omitempty"`
-	VodDashManifests     []VodDashManifest     `json:"vodDashManifests,omitempty"`
-	VodHlsManifests      []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
+	Scheduling             *EncodingScheduling   `json:"scheduling,omitempty"`
+	HandleVariableInputFps *bool                 `json:"handleVariableInputFps,omitempty"`
+	PreviewDashManifests   []PreviewDashManifest `json:"previewDashManifests,omitempty"`
+	PreviewHlsManifests    []PreviewHlsManifest  `json:"previewHlsManifests,omitempty"`
+	VodDashManifests       []VodDashManifest     `json:"vodDashManifests,omitempty"`
+	VodHlsManifests        []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
 }
