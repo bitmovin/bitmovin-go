@@ -47,21 +47,21 @@ func (s *AnalyticsService) Stddev(a *models.Query) (*models.QueryResponse, error
 }
 
 func (s *AnalyticsService) Percentile(a *models.PercentileQuery) (*models.QueryResponse, error) {
-	b, err := json.Marshal(*a)
+	marshaledQuery, err := json.Marshal(*a)
 	if err != nil {
 		return nil, err
 	}
 	p := fmt.Sprintf("%spercentile", path)
-	o, err := s.RestService.Create(p, b)
+	output, err := s.RestService.Create(p, marshaledQuery)
 	if err != nil {
 		return nil, err
 	}
-	var r models.QueryResponse
-	err = json.Unmarshal(o, &r)
+	var response models.QueryResponse
+	err = json.Unmarshal(output, &response)
 	if err != nil {
 		return nil, err
 	}
-	return &r, nil
+	return &response, nil
 }
 
 func (s *AnalyticsService) Variance(a *models.Query) (*models.QueryResponse, error) {
@@ -73,19 +73,19 @@ func (s *AnalyticsService) Median(a *models.Query) (*models.QueryResponse, error
 }
 
 func (s *AnalyticsService) doAnalytics(a *models.Query, method string) (*models.QueryResponse, error) {
-	b, err := json.Marshal(*a)
+	marshaledQuery, err := json.Marshal(*a)
 	if err != nil {
 		return nil, err
 	}
 	p := fmt.Sprintf("%s%s", path, method)
-	o, err := s.RestService.Create(p, b)
+	output, err := s.RestService.Create(p, marshaledQuery)
 	if err != nil {
 		return nil, err
 	}
-	var r models.QueryResponse
-	err = json.Unmarshal(o, &r)
+	var response models.QueryResponse
+	err = json.Unmarshal(output, &response)
 	if err != nil {
 		return nil, err
 	}
-	return &r, nil
+	return &response, nil
 }

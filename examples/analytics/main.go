@@ -25,11 +25,3 @@ func main() {
 	log.Printf("%+v", res)
 
 }
-
-func stringToPtr(s string) *string {
-	return &s
-}
-
-func intToPtr(i int) *int {
-	return &i
-}
