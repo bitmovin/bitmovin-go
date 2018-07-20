@@ -12,6 +12,7 @@ type Stream struct {
 	Outputs              []Output                        `json:"outputs,omitempty"`
 	DecodingErrorMode    bitmovintypes.DecodingErrorMode `json:"decodingErrorMode,omitempty"`
 	Conditions           *StreamCondition                `json:"conditions,omitempty"`
+	Mode                 bitmovintypes.StreamMode        `json:"mode,omitempty"`
 }
 
 type StreamCondition struct {
