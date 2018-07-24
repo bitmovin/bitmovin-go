@@ -544,13 +544,20 @@ type LiveStatusResponse struct {
 	Data      LiveStatusData               `json:"data,omitempty"`
 }
 
+type PerTitle struct {
+	MinBitrate *int64 `json:"minBitrate,omitempty"`
+	MaxBitrate *int64 `json:"maxBitrate,omitempty"`
+}
+
 type StartOptions struct {
-	Scheduling             *EncodingScheduling   `json:"scheduling,omitempty"`
-	HandleVariableInputFps *bool                 `json:"handleVariableInputFps,omitempty"`
-	PreviewDashManifests   []PreviewDashManifest `json:"previewDashManifests,omitempty"`
-	PreviewHlsManifests    []PreviewHlsManifest  `json:"previewHlsManifests,omitempty"`
-	VodDashManifests       []VodDashManifest     `json:"vodDashManifests,omitempty"`
-	VodHlsManifests        []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
+	Scheduling             *EncodingScheduling        `json:"scheduling,omitempty"`
+	HandleVariableInputFps *bool                      `json:"handleVariableInputFps,omitempty"`
+	PreviewDashManifests   []PreviewDashManifest      `json:"previewDashManifests,omitempty"`
+	PreviewHlsManifests    []PreviewHlsManifest       `json:"previewHlsManifests,omitempty"`
+	VodDashManifests       []VodDashManifest          `json:"vodDashManifests,omitempty"`
+	VodHlsManifests        []VodHlsManifest           `json:"vodHlsManifests,omitempty"`
+	EncodingMode           bitmovintypes.EncodingMode `json:"encodingMode,omitempty"`
+	PerTitle               *PerTitle                  `json:"perTitle,omitempty"`
 }
 
 type RescheduleEncoding struct {

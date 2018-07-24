@@ -2,601 +2,351 @@ package main
 
 import (
 	"fmt"
+	"strings"
+	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
 	"github.com/bitmovin/bitmovin-go/bitmovintypes"
 	"github.com/bitmovin/bitmovin-go/models"
 	"github.com/bitmovin/bitmovin-go/services"
-	"time"
 )
 
-const MEDIAN_BITRATE = 500000
-const MAX_COMPLEXITY_FACTOR = 1.5
-const MIN_COMPLEXITY_FACTOR = 0.5
+const (
+	minBitrate int64 = 300 * 1000
+	maxBitrate int64 = 4000 * 1000
+)
 
-type H264CodecConfigDefinition struct {
-	height  *int64
-	bitrate *int64
-	fps     *float64
+type h264VideoRepresentation struct {
+	name         *string
+	outputPath   *string
+	width        *int64
+	height       *int64
+	fps          *float64
+	audioGroupId *string
 }
 
-type EncodingConfig struct {
-	codecConfigDef  *H264CodecConfigDefinition
-	codecConfigResp *models.H264CodecConfigurationResponse
-	streamResp      *models.StreamResponse
-	fmp4MuxingResp  *models.FMP4MuxingResponse
-	tsMuxingResp    *models.TSMuxingResponse
+type aacAudioRep struct {
+	name         *string
+	outputPath   *string
+	bitrate      *int64
+	sampleRate   *float64
+	audioGroupId *string
+	lang         *string
 }
+
+type encodingConfig struct {
+	vRep       *h264VideoRepresentation
+	aRep       *aacAudioRep
+	vConfResp  *models.H264CodecConfigurationResponse
+	aConfResp  *models.AACCodecConfigurationResponse
+	streamResp *models.StreamResponse
+}
+
+const bitmovinApiKey = "<YOUR BITMOVIN API KEY>"
+
+const dashManifestName = "manifest.m3u8"
+
+const httpsInput = "your.host.com"
+const fileInputPath = "/path/to/your/input/file.mkv"
+
+const s3OutputAccessKey = "<YOUR S3 OUTPUT ACCESS KEY>"
+const s3OutputSecretKey = "<YOUR S3 OUTPUT SECRET KEY>"
+const s3OutputBucket = "<YOUR S3 OUTPUT BUCKET>"
+const baseOutputPath = "/path/to/your/output"
 
 func main() {
-	bitmovin := bitmovin.NewBitmovinDefaultTimeout("YOUR_BITMOVIN_API_KEY", "https://api.bitmovin.com/v1/")
+	// Creating Bitmovin object
+	bitmovin := bitmovin.NewBitmovin(bitmovinApiKey, "https://api.bitmovin.com/v1/", 5)
 
-	videoEncodingProfiles := []*H264CodecConfigDefinition{
-		{height: intToPtr(180), bitrate: intToPtr(200), fps: nil},
-		{height: intToPtr(180), bitrate: intToPtr(250), fps: nil},
-		{height: intToPtr(180), bitrate: intToPtr(300), fps: nil},
-		{height: intToPtr(270), bitrate: intToPtr(500), fps: nil},
-		{height: intToPtr(360), bitrate: intToPtr(800), fps: nil},
-		{height: intToPtr(360), bitrate: intToPtr(1000), fps: nil},
-		{height: intToPtr(480), bitrate: intToPtr(1500), fps: nil},
-		{height: intToPtr(720), bitrate: intToPtr(3000), fps: nil},
-		{height: intToPtr(720), bitrate: intToPtr(4000), fps: nil},
-		{height: intToPtr(1080), bitrate: intToPtr(6000), fps: nil},
-		{height: intToPtr(1080), bitrate: intToPtr(7000), fps: nil},
-		{height: intToPtr(1080), bitrate: intToPtr(10000), fps: nil},
+	videoRepresentations := []*h264VideoRepresentation{
+		{height: intToPtr(360), fps: nil, name: stringToPtr("360p profile"), outputPath: stringToPtr("video/360p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
+		{height: intToPtr(432), fps: nil, name: stringToPtr("432p profile"), outputPath: stringToPtr("video/432p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
+		{height: intToPtr(576), fps: nil, name: stringToPtr("576p profile"), outputPath: stringToPtr("video/576p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
+		{height: intToPtr(720), fps: nil, name: stringToPtr("720p profile"), outputPath: stringToPtr("video/720p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
+		{height: intToPtr(1080), fps: nil, name: stringToPtr("1080p profile"), outputPath: stringToPtr("video/1080p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
 	}
 
-	inputFilePath := "/path/to/your/input/file.mkv"
-	outputBasePath := "/your/output/path/"
-
-	fmt.Println("Creating GCS Input")
-	gcsIS := services.NewGCSInputService(bitmovin)
-	gcsInput := &models.GCSInput{
-		AccessKey:  stringToPtr("YOUR_ACCESS_KEY"),
-		SecretKey:  stringToPtr("YOUR_SECRET_KEY"),
-		BucketName: stringToPtr("YOUR_BUCKET_NAME"),
+	audioRepresentations := []*aacAudioRep{
+		{
+			sampleRate:   floatToPtr(44100.0),
+			bitrate:      intToPtr(128000),
+			name:         stringToPtr("128 kbit audio profile"),
+			outputPath:   stringToPtr("audio/128kbit"),
+			audioGroupId: stringToPtr("audio1"),
+			lang:         stringToPtr("en"),
+		},
 	}
-	gcsInputResp, err := gcsIS.Create(gcsInput)
-	errorHandler(gcsInputResp.Status, err)
-	fmt.Println("Created GCS Input!")
 
-	fmt.Println("Creating GCS Output")
-	gcsOS := services.NewGCSOutputService(bitmovin)
-	gcsOutput := &models.GCSOutput{
-		AccessKey:  stringToPtr("YOUR_ACCESS_KEY"),
-		SecretKey:  stringToPtr("YOUR_SECRET_KEY"),
-		BucketName: stringToPtr("YOUR_BUCKET_NAME"),
+	// Add video and audio representations to encoding config
+	var encodingConfigs []*encodingConfig
+	for _, vr := range videoRepresentations {
+		encodingConfigs = append(encodingConfigs, &encodingConfig{
+			vRep: vr,
+		})
 	}
-	outputResponse, err := gcsOS.Create(gcsOutput)
-	errorHandler(outputResponse.Status, err)
-	fmt.Println("Created GCS Output!")
+	for _, ar := range audioRepresentations {
+		encodingConfigs = append(encodingConfigs, &encodingConfig{
+			aRep: ar,
+		})
+	}
 
-	fmt.Println("Creating Analysis Encoding")
+	// Creating the HTTP Input
+	httpIS := services.NewHTTPInputService(bitmovin)
+	httpInput := &models.HTTPInput{
+		Host: stringToPtr(httpsInput),
+	}
+	httpResp, err := httpIS.Create(httpInput)
+	errorHandler(httpResp.Status, err)
+
+	//Creating S3 Output
+	s3OS := services.NewS3OutputService(bitmovin)
+	s3Output := &models.S3Output{
+		AccessKey:   stringToPtr(s3OutputAccessKey),
+		SecretKey:   stringToPtr(s3OutputSecretKey),
+		BucketName:  stringToPtr(s3OutputBucket),
+		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
+	}
+	s3OutputResp, err := s3OS.Create(s3Output)
+	errorHandler(s3OutputResp.Status, err)
+
+	// Create encoding
 	encodingS := services.NewEncodingService(bitmovin)
-	analysisEncoding := models.Encoding{
-		Name:        stringToPtr("Per title analysis encoding"),
+	encoding := &models.Encoding{
+		Name:        stringToPtr("My Golang Example Per-Title Encoding"),
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
-	analysisEncodingResp, err := encodingS.Create(&analysisEncoding)
-	errorHandler(analysisEncodingResp.Status, err)
-	fmt.Println("Created Analysis Encoding!")
+	encodingResp, err := encodingS.Create(encoding)
+	errorHandler(encodingResp.Status, err)
 
-	fmt.Println("Creating Codec Configuration")
+	// Add audio and video codec configs to encoding
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
-	analysisH264CodecConfig := models.H264CodecConfiguration{
-		Name:    stringToPtr("H264 Per Title Analysis Configuration"),
-		CRF:     floatToPtr(23.0),
-		Height:  intToPtr(360),
-		Profile: bitmovintypes.H264ProfileMain,
-	}
-	analysisH264CodecConfigResp, err := h264S.Create(&analysisH264CodecConfig)
-	errorHandler(analysisH264CodecConfigResp.Status, err)
-	fmt.Println("Created Codec Configuration!")
+	aacS := services.NewAACCodecConfigurationService(bitmovin)
 
-	fmt.Println("Creating Streams...")
-	inputStream := models.InputStream{
-		InputID:       gcsInputResp.Data.Result.ID,
-		InputPath:     stringToPtr(inputFilePath),
+	for _, ec := range encodingConfigs {
+		if ec.vRep != nil {
+			vc := &models.H264CodecConfiguration{
+				Name:    ec.vRep.name,
+				Width:   ec.vRep.width,
+				Height:  ec.vRep.height,
+				Profile: bitmovintypes.H264ProfileHigh,
+			}
+			vcResp, err := h264S.Create(vc)
+			errorHandler(vcResp.Status, err)
+			ec.vConfResp = vcResp
+		}
+		if ec.aRep != nil {
+			ac := &models.AACCodecConfiguration{
+				Name:         ec.aRep.name,
+				Bitrate:      ec.aRep.bitrate,
+				SamplingRate: ec.aRep.sampleRate,
+			}
+			acResp, err := aacS.Create(ac)
+			errorHandler(acResp.Status, err)
+			ec.aConfResp = acResp
+		}
+	}
+
+	// Define video and audio input streams
+	vis := models.InputStream{
+		InputID:       httpResp.Data.Result.ID,
+		InputPath:     stringToPtr(fileInputPath),
 		SelectionMode: bitmovintypes.SelectionModeAuto,
 	}
-	vis := []models.InputStream{inputStream}
-	analysisVideoStream := &models.Stream{
-		CodecConfigurationID: analysisH264CodecConfigResp.Data.Result.ID,
-		InputStreams:         vis,
-		Name:                 stringToPtr("Per Title Analysis Stream"),
+	ais := models.InputStream{
+		InputID:       httpResp.Data.Result.ID,
+		InputPath:     stringToPtr(fileInputPath),
+		SelectionMode: bitmovintypes.SelectionModeAuto,
 	}
-	fmt.Println("Created Streams!")
 
-	analysisVideoStreamResp, err := encodingS.AddStream(*analysisEncodingResp.Data.Result.ID, analysisVideoStream)
-	errorHandler(analysisVideoStreamResp.Status, err)
-	fmt.Println("Created Stream!")
+	visList := []models.InputStream{vis}
+	aisList := []models.InputStream{ais}
 
-	fmt.Println("Creating Muxing...")
-	analysisMuxingStream := models.StreamItem{
-		StreamID: analysisVideoStreamResp.Data.Result.ID,
+	//Add streams to encoding
+	for _, ec := range encodingConfigs {
+		if ec.vConfResp != nil {
+			s := &models.Stream{
+				CodecConfigurationID: ec.vConfResp.Data.Result.ID,
+				InputStreams:         visList,
+				Mode:                 bitmovintypes.StreamModePerTitleTemplate,
+				CustomData: map[string]interface{}{
+					"type": "video",
+				},
+			}
+			sResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, s)
+			errorHandler(sResp.Status, err)
+			ec.streamResp = sResp
+		}
+		if ec.aConfResp != nil {
+			s := &models.Stream{
+				CodecConfigurationID: ec.aConfResp.Data.Result.ID,
+				InputStreams:         aisList,
+				CustomData: map[string]interface{}{
+					"type": "audio",
+					"lang": ec.aRep.lang,
+				},
+			}
+			sResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, s)
+			errorHandler(sResp.Status, err)
+			ec.streamResp = sResp
+		}
 	}
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
 	}
-	analysisMuxingOutput := models.Output{
-		OutputID:   outputResponse.Data.Result.ID,
-		OutputPath: stringToPtr(outputBasePath + "quality_analysis/"),
-		ACL:        []models.ACLItem{aclEntry},
+	acl := []models.ACLItem{aclEntry}
+
+	//Add FMP4 muxings to encoding
+	for _, ec := range encodingConfigs {
+		if ec.streamResp != nil {
+			ms := models.StreamItem{
+				StreamID: ec.streamResp.Data.Result.ID,
+			}
+
+			if ec.vRep != nil {
+				mop := models.Output{
+					OutputID:   s3OutputResp.Data.Result.ID,
+					OutputPath: stringToPtr(fmt.Sprintf("%s/%s_dash", baseOutputPath, *ec.vRep.outputPath)),
+					ACL:        acl,
+				}
+				vmx := &models.FMP4Muxing{
+					SegmentLength:   floatToPtr(4.0),
+					SegmentNaming:   stringToPtr("seg_%number%.m4s"),
+					InitSegmentName: stringToPtr("init.mp4"),
+					Streams:         []models.StreamItem{ms},
+					Outputs:         []models.Output{mop},
+				}
+				vmxResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, vmx)
+				errorHandler(vmxResp.Status, err)
+			}
+			if ec.aRep != nil {
+				mop := models.Output{
+					OutputID:   s3OutputResp.Data.Result.ID,
+					OutputPath: stringToPtr(fmt.Sprintf("%s/%s_dash", baseOutputPath, *ec.aRep.outputPath)),
+					ACL:        acl,
+				}
+				amx := &models.FMP4Muxing{
+					SegmentLength:   floatToPtr(4.0),
+					SegmentNaming:   stringToPtr("seg_%number%.m4s"),
+					InitSegmentName: stringToPtr("init.mp4"),
+					Streams:         []models.StreamItem{ms},
+					Outputs:         []models.Output{mop},
+				}
+				amxResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, amx)
+				errorHandler(amxResp.Status, err)
+			}
+
+		}
 	}
 
-	analysisMuxing := models.FMP4Muxing{
-		SegmentLength:   floatToPtr(4.0),
-		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
-		InitSegmentName: stringToPtr("init.mp4"),
-		Streams:         []models.StreamItem{analysisMuxingStream},
-		Outputs:         []models.Output{analysisMuxingOutput},
-		Name:            stringToPtr("Per Title Analysis Muxing"),
+	perTitle := &models.PerTitle{
+		MinBitrate: intToPtr(minBitrate),
+		MaxBitrate: intToPtr(maxBitrate),
 	}
-	analysisMuxingResp, err := encodingS.AddFMP4Muxing(*analysisEncodingResp.Data.Result.ID, &analysisMuxing)
-	errorHandler(analysisMuxingResp.Status, err)
-	fmt.Println("Created Muxing!")
 
-	fmt.Println("Starting Analysis Encoding...")
-	startResp, err := encodingS.Start(*analysisEncodingResp.Data.Result.ID)
+	options := &models.StartOptions{
+		PerTitle: perTitle,
+	}
+
+	startResp, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
 	errorHandler(startResp.Status, err)
-	fmt.Println("Started Analysis Encoding!")
 
-	fmt.Println("Waiting for Analysis Encoding to be finished...")
-	waitForEncodingToBeFinished(analysisEncodingResp, encodingS)
-	fmt.Println("Analysis Encoding finished!")
+	waitForEncodingToBeFinished(encodingResp, encodingS)
+	fmt.Println("Per-Title Encoding finished successfully!")
 
-	analysisMuxingResp, err = encodingS.RetrieveFMP4Muxing(*analysisEncodingResp.Data.Result.ID, *analysisMuxingResp.Data.Result.ID)
-	analysisMuxing = analysisMuxingResp.Data.Result
-	complexityFactor := float64(*analysisMuxing.AvgBitrate) / float64(MEDIAN_BITRATE)
+	///// Generate DASH manifest
 
-	if complexityFactor > MAX_COMPLEXITY_FACTOR {
-		complexityFactor = MAX_COMPLEXITY_FACTOR
-	}
-	if complexityFactor < MIN_COMPLEXITY_FACTOR {
-		complexityFactor = MIN_COMPLEXITY_FACTOR
-	}
-	fmt.Printf("Used values for calculation -> avgBitrate %d, medianBitrate %d\n", *analysisMuxing.AvgBitrate, MEDIAN_BITRATE)
-	fmt.Printf("Got complexity factor of %f\n", complexityFactor)
-
-	fmt.Println("Creating the Encoding...")
-	realEncoding := models.Encoding{
-		Name:        stringToPtr("Golang - Per Title Encoding"),
-		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
-	}
-	realEncodingResp, err := encodingS.Create(&realEncoding)
-	errorHandler(realEncodingResp.Status, err)
-	fmt.Println("Created Encoding!")
-
-	updateVideoEncodingProfilesWithComplexityFactor(videoEncodingProfiles, complexityFactor)
-	encodingConfigs := createEncodingConfigs(videoEncodingProfiles)
-	createAndAddH264CodecConfigurationsToEncodingConfigs(encodingConfigs, h264S)
-	createAndAddVideoStreamsToEncodingConfigs(encodingConfigs, inputStream, encodingS, *realEncodingResp.Data.Result.ID)
-	createAndAddFmp4MuxingsToEncodingConfigs(encodingConfigs, *outputResponse, outputBasePath, encodingS, *realEncodingResp.Data.Result.ID)
-	createAndAddTsMuxingsToEncodingConfigs(encodingConfigs, *outputResponse, outputBasePath, encodingS, *realEncodingResp.Data.Result.ID)
-
-	fmt.Println("Creating AAC Configuration...")
-	aacS := services.NewAACCodecConfigurationService(bitmovin)
-	audioCodecConfiguration := models.AACCodecConfiguration{
-		Name:         stringToPtr("AAC Codec Configuration"),
-		Bitrate:      intToPtr(128000),
-		SamplingRate: floatToPtr(48000),
-	}
-	audioCodecConfigurationResp, err := aacS.Create(&audioCodecConfiguration)
-	errorHandler(audioCodecConfigurationResp.Status, err)
-	fmt.Println("Created AAC Configuration!")
-
-	fmt.Println("Creating Audio Stream...")
-	ais := []models.InputStream{inputStream}
-	audioConfigurationStream := &models.Stream{
-		CodecConfigurationID: audioCodecConfigurationResp.Data.Result.ID,
-		InputStreams:         ais,
-		Name:                 stringToPtr("Audio Stream"),
-	}
-	audioStreamResp, err := encodingS.AddStream(*realEncodingResp.Data.Result.ID, audioConfigurationStream)
-	errorHandler(audioStreamResp.Status, err)
-	fmt.Println("Created Audio Stream!")
-
-	fmt.Println("Creating Audio FMP4 Muxing...")
-	audioMuxingStream := models.StreamItem{
-		StreamID: audioStreamResp.Data.Result.ID,
-	}
-
-	audioMuxingOutput := models.Output{
-		OutputID:   outputResponse.Data.Result.ID,
-		OutputPath: stringToPtr(outputBasePath + "dash/audio/"),
-		ACL:        []models.ACLItem{aclEntry},
-	}
-
-	audioFmp4Muxing := models.FMP4Muxing{
-		SegmentLength:   floatToPtr(4.0),
-		SegmentNaming:   stringToPtr("seg_%number%.m4s"),
-		InitSegmentName: stringToPtr("init.mp4"),
-		Streams:         []models.StreamItem{audioMuxingStream},
-		Outputs:         []models.Output{audioMuxingOutput},
-		Name:            stringToPtr("Audio FMP4 Muxing"),
-	}
-	audioFmp4MuxingResp, err := encodingS.AddFMP4Muxing(*realEncodingResp.Data.Result.ID, &audioFmp4Muxing)
-	errorHandler(audioFmp4MuxingResp.Status, err)
-	fmt.Println("Created Audio FMP4 Muxing!")
-
-	fmt.Println("Creating Audio TS Muxing...")
-	audioTsMuxingOutput := models.Output{
-		OutputID:   outputResponse.Data.Result.ID,
-		OutputPath: stringToPtr(outputBasePath + "hls/audio/"),
-		ACL:        []models.ACLItem{aclEntry},
-	}
-
-	audioTsMuxing := models.TSMuxing{
-		SegmentLength: floatToPtr(4.0),
-		SegmentNaming: stringToPtr("seg_%number%.ts"),
-		Streams:       []models.StreamItem{audioMuxingStream},
-		Outputs:       []models.Output{audioTsMuxingOutput},
-		Name:          stringToPtr("Audio Muxing"),
-	}
-	audioTsMuxingResp, err := encodingS.AddTSMuxing(*realEncodingResp.Data.Result.ID, &audioTsMuxing)
-	errorHandler(audioTsMuxingResp.Status, err)
-	fmt.Println("Created Audio TS Muxing!")
-
-	fmt.Println("Starting Encoding...")
-	encStartResp, err := encodingS.Start(*realEncodingResp.Data.Result.ID)
-	errorHandler(encStartResp.Status, err)
-	fmt.Println("Started Encoding!")
-
-	fmt.Println("Waiting for Actual Encoding to be finished...")
-	waitForEncodingToBeFinished(realEncodingResp, encodingS)
-	fmt.Println("Encoding finished!")
-
-	fmt.Println("Creating DASH Manifest...")
-	createDashManifest(
-		encodingConfigs,
-		audioFmp4MuxingResp,
-		*realEncodingResp.Data.Result.ID,
-		*outputResponse.Data.Result.ID,
-		outputBasePath,
-		[]models.ACLItem{aclEntry},
-		bitmovin,
-	)
-	fmt.Println("Created DASH Manifest!")
-
-	fmt.Println("Creating HLS Manifests...")
-	createHlsManifest(
-		encodingConfigs,
-		*audioTsMuxingResp.Data.Result.ID,
-		*audioStreamResp.Data.Result.ID,
-		*realEncodingResp.Data.Result.ID,
-		*outputResponse.Data.Result.ID,
-		outputBasePath,
-		[]models.ACLItem{aclEntry},
-		bitmovin,
-	)
-	fmt.Println("Created HLS Manifests!")
-}
-
-func createDashManifest(
-	encodingConfigs []*EncodingConfig,
-	audioMuxingResp *models.FMP4MuxingResponse,
-	encodingId string,
-	outputId string,
-	outputBasePath string,
-	acl []models.ACLItem,
-	bitmovin *bitmovin.Bitmovin,
-) {
+	//Create manifest objects
+	dashService := services.NewDashManifestService(bitmovin)
 
 	manifestOutput := models.Output{
-		OutputID:   stringToPtr(outputId),
-		OutputPath: stringToPtr(outputBasePath + "/manifest"),
+		OutputID:   s3OutputResp.Data.Result.ID,
+		OutputPath: stringToPtr(baseOutputPath),
 		ACL:        acl,
 	}
 
-	dashManifest := &models.DashManifest{
-		ManifestName: stringToPtr("your_manifest_name.mpd"),
+	// Dash Manifests
+	dashM := &models.DashManifest{
+		ManifestName: stringToPtr(dashManifestName),
 		Outputs:      []models.Output{manifestOutput},
 	}
-	dashService := services.NewDashManifestService(bitmovin)
-	dashManifestResp, err := dashService.Create(dashManifest)
-	errorHandler(dashManifestResp.Status, err)
+	dashMResp, err := dashService.Create(dashM)
+	errorHandler(dashMResp.Status, err)
 
 	period := &models.Period{}
-	periodResp, err := dashService.AddPeriod(*dashManifestResp.Data.Result.ID, period)
+	//Add to vod manifest
+	periodResp, err := dashService.AddPeriod(*dashMResp.Data.Result.ID, period)
 	errorHandler(periodResp.Status, err)
 
-	/*
-		AUDIO
-	*/
-	aas := &models.AudioAdaptationSet{
-		Language: stringToPtr("en"),
-	}
-	aasResp, err := dashService.AddAudioAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, aas)
-	errorHandler(aasResp.Status, err)
+	videoAdaptationSet := &models.VideoAdaptationSet{}
+	// Add to vod manifest
+	videoAdaptationSetResp, err := dashService.AddVideoAdaptationSet(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, videoAdaptationSet)
+	errorHandler(videoAdaptationSetResp.Status, err)
 
-	fmp4RepAudio := &models.FMP4Representation{
-		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
-		MuxingID:    audioMuxingResp.Data.Result.ID,
-		EncodingID:  stringToPtr(encodingId),
-		SegmentPath: stringToPtr("../dash/audio"),
-	}
-	fmp4RepAudioResp, err := dashService.AddFMP4Representation(
-		*dashManifestResp.Data.Result.ID,
-		*periodResp.Data.Result.ID,
-		*aasResp.Data.Result.ID,
-		fmp4RepAudio)
-	errorHandler(fmp4RepAudioResp.Status, err)
+	vodAasMap := make(map[string]*models.AudioAdaptationSetResponse)
+	for _, ec := range encodingConfigs {
+		if ec.aRep != nil {
+			aas := &models.AudioAdaptationSet{
+				Language: ec.aRep.lang,
+			}
+			// Add to vod manifest
+			vodAasResp, err := dashService.AddAudioAdaptationSet(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, aas)
+			errorHandler(vodAasResp.Status, err)
 
-	/*
-		VIDEO
-	*/
-	vas := &models.VideoAdaptationSet{}
-	vasResp, err := dashService.AddVideoAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, vas)
-	errorHandler(vasResp.Status, err)
-
-	for _, encodingConfig := range encodingConfigs {
-		fmp4Represetation := &models.FMP4Representation{
-			Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
-			MuxingID:    encodingConfig.fmp4MuxingResp.Data.Result.ID,
-			EncodingID:  stringToPtr(encodingId),
-			SegmentPath: stringToPtr(fmt.Sprintf("../dash/video/%dp_%dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
+			vodAasMap[*ec.aRep.lang] = vodAasResp
 		}
-		fmp4RepresetationResp, err := dashService.AddFMP4Representation(
-			*dashManifestResp.Data.Result.ID,
-			*periodResp.Data.Result.ID,
-			*vasResp.Data.Result.ID,
-			fmp4Represetation,
-		)
-		errorHandler(fmp4RepresetationResp.Status, err)
 	}
 
-	fmt.Printf("Starting DASH manifest generation with manifest id %s...\n", *dashManifestResp.Data.Result.ID)
+	streamsResp, err := encodingS.ListStream(*encodingResp.Data.Result.ID, 0, 20)
+	muxingsResp, err := encodingS.ListFMP4Muxing(*encodingResp.Data.Result.ID, 0, 20)
+	errorHandler(muxingsResp.Status, err)
 
-	startResp, err := dashService.Start(*dashManifestResp.Data.Result.ID)
+	for _, stream := range streamsResp.Data.Result.Items {
+		streamCustomDataResp, err := encodingS.RetrieveStreamCustomData(*encodingResp.Data.Result.ID, *stream.ID, 0, 20)
+		errorHandler(streamCustomDataResp.Status, err)
+
+		muxing := getMuxingOfStream(*stream.ID, muxingsResp)
+
+		muxingOutputPath := *muxing.Outputs[0].OutputPath
+		segmentPath := strings.Replace(muxingOutputPath, fmt.Sprintf("%s/", baseOutputPath), "", -1)
+
+		if stream.Mode == bitmovintypes.StreamModePerTitleResult {
+			codecConfigResp, err := h264S.Retrieve(*stream.CodecConfigurationID)
+			errorHandler(codecConfigResp.Status, err)
+
+			fmp4Rep := &models.FMP4Representation{
+				Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
+				MuxingID:    muxing.ID,
+				EncodingID:  encodingResp.Data.Result.ID,
+				SegmentPath: stringToPtr(segmentPath),
+			}
+			// Add to vod manifest
+			fmp4RepResp, err := dashService.AddFMP4Representation(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, *videoAdaptationSetResp.Data.Result.ID, fmp4Rep)
+			errorHandler(fmp4RepResp.Status, err)
+		} else if streamCustomDataResp.Data.Result.CustomData["type"].(string) == "audio" {
+			fmp4Rep := &models.FMP4Representation{
+				Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
+				MuxingID:    muxing.ID,
+				EncodingID:  encodingResp.Data.Result.ID,
+				SegmentPath: stringToPtr(segmentPath),
+			}
+			vodAasResp := vodAasMap[streamCustomDataResp.Data.Result.CustomData["lang"].(string)]
+
+			// Add to vod manifest
+			fmp4RepResp, err := dashService.AddFMP4Representation(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, *vodAasResp.Data.Result.ID, fmp4Rep)
+			errorHandler(fmp4RepResp.Status, err)
+		}
+	}
+
+	fmt.Println("Starting dash manifest creation")
+	startResp, err = dashService.Start(*dashMResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
+	fmt.Println("Dash manifest creation finished successfully!")
 
-	status := ""
-	for status != "FINISHED" {
-		time.Sleep(5 * time.Second)
-		statusResp, err := dashService.RetrieveStatus(*dashManifestResp.Data.Result.ID)
-		if err != nil {
-			fmt.Println("error in Manifest Status")
-			fmt.Println(err)
-			return
-		}
-		status = *statusResp.Data.Result.Status
-		fmt.Printf("STATUS: %s\n", status)
-		if status == "ERROR" {
-			fmt.Println("error in Manifest Status")
-			fmt.Printf("STATUS: %s\n", status)
-			return
-		}
-	}
-	fmt.Println("DASH manifest created successfully!")
+	waitForDashManifestCreationToBeFinished(*dashMResp.Data.Result.ID, dashService)
 }
 
-func createHlsManifest(
-	encodingConfigs []*EncodingConfig,
-	audioMuxingId string,
-	audioStreamId string,
-	encodingId string,
-	outputId string,
-	outputBasePath string,
-	acl []models.ACLItem,
-	bitmovin *bitmovin.Bitmovin,
-) {
-
-	manifestOutput := models.Output{
-		OutputID:   stringToPtr(outputId),
-		OutputPath: stringToPtr(outputBasePath + "/manifest"),
-		ACL:        acl,
-	}
-
-	hlsService := services.NewHLSManifestService(bitmovin)
-	hlsManifest := &models.HLSManifest{
-		ManifestName: stringToPtr("your_manifest_name.m3u8"),
-		Outputs:      []models.Output{manifestOutput},
-	}
-	hlsManifestResp, err := hlsService.Create(hlsManifest)
-	errorHandler(hlsManifestResp.Status, err)
-
-	/*
-		AUDIO
-	*/
-	audioMediaInfo := &models.MediaInfo{
-		Type:            bitmovintypes.MediaTypeAudio,
-		URI:             stringToPtr("audio.m3u8"),
-		GroupID:         stringToPtr("audio_group"),
-		Language:        stringToPtr("en"),
-		Name:            stringToPtr("Rendition Description"),
-		IsDefault:       boolToPtr(false),
-		Autoselect:      boolToPtr(false),
-		Forced:          boolToPtr(false),
-		Characteristics: []string{"public.accessibility.describes-video"},
-		SegmentPath:     stringToPtr("../hls/audio"),
-		EncodingID:      stringToPtr(encodingId),
-		StreamID:        stringToPtr(audioStreamId),
-		MuxingID:        stringToPtr(audioMuxingId),
-	}
-	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
-	errorHandler(audioMediaInfoResp.Status, err)
-
-	/*
-		VIDEO
-	*/
-	for _, encodingConfig := range encodingConfigs {
-		videoStreamInfo := &models.StreamInfo{
-			Audio:       stringToPtr("audio_group"),
-			SegmentPath: stringToPtr(fmt.Sprintf("../hls/video/%dp_%dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
-			URI:         stringToPtr(fmt.Sprintf("video_%dp_%dk.m3u8", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
-			EncodingID:  stringToPtr(encodingId),
-			StreamID:    encodingConfig.streamResp.Data.Result.ID,
-			MuxingID:    encodingConfig.tsMuxingResp.Data.Result.ID,
-		}
-		videoStreamInfoResp, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, videoStreamInfo)
-		errorHandler(videoStreamInfoResp.Status, err)
-	}
-
-	fmt.Printf("Starting HLS manifest generation with manifest id %s...\n", *hlsManifestResp.Data.Result.ID)
-
-	startResp, err := hlsService.Start(*hlsManifestResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
-
-	status := ""
-	for status != "FINISHED" {
-		time.Sleep(5 * time.Second)
-		statusResp, err := hlsService.RetrieveStatus(*hlsManifestResp.Data.Result.ID)
-		if err != nil {
-			fmt.Println("error in Manifest Status")
-			fmt.Println(err)
-			return
-		}
-		status = *statusResp.Data.Result.Status
-		fmt.Printf("STATUS: %s\n", status)
-		if status == "ERROR" {
-			fmt.Println("error in Manifest Status")
-			fmt.Printf("STATUS: %s\n", status)
-			return
-		}
-	}
-	fmt.Println("HLS manifest created successfully!")
-}
-
-func createEncodingConfigs(
-	codecConfigDefinitions []*H264CodecConfigDefinition,
-) []*EncodingConfig {
-	var encodingConfigs []*EncodingConfig
-	for _, codecConfigDefinition := range codecConfigDefinitions {
-		encodingConfigs = append(encodingConfigs, &EncodingConfig{codecConfigDef: codecConfigDefinition})
-	}
-	return encodingConfigs
-}
-
-func updateVideoEncodingProfilesWithComplexityFactor(
-	codecConfigDefinitions []*H264CodecConfigDefinition,
-	complexityFactor float64,
-) {
-	for _, codecConfigDefinition := range codecConfigDefinitions {
-		fmt.Printf("Bitrate before: %d\n", *codecConfigDefinition.bitrate)
-		codecConfigDefinition.bitrate = intToPtr(int64(float64(*codecConfigDefinition.bitrate) * complexityFactor))
-		fmt.Printf("Bitrate after: %d\n", *codecConfigDefinition.bitrate)
-	}
-}
-
-func createAndAddTsMuxingsToEncodingConfigs(
-	encodingConfigs []*EncodingConfig,
-	outputResp models.GCSOutputResponse,
-	outputBasePath string,
-	encodingS *services.EncodingService,
-	encodingId string,
-) {
-	for _, encodingProfile := range encodingConfigs {
-		fmt.Println("Creating Muxing...")
-		tsMuxingStream := models.StreamItem{
-			StreamID: encodingProfile.streamResp.Data.Result.ID,
-		}
-
-		aclEntry := models.ACLItem{
-			Permission: bitmovintypes.ACLPermissionPublicRead,
-		}
-		muxingOutput := models.Output{
-			OutputID:   outputResp.Data.Result.ID,
-			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath+"hls/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
-			ACL:        []models.ACLItem{aclEntry},
-		}
-
-		muxing := models.TSMuxing{
-			SegmentLength: floatToPtr(4.0),
-			SegmentNaming: stringToPtr("seg_%number%.ts"),
-			Streams:       []models.StreamItem{tsMuxingStream},
-			Outputs:       []models.Output{muxingOutput},
-			Name:          stringToPtr(fmt.Sprintf("TS Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
-		}
-		muxingResp, err := encodingS.AddTSMuxing(encodingId, &muxing)
-		errorHandler(muxingResp.Status, err)
-		encodingProfile.tsMuxingResp = muxingResp
-		fmt.Println("Created Muxing!")
-	}
-}
-
-func createAndAddFmp4MuxingsToEncodingConfigs(
-	encodingConfigs []*EncodingConfig,
-	outputResp models.GCSOutputResponse,
-	outputBasePath string,
-	encodingS *services.EncodingService,
-	encodingId string,
-) {
-	for _, encodingProfile := range encodingConfigs {
-		fmt.Printf("Creating FMP4 Muxing %dp_%dk\n", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)
-		fmp4MuxingStream := models.StreamItem{
-			StreamID: encodingProfile.streamResp.Data.Result.ID,
-		}
-
-		aclEntry := models.ACLItem{
-			Permission: bitmovintypes.ACLPermissionPublicRead,
-		}
-		muxingOutput := models.Output{
-			OutputID:   outputResp.Data.Result.ID,
-			OutputPath: stringToPtr(fmt.Sprintf(outputBasePath+"dash/video/%dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
-			ACL:        []models.ACLItem{aclEntry},
-		}
-
-		muxing := models.FMP4Muxing{
-			SegmentLength:   floatToPtr(4.0),
-			SegmentNaming:   stringToPtr("seg_%number%.m4s"),
-			InitSegmentName: stringToPtr("init.mp4"),
-			Streams:         []models.StreamItem{fmp4MuxingStream},
-			Outputs:         []models.Output{muxingOutput},
-			Name:            stringToPtr(fmt.Sprintf("FMP4 Muxing %dp_%dk", *encodingProfile.codecConfigDef.height, *encodingProfile.codecConfigDef.bitrate)),
-		}
-		muxingResp, err := encodingS.AddFMP4Muxing(encodingId, &muxing)
-		errorHandler(muxingResp.Status, err)
-		encodingProfile.fmp4MuxingResp = muxingResp
-		fmt.Println("Created Muxing!")
-	}
-}
-
-func createAndAddVideoStreamsToEncodingConfigs(
-	encodingConfigs []*EncodingConfig,
-	videoInputStream models.InputStream,
-	encodingS *services.EncodingService,
-	encodingId string,
-) {
-	for _, encodingConfig := range encodingConfigs {
-		fmt.Printf("Creating Stream %dp_%dk\n", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)
-		vis := []models.InputStream{videoInputStream}
-		videoStream := &models.Stream{
-			CodecConfigurationID: encodingConfig.codecConfigResp.Data.Result.ID,
-			InputStreams:         vis,
-			Name:                 stringToPtr(fmt.Sprintf("Stream %dp_%dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
-		}
-		videoStreamResp, err := encodingS.AddStream(encodingId, videoStream)
-		errorHandler(videoStreamResp.Status, err)
-		encodingConfig.streamResp = videoStreamResp
-		fmt.Println("Created Stream!")
-	}
-}
-
-func createAndAddH264CodecConfigurationsToEncodingConfigs(
-	encodingConfigs []*EncodingConfig,
-	h264S *services.H264CodecConfigurationService,
-) {
-	for _, encodingConfig := range encodingConfigs {
-		fmt.Printf("Creating codec config (bitrate = %d, height = %d)\n", *encodingConfig.codecConfigDef.bitrate, *encodingConfig.codecConfigDef.height)
-		h264CodecConfig := models.H264CodecConfiguration{
-			Name:      stringToPtr(fmt.Sprintf("H264 Configuration %dp %dk", *encodingConfig.codecConfigDef.height, *encodingConfig.codecConfigDef.bitrate)),
-			Bitrate:   intToPtr(*encodingConfig.codecConfigDef.bitrate * 1000),
-			Height:    encodingConfig.codecConfigDef.height,
-			FrameRate: encodingConfig.codecConfigDef.fps,
-			Profile:   bitmovintypes.H264ProfileHigh,
-		}
-		codecConfigResp, err := h264S.Create(&h264CodecConfig)
-		errorHandler(codecConfigResp.Status, err)
-		fmt.Println("Created codec config!")
-		encodingConfig.codecConfigResp = codecConfigResp
-	}
-}
-
-func waitForEncodingToBeFinished(
-	encodingResp *models.EncodingResponse,
-	encodingS *services.EncodingService,
-) {
+func waitForEncodingToBeFinished(encodingResp *models.EncodingResponse, encodingS *services.EncodingService) {
 	var status string
 	status = ""
 	fmt.Println("Waiting for encoding to be FINISHED...")
@@ -610,13 +360,44 @@ func waitForEncodingToBeFinished(
 		}
 		// Polling and Printing out the response
 		status = *statusResp.Data.Result.Status
-		fmt.Printf("STATUS: %s\n", status)
+		fmt.Printf("ENCODING STATUS: %s\n", status)
 		if status == "ERROR" {
 			fmt.Println("error in Encoding Status")
 			fmt.Printf("STATUS: %s\n", status)
 			return
 		}
 	}
+}
+
+func waitForDashManifestCreationToBeFinished(dashManifestId string, dashService *services.DashManifestService) {
+	status := ""
+	for status != "FINISHED" {
+		time.Sleep(5 * time.Second)
+		statusResp, err := dashService.RetrieveStatus(dashManifestId)
+		if err != nil {
+			fmt.Println("error in Manifest Status")
+			fmt.Println(err)
+			return
+		}
+		// Polling and Printing out the response
+		fmt.Printf("%+v\n", statusResp)
+		status = *statusResp.Data.Result.Status
+		if status == "ERROR" {
+			fmt.Println("error in Manifest Status")
+			fmt.Printf("%+v\n", statusResp)
+			return
+		}
+	}
+}
+
+func getMuxingOfStream(streamId string, muxingsResp *models.FMP4MuxingListResponse) *models.FMP4Muxing {
+	for _, m := range muxingsResp.Data.Result.Items {
+		if *(m.Streams[0].StreamID) == streamId {
+			return &m
+		}
+	}
+
+	return nil
 }
 
 func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
