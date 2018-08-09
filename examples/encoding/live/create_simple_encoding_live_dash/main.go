@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -247,7 +248,7 @@ func main() {
 		time.Sleep(10 * time.Second)
 		statusResp, err := encodingS.RetrieveLiveStatus(encodingID)
 		if err != nil {
-			if err.Error() != "ERROR 2023: Live encoding details not available!" {
+			if !strings.HasPrefix(err.Error(), "ERROR 2023") {
 				fmt.Println("Error in starting live encoding")
 				fmt.Println(err)
 				return
