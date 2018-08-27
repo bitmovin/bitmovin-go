@@ -202,7 +202,7 @@ func main() {
 
 	manifestOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test/manifest"),
+		OutputPath: stringToPtr("golang_test"),
 		ACL:        acl,
 	}
 	hlsManifest := &models.HLSManifest{
@@ -214,56 +214,58 @@ func main() {
 	errorHandler(hlsManifestResp.Status, err)
 
 	audio128kMediaInfo := &models.MediaInfo{
-		Type:            bitmovintypes.MediaTypeAudio,
-		URI:             stringToPtr("audio_128k.m3u8"),
-		GroupID:         stringToPtr("audio_group_128k"),
-		Language:        stringToPtr("en"),
-		Name:            stringToPtr("Rendition Description"),
-		IsDefault:       boolToPtr(false),
-		Autoselect:      boolToPtr(false),
-		Forced:          boolToPtr(false),
-		Characteristics: []string{"public.accessibility.describes-video"},
-		SegmentPath:     stringToPtr("../audio/128k"),
-		EncodingID:      encodingResp.Data.Result.ID,
-		StreamID:        aacStream128kResp.Data.Result.ID,
-		MuxingID:        audioMuxing128kResp.Data.Result.ID,
+		Type:               bitmovintypes.MediaTypeAudio,
+		URI:                stringToPtr("audio_128k.m3u8"),
+		GroupID:            stringToPtr("audio_128"),
+		Language:           stringToPtr("en"),
+		AssociatedLanguage: stringToPtr("en"),
+		Name:               stringToPtr("audio_128"),
+		IsDefault:          boolToPtr(false),
+		Autoselect:         boolToPtr(false),
+		Forced:             boolToPtr(false),
+		Characteristics:    []string{"public.accessibility.describes-audio"},
+		SegmentPath:        stringToPtr("audio/128k/"),
+		EncodingID:         encodingResp.Data.Result.ID,
+		StreamID:           aacStream128kResp.Data.Result.ID,
+		MuxingID:           audioMuxing128kResp.Data.Result.ID,
 	}
 	audioMediaInfo128kResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audio128kMediaInfo)
 	errorHandler(audioMediaInfo128kResp.Status, err)
 
 	audio98kMediaInfo := &models.MediaInfo{
-		Type:            bitmovintypes.MediaTypeAudio,
-		URI:             stringToPtr("audio_98k.m3u8"),
-		GroupID:         stringToPtr("audio_group_98k"),
-		Language:        stringToPtr("en"),
-		Name:            stringToPtr("Rendition Description"),
-		IsDefault:       boolToPtr(false),
-		Autoselect:      boolToPtr(false),
-		Forced:          boolToPtr(false),
-		Characteristics: []string{"public.accessibility.describes-video"},
-		SegmentPath:     stringToPtr("../audio/98k"),
-		EncodingID:      encodingResp.Data.Result.ID,
-		StreamID:        aacStream98kResp.Data.Result.ID,
-		MuxingID:        audioMuxing98kResp.Data.Result.ID,
+		Type:               bitmovintypes.MediaTypeAudio,
+		URI:                stringToPtr("audio_98.m3u8"),
+		GroupID:            stringToPtr("audio_98"),
+		Language:           stringToPtr("en"),
+		AssociatedLanguage: stringToPtr("en"),
+		Name:               stringToPtr("audio_98"),
+		IsDefault:          boolToPtr(false),
+		Autoselect:         boolToPtr(false),
+		Forced:             boolToPtr(false),
+		Characteristics:    []string{"public.accessibility.describes-audio"},
+		SegmentPath:        stringToPtr("audio/98k/"),
+		EncodingID:         encodingResp.Data.Result.ID,
+		StreamID:           aacStream98kResp.Data.Result.ID,
+		MuxingID:           audioMuxing98kResp.Data.Result.ID,
 	}
 	audioMediaInfo98kResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audio98kMediaInfo)
 	errorHandler(audioMediaInfo98kResp.Status, err)
 
 	video1080pStreamInfo := &models.StreamInfo{
 		AudioGroups: &models.HLSAudioGroupConfig{
-			DroppingMode: bitmovintypes.HLSVariantStreamDroppingModeAudio,
+			DroppingMode: bitmovintypes.HLSVariantStreamDroppingModeStream,
 			Groups: []models.HLSAudioGroupDefinition{
 				{
-					Name:     "audio_group_128k",
-					Priority: 2,
+					Name:     "audio_98",
+					Priority: 1,
 				},
 				{
-					Name:     "audio_group_98k",
-					Priority: 1,
+					Name:     "audio_128",
+					Priority: 10,
 				},
 			},
 		},
-		SegmentPath: stringToPtr("../video/1080p"),
+		SegmentPath: stringToPtr("video/1080p/"),
 		URI:         stringToPtr("video_hi.m3u8"),
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream1080pResp.Data.Result.ID,
@@ -274,19 +276,19 @@ func main() {
 
 	video720pStreamInfo := &models.StreamInfo{
 		AudioGroups: &models.HLSAudioGroupConfig{
-			DroppingMode: bitmovintypes.HLSVariantStreamDroppingModeAudio,
+			DroppingMode: bitmovintypes.HLSVariantStreamDroppingModeStream,
 			Groups: []models.HLSAudioGroupDefinition{
 				{
-					Name:     "audio_group_128k",
-					Priority: 2,
+					Name:     "audio_98",
+					Priority: 1,
 				},
 				{
-					Name:     "audio_group_98k",
-					Priority: 1,
+					Name:     "audio_128",
+					Priority: 10,
 				},
 			},
 		},
-		SegmentPath: stringToPtr("../video/720p"),
+		SegmentPath: stringToPtr("video/720p/"),
 		URI:         stringToPtr("video_lo.m3u8"),
 		EncodingID:  encodingResp.Data.Result.ID,
 		StreamID:    videoStream720pResp.Data.Result.ID,
