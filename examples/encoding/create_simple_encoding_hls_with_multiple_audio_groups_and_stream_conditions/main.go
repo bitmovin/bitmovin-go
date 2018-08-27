@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -141,24 +142,26 @@ func main() {
 		StreamID: aacStream98kResp.Data.Result.ID,
 	}
 
+	outputBasePath := "golang"
+
 	videoMuxing1080pOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test/video/1080p"),
+		OutputPath: stringToPtr(fmt.Sprintf("%s/video/1080p", outputBasePath)),
 		ACL:        acl,
 	}
 	videoMuxing720pOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test/video/720p"),
+		OutputPath: stringToPtr(fmt.Sprintf("%s/video/720p", outputBasePath)),
 		ACL:        acl,
 	}
 	audioMuxing128kOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test/audio/128k"),
+		OutputPath: stringToPtr(fmt.Sprintf("%s/audio/128k", outputBasePath)),
 		ACL:        acl,
 	}
 	audioMuxing98kOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test/audio/98k"),
+		OutputPath: stringToPtr(fmt.Sprintf("%s/audio/98k", outputBasePath)),
 		ACL:        acl,
 	}
 
@@ -202,7 +205,7 @@ func main() {
 
 	manifestOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_test"),
+		OutputPath: stringToPtr(outputBasePath),
 		ACL:        acl,
 	}
 	hlsManifest := &models.HLSManifest{
@@ -320,18 +323,14 @@ func main() {
 			return
 		}
 		// Polling and Printing out the response
-		fmt.Printf("%+v\n", statusResp)
+		fmt.Printf("%s\n", getAsJsonString(*statusResp))
 		status = *statusResp.Data.Result.Status
 		if status == "ERROR" {
 			fmt.Println("error in Encoding Status")
-			fmt.Printf("%+v\n", statusResp)
+			fmt.Printf("%s\n", getAsJsonString(*statusResp))
 			return
 		}
 	}
-
-	// Delete Encoding
-	deleteResp, err := encodingS.Delete(*encodingResp.Data.Result.ID)
-	errorHandler(deleteResp.Status, err)
 }
 
 func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
@@ -357,4 +356,12 @@ func boolToPtr(b bool) *bool {
 
 func floatToPtr(f float64) *float64 {
 	return &f
+}
+
+func getAsJsonString(v interface{}) string {
+	j, err := json.MarshalIndent(v, "", "    ")
+	if err != nil {
+		panic(err)
+	}
+	return string(j)
 }
