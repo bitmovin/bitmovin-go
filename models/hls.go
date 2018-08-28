@@ -40,7 +40,7 @@ type LiveHLSManifest struct {
 
 type HLSAudioGroupDefinition struct {
 	Name     string `json:"name,omitempty"`
-	Priority int    `json:"priority,omitempty"`
+	Priority *int64 `json:"priority,omitempty"`
 }
 
 type HLSAudioGroupConfig struct {

@@ -260,11 +260,11 @@ func main() {
 			Groups: []models.HLSAudioGroupDefinition{
 				{
 					Name:     "audio_98",
-					Priority: 1,
+					Priority: intToPtr(1),
 				},
 				{
 					Name:     "audio_128",
-					Priority: 10,
+					Priority: intToPtr(10),
 				},
 			},
 		},
@@ -283,11 +283,11 @@ func main() {
 			Groups: []models.HLSAudioGroupDefinition{
 				{
 					Name:     "audio_98",
-					Priority: 1,
+					Priority: intToPtr(1),
 				},
 				{
 					Name:     "audio_128",
-					Priority: 10,
+					Priority: intToPtr(10),
 				},
 			},
 		},
