@@ -545,8 +545,20 @@ type LiveStatusResponse struct {
 }
 
 type PerTitle struct {
-	MinBitrate *int64 `json:"minBitrate,omitempty"`
-	MaxBitrate *int64 `json:"maxBitrate,omitempty"`
+	H264Configuration *H264PerTitleConfiguration `json:"h264Configuration,omitempty"`
+}
+
+type H264PerTitleConfiguration struct {
+	AutoRepresentations *AutoRepresentations `json:"autoRepresentations,omitempty"`
+	MinBitrate          *int64               `json:"minBitrate,omitempty"`
+	MaxBitrate          *int64               `json:"maxBitrate,omitempty"`
+	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
+	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
+	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
+}
+
+type AutoRepresentations struct {
+	AdoptConfigurationThreshold *float64 `json:"adoptConfigurationThreshold,omitempty"`
 }
 
 type StartOptions struct {
