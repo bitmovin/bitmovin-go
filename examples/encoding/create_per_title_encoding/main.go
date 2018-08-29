@@ -44,19 +44,19 @@ type encodingConfig struct {
 
 const bitmovinApiKey = "<YOUR BITMOVIN API KEY>"
 
-const dashManifestName = "manifest.m3u8"
+const s3OutputAccessKey = "<YOUR S3 OUTPUT ACCESS KEY>"
+const s3OutputSecretKey = "<YOUR S3 OUTPUT SECRET KEY>"
+const s3OutputBucket = "<YOUR S3 OUTPUT BUCKET>"
 
 const httpsInput = "your.host.com"
 const fileInputPath = "/path/to/your/input/file.mkv"
 
-const s3OutputAccessKey = "<YOUR S3 OUTPUT ACCESS KEY>"
-const s3OutputSecretKey = "<YOUR S3 OUTPUT SECRET KEY>"
-const s3OutputBucket = "<YOUR S3 OUTPUT BUCKET>"
 const baseOutputPath = "/path/to/your/output"
+const dashManifestName = "stream.mpd"
 
 func main() {
 	// Creating Bitmovin object
-	bitmovin := bitmovin.NewBitmovin(bitmovinApiKey, "https://api.bitmovin.com/v1/", 5)
+	bitmovin := bitmovin.NewBitmovinDefault(bitmovinApiKey)
 
 	videoRepresentations := []*h264VideoRepresentation{
 		{height: intToPtr(360), fps: nil, name: stringToPtr("360p profile"), outputPath: stringToPtr("video/360p/{bitrate}"), audioGroupId: stringToPtr("audio1")},
@@ -112,7 +112,7 @@ func main() {
 	// Create encoding
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
-		Name:        stringToPtr("My Golang Example Per-Title Encoding"),
+		Name:        stringToPtr("Example Per-Title Encoding"),
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
@@ -240,8 +240,10 @@ func main() {
 	}
 
 	perTitle := &models.PerTitle{
-		MinBitrate: intToPtr(minBitrate),
-		MaxBitrate: intToPtr(maxBitrate),
+		H264Configuration: &models.H264PerTitleConfiguration{
+			MinBitrate: intToPtr(minBitrate),
+			MaxBitrate: intToPtr(maxBitrate),
+		},
 	}
 
 	options := &models.StartOptions{
@@ -308,7 +310,7 @@ func main() {
 		muxing := getMuxingOfStream(*stream.ID, muxingsResp)
 
 		muxingOutputPath := *muxing.Outputs[0].OutputPath
-		segmentPath := strings.Replace(muxingOutputPath, fmt.Sprintf("%s/", baseOutputPath), "", -1)
+		segmentPath := strings.Replace(`/`+muxingOutputPath, baseOutputPath+`/`, "", -1)
 
 		if stream.Mode == bitmovintypes.StreamModePerTitleResult {
 			codecConfigResp, err := h264S.Retrieve(*stream.CodecConfigurationID)
