@@ -544,13 +544,32 @@ type LiveStatusResponse struct {
 	Data      LiveStatusData               `json:"data,omitempty"`
 }
 
+type PerTitle struct {
+	H264Configuration *H264PerTitleConfiguration `json:"h264Configuration,omitempty"`
+}
+
+type H264PerTitleConfiguration struct {
+	AutoRepresentations *AutoRepresentations `json:"autoRepresentations,omitempty"`
+	MinBitrate          *int64               `json:"minBitrate,omitempty"`
+	MaxBitrate          *int64               `json:"maxBitrate,omitempty"`
+	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
+	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
+	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
+}
+
+type AutoRepresentations struct {
+	AdoptConfigurationThreshold *float64 `json:"adoptConfigurationThreshold,omitempty"`
+}
+
 type StartOptions struct {
-	Scheduling             *EncodingScheduling   `json:"scheduling,omitempty"`
-	HandleVariableInputFps *bool                 `json:"handleVariableInputFps,omitempty"`
-	PreviewDashManifests   []PreviewDashManifest `json:"previewDashManifests,omitempty"`
-	PreviewHlsManifests    []PreviewHlsManifest  `json:"previewHlsManifests,omitempty"`
-	VodDashManifests       []VodDashManifest     `json:"vodDashManifests,omitempty"`
-	VodHlsManifests        []VodHlsManifest      `json:"vodHlsManifests,omitempty"`
+	Scheduling             *EncodingScheduling        `json:"scheduling,omitempty"`
+	HandleVariableInputFps *bool                      `json:"handleVariableInputFps,omitempty"`
+	PreviewDashManifests   []PreviewDashManifest      `json:"previewDashManifests,omitempty"`
+	PreviewHlsManifests    []PreviewHlsManifest       `json:"previewHlsManifests,omitempty"`
+	VodDashManifests       []VodDashManifest          `json:"vodDashManifests,omitempty"`
+	VodHlsManifests        []VodHlsManifest           `json:"vodHlsManifests,omitempty"`
+	EncodingMode           bitmovintypes.EncodingMode `json:"encodingMode,omitempty"`
+	PerTitle               *PerTitle                  `json:"perTitle,omitempty"`
 }
 
 type RescheduleEncoding struct {
