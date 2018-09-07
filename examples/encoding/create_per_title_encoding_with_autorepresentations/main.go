@@ -11,37 +11,6 @@ import (
 	"github.com/bitmovin/bitmovin-go/services"
 )
 
-const (
-	minBitrate int64 = 300 * 1000
-	maxBitrate int64 = 4000 * 1000
-)
-
-type h264VideoRepresentation struct {
-	name         *string
-	outputPath   *string
-	width        *int64
-	height       *int64
-	fps          *float64
-	audioGroupId *string
-}
-
-type aacAudioRep struct {
-	name         *string
-	outputPath   *string
-	bitrate      *int64
-	sampleRate   *float64
-	audioGroupId *string
-	lang         *string
-}
-
-type encodingConfig struct {
-	vRep       *h264VideoRepresentation
-	aRep       *aacAudioRep
-	vConfResp  *models.H264CodecConfigurationResponse
-	aConfResp  *models.AACCodecConfigurationResponse
-	streamResp *models.StreamResponse
-}
-
 const bitmovinApiKey = "<YOUR BITMOVIN API KEY>"
 
 const s3OutputAccessKey = "<YOUR S3 OUTPUT ACCESS KEY>"
