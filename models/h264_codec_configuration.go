@@ -30,7 +30,7 @@ type H264CodecConfiguration struct {
 	Partitions             []bitmovintypes.Partition            `json:"partitions,omitempty"`
 	CRF                    *float64                             `json:"crf,omitempty"`
 	Slices                 *int64                               `json:"slices,omitempty"`
-	MotionEstimationMethod bitmovintypes.MotionEstimationMethod `json:"slices,omitempty"`
+	MotionEstimationMethod bitmovintypes.MotionEstimationMethod `json:"motionEstimationMethod,omitempty"`
 	SubMe                  bitmovintypes.SubMe                  `json:"subMe,omitempty"`
 }
 
