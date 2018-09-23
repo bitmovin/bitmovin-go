@@ -15,5 +15,4 @@ const (
 	SubMeRDREFALL = `RD_REF_ALL`
 	SubMeQPRD     = `QPRD`
 	SubMeFULLRD   = `FULL_RD`
-	SubMeDefault  = SubMeRDREFIP
 )

@@ -8,5 +8,4 @@ const (
 	MotionEstimationMethodUMH     = `UMH`
 	MotionEstimationMethodESA     = `ESA`
 	MotionEstimationMethodTESA    = `TESA`
-	MotionEstimationMethodDefault = MotionEstimationMethodUMH
 )
