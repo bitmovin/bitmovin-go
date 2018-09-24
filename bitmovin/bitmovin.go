@@ -6,9 +6,10 @@ import (
 )
 
 type Bitmovin struct {
-	HTTPClient *http.Client
-	APIKey     *string
-	APIBaseURL *string
+	HTTPClient     *http.Client
+	APIKey         *string
+	APIBaseURL     *string
+	OrganizationID *string
 }
 
 func NewBitmovinDefaultTimeout(apiKey string, baseURL string) *Bitmovin {
@@ -24,7 +25,19 @@ func NewBitmovin(apiKey string, baseURL string, timeout int64) *Bitmovin {
 		HTTPClient: &http.Client{
 			Timeout: time.Second * time.Duration(timeout),
 		},
-		APIKey:     &apiKey,
-		APIBaseURL: &baseURL,
+		APIKey:         &apiKey,
+		APIBaseURL:     &baseURL,
+		OrganizationID: nil,
+	}
+}
+
+func NewBitmovinWithOrganizationID(apiKey string, organizationID string, baseURL string, timeout int64) *Bitmovin {
+	return &Bitmovin{
+		HTTPClient: &http.Client{
+			Timeout: time.Second * time.Duration(timeout),
+		},
+		APIKey:         &apiKey,
+		APIBaseURL:     &baseURL,
+		OrganizationID: &organizationID,
 	}
 }
