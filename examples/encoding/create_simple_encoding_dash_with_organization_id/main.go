@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -11,23 +10,17 @@ import (
 	"github.com/bitmovin/bitmovin-go/services"
 )
 
-const (
-	MaxRetries int = 500
-)
-
 func main() {
 	// Creating Bitmovin object
-	bitmovin := bitmovin.NewBitmovin("YOUR API KEY", "https://api.bitmovin.com/v1/", 5)
+	bitmovin := bitmovin.NewBitmovinWithOrganizationID("YOUR API KEY", "YOUR ORGANIZATION ID", "https://api.bitmovin.com/v1/", 5)
 
-	// Creating the RTMP Input
-	rtmpIS := services.NewRTMPInputService(bitmovin)
-	rtmpInputListResp, err := rtmpIS.List(0, 10)
-	errorHandler(rtmpInputListResp.Status, err)
-
-	if len(rtmpInputListResp.Data.Result.Items) < 1 {
-		fmt.Println("No RTMP inputs on account!")
-		return
+	// Creating the HTTP Input
+	httpIS := services.NewHTTPInputService(bitmovin)
+	httpInput := &models.HTTPInput{
+		Host: stringToPtr("YOUR HTTP HOST"),
 	}
+	httpResp, err := httpIS.Create(httpInput)
+	errorHandler(httpResp.Status, err)
 
 	s3OS := services.NewS3OutputService(bitmovin)
 	s3Output := &models.S3Output{
@@ -41,13 +34,11 @@ func main() {
 
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
-		Name:        stringToPtr("example golang live encoding"),
-		CloudRegion: bitmovintypes.CloudRegionGoogleUSEast1,
+		Name:        stringToPtr("example encoding"),
+		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
 	errorHandler(encodingResp.Status, err)
-
-	encodingID := *encodingResp.Data.Result.ID
 
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
 	video1080pConfig := &models.H264CodecConfiguration{
@@ -81,15 +72,13 @@ func main() {
 	errorHandler(aacResp.Status, err)
 
 	videoInputStream := models.InputStream{
-		InputID:       rtmpInputListResp.Data.Result.Items[0].ID,
-		InputPath:     stringToPtr("live"),
-		Position:      intToPtr(0),
+		InputID:       httpResp.Data.Result.ID,
+		InputPath:     stringToPtr("YOUR INPUT FILE PATH AND LOCATION"),
 		SelectionMode: bitmovintypes.SelectionModeAuto,
 	}
 	audioInputStream := models.InputStream{
-		InputID:       rtmpInputListResp.Data.Result.Items[0].ID,
-		InputPath:     stringToPtr("live"),
-		Position:      intToPtr(1),
+		InputID:       httpResp.Data.Result.ID,
+		InputPath:     stringToPtr("YOUR INPUT FILE PATH AND LOCATION"),
 		SelectionMode: bitmovintypes.SelectionModeAuto,
 	}
 
@@ -103,9 +92,9 @@ func main() {
 		InputStreams:         vis,
 	}
 
-	videoStream1080pResp, err := encodingS.AddStream(encodingID, videoStream1080p)
+	videoStream1080pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream1080p)
 	errorHandler(videoStream1080pResp.Status, err)
-	videoStream720pResp, err := encodingS.AddStream(encodingID, videoStream720p)
+	videoStream720pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream720p)
 	errorHandler(videoStream720pResp.Status, err)
 
 	ais := []models.InputStream{audioInputStream}
@@ -113,7 +102,7 @@ func main() {
 		CodecConfigurationID: aacResp.Data.Result.ID,
 		InputStreams:         ais,
 	}
-	aacStreamResp, err := encodingS.AddStream(encodingID, audioStream)
+	aacStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
 	errorHandler(aacStreamResp.Status, err)
 
 	aclEntry := models.ACLItem{
@@ -133,17 +122,17 @@ func main() {
 
 	videoMuxing1080pOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_live_test/video/1080p"),
+		OutputPath: stringToPtr("golang_test/video/1080p"),
 		ACL:        acl,
 	}
 	videoMuxing720pOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_live_test/video/720p"),
+		OutputPath: stringToPtr("golang_test/video/720p"),
 		ACL:        acl,
 	}
 	audioMuxingOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_live_test/audio"),
+		OutputPath: stringToPtr("golang_test/audio"),
 		ACL:        acl,
 	}
 
@@ -154,7 +143,7 @@ func main() {
 		Streams:         []models.StreamItem{videoMuxingStream1080p},
 		Outputs:         []models.Output{videoMuxing1080pOutput},
 	}
-	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing1080p)
+	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing1080p)
 	errorHandler(videoMuxing1080pResp.Status, err)
 
 	videoMuxing720p := &models.FMP4Muxing{
@@ -164,7 +153,7 @@ func main() {
 		Streams:         []models.StreamItem{videoMuxingStream720p},
 		Outputs:         []models.Output{videoMuxing720pOutput},
 	}
-	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing720p)
+	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing720p)
 	errorHandler(videoMuxing720pResp.Status, err)
 
 	audioMuxing := &models.FMP4Muxing{
@@ -174,12 +163,35 @@ func main() {
 		Streams:         []models.StreamItem{audioMuxingStream},
 		Outputs:         []models.Output{audioMuxingOutput},
 	}
-	audioMuxingResp, err := encodingS.AddFMP4Muxing(encodingID, audioMuxing)
+	audioMuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, audioMuxing)
 	errorHandler(audioMuxingResp.Status, err)
+
+	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
+	errorHandler(startResp.Status, err)
+
+	var status string
+	status = ""
+	for status != "FINISHED" {
+		time.Sleep(10 * time.Second)
+		statusResp, err := encodingS.RetrieveStatus(*encodingResp.Data.Result.ID)
+		if err != nil {
+			fmt.Println("error in Encoding Status")
+			fmt.Println(err)
+			return
+		}
+		// Polling and Printing out the response
+		fmt.Printf("%+v\n", statusResp)
+		status = *statusResp.Data.Result.Status
+		if status == "ERROR" {
+			fmt.Println("error in Encoding Status")
+			fmt.Printf("%+v\n", statusResp)
+			return
+		}
+	}
 
 	manifestOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_live_test/manifest"),
+		OutputPath: stringToPtr("golang_test/manifest"),
 		ACL:        acl,
 	}
 	dashManifest := &models.DashManifest{
@@ -231,51 +243,31 @@ func main() {
 	fmp4RepAudioResp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, fmp4RepAudio)
 	errorHandler(fmp4RepAudioResp.Status, err)
 
-	liveDashManifest := models.LiveDashManifest{
-		ManifestID:     dashManifestResp.Data.Result.ID,
-		LiveEdgeOffset: floatToPtr(45.0),
-	}
-
-	liveStreamConfig := &models.LiveStreamConfiguration{
-		StreamKey:     stringToPtr("YOUR STREAM KEY"),
-		DashManifests: []models.LiveDashManifest{liveDashManifest},
-	}
-
-	startResp, err := encodingS.StartLive(encodingID, liveStreamConfig)
+	startResp, err = dashService.Start(*dashManifestResp.Data.Result.ID)
 	errorHandler(startResp.Status, err)
 
-	for numRetries := 0; numRetries < MaxRetries; numRetries++ {
-		time.Sleep(10 * time.Second)
-		statusResp, err := encodingS.RetrieveLiveStatus(encodingID)
+	status = ""
+	for status != "FINISHED" {
+		time.Sleep(5 * time.Second)
+		statusResp, err := dashService.RetrieveStatus(*dashManifestResp.Data.Result.ID)
 		if err != nil {
-			if !strings.HasPrefix(err.Error(), "ERROR 2023") {
-				fmt.Println("Error in starting live encoding")
-				fmt.Println(err)
-				return
-			}
-			fmt.Println("Encoding details not ready yet.")
-			continue
+			fmt.Println("error in Manifest Status")
+			fmt.Println(err)
+			return
 		}
-		if statusResp != nil {
-			if statusResp.Data.Result.EncoderIP == nil {
-				fmt.Println("Encoder IP detail empty, encoding failed")
-				return
-			}
-			if statusResp.Data.Result.StreamKey == nil {
-				fmt.Println("Stream Key detail empty, encoding failed")
-				return
-			}
-			fmt.Println("---------------")
-			fmt.Println("Live Stream set up successfully:")
-			fmt.Printf("Encoding ID ... %v \n", encodingID)
-			fmt.Printf("Encoder IP .... %v \n", *statusResp.Data.Result.EncoderIP)
-			fmt.Printf("Stream Key .... %v \n", *statusResp.Data.Result.StreamKey)
-			fmt.Printf("Stream URL: ... rtmp://%v/live \n", *statusResp.Data.Result.EncoderIP)
-			fmt.Println("---------------")
+		// Polling and Printing out the response
+		fmt.Printf("%+v\n", statusResp)
+		status = *statusResp.Data.Result.Status
+		if status == "ERROR" {
+			fmt.Println("error in Manifest Status")
+			fmt.Printf("%+v\n", statusResp)
 			return
 		}
 	}
-	fmt.Println("Maximum number of retries reached.")
+
+	// Delete Encoding
+	deleteResp, err := encodingS.Delete(*encodingResp.Data.Result.ID)
+	errorHandler(deleteResp.Status, err)
 }
 
 func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {

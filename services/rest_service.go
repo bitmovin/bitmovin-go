@@ -32,6 +32,9 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", fullURL, bytes.NewBuffer(input))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
@@ -61,6 +64,9 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
@@ -90,6 +96,9 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("DELETE", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
@@ -118,6 +127,9 @@ func (r *RestService) List(relativeURL string, offset int64, limit int64) ([]byt
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
@@ -143,6 +155,9 @@ func (r *RestService) RetrieveCustomData(relativeURL string) ([]byte, error) {
 	req, err := http.NewRequest("GET", fullURL, nil)
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
@@ -168,6 +183,9 @@ func (r *RestService) Update(relativeURL string, input []byte) ([]byte, error) {
 	req, err := http.NewRequest("PUT", fullURL, bytes.NewBuffer(input))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("X-Api-Key", *r.Bitmovin.APIKey)
+	if r.Bitmovin.OrganizationID != nil {
+		req.Header.Set("X-Tenant-Org-Id", *r.Bitmovin.OrganizationID)
+	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
