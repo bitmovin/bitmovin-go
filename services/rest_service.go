@@ -3,7 +3,6 @@ package services
 import (
 	"bytes"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -216,10 +215,12 @@ func unmarshalError(body []byte) (*models.DataEnvelope, error) {
 }
 
 func formatError(body []byte) error {
-	data, err := unmarshalError(body)
+	dataEnvelope, err := unmarshalError(body)
 	if err != nil {
 		return err
 	}
-	str := fmt.Sprintf("%s %d (ReqId#%s): %s", data.Status, data.Data.Code, data.RequestID, data.Data.Message)
-	return errors.New(str)
+	be := models.BitmovinError{
+		DataEnvelope: *dataEnvelope,
+	}
+	return be
 }
