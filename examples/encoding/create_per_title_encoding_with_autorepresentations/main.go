@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -33,7 +34,7 @@ func main() {
 		Host: stringToPtr(httpsInput),
 	}
 	httpResp, err := httpIS.Create(httpInput)
-	errorHandler(httpResp.Status, err)
+	errorHandler(err)
 
 	//Creating S3 Output
 	s3OS := services.NewS3OutputService(bitmovin)
@@ -44,7 +45,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	// Create encoding
 	encodingS := services.NewEncodingService(bitmovin)
@@ -53,7 +54,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	// Add video codec config to encoding
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
@@ -63,7 +64,7 @@ func main() {
 	}
 
 	vcResp, err := h264S.Create(vc)
-	errorHandler(vcResp.Status, err)
+	errorHandler(err)
 
 	// Define per title template video stream
 	vis := models.InputStream{
@@ -81,7 +82,7 @@ func main() {
 	}
 
 	sResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, s)
-	errorHandler(sResp.Status, err)
+	errorHandler(err)
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
@@ -104,8 +105,8 @@ func main() {
 		Streams:         []models.StreamItem{ms},
 		Outputs:         []models.Output{mop},
 	}
-	vmxResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, vmx)
-	errorHandler(vmxResp.Status, err)
+	_, err = encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, vmx)
+	errorHandler(err)
 
 	// Configure per-title options
 	perTitle := &models.PerTitle{
@@ -120,8 +121,8 @@ func main() {
 	}
 
 	// Start the encoding
-	startResp, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
+	errorHandler(err)
 
 	waitForEncodingToBeFinished(encodingResp, encodingS)
 	fmt.Println("Per-Title Encoding finished successfully!")
@@ -143,21 +144,21 @@ func main() {
 		Outputs:      []models.Output{manifestOutput},
 	}
 	dashMResp, err := dashService.Create(dashM)
-	errorHandler(dashMResp.Status, err)
+	errorHandler(err)
 
 	period := &models.Period{}
 	//Add to vod manifest
 	periodResp, err := dashService.AddPeriod(*dashMResp.Data.Result.ID, period)
-	errorHandler(periodResp.Status, err)
+	errorHandler(err)
 
 	videoAdaptationSet := &models.VideoAdaptationSet{}
 	// Add to vod manifest
 	videoAdaptationSetResp, err := dashService.AddVideoAdaptationSet(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, videoAdaptationSet)
-	errorHandler(videoAdaptationSetResp.Status, err)
+	errorHandler(err)
 
 	streamsResp, err := encodingS.ListStream(*encodingResp.Data.Result.ID, 0, 20)
 	muxingsResp, err := encodingS.ListFMP4Muxing(*encodingResp.Data.Result.ID, 0, 20)
-	errorHandler(muxingsResp.Status, err)
+	errorHandler(err)
 
 	for _, stream := range streamsResp.Data.Result.Items {
 		if stream.Mode == bitmovintypes.StreamModePerTitleTemplate {
@@ -176,13 +177,13 @@ func main() {
 			SegmentPath: stringToPtr(segmentPath),
 		}
 		// Add to vod manifest
-		fmp4RepResp, err := dashService.AddFMP4Representation(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, *videoAdaptationSetResp.Data.Result.ID, fmp4Rep)
-		errorHandler(fmp4RepResp.Status, err)
+		_, err := dashService.AddFMP4Representation(*dashMResp.Data.Result.ID, *periodResp.Data.Result.ID, *videoAdaptationSetResp.Data.Result.ID, fmp4Rep)
+		errorHandler(err)
 	}
 
 	fmt.Println("Starting dash manifest creation")
-	startResp, err = dashService.Start(*dashMResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = dashService.Start(*dashMResp.Data.Result.ID)
+	errorHandler(err)
 	fmt.Println("Dash manifest creation finished successfully!")
 
 	waitForDashManifestCreationToBeFinished(*dashMResp.Data.Result.ID, dashService)
@@ -242,12 +243,16 @@ func getMuxingOfStream(streamId string, muxingsResp *models.FMP4MuxingListRespon
 	return nil
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 

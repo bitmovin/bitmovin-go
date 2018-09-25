@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -44,7 +45,7 @@ func main() {
 		Host: stringToPtr(inputHost),
 	}
 	httpResp, err := httpIS.Create(httpInput)
-	errorHandler(httpResp.Status, err)
+	errorHandler(err)
 
 	s3OS := services.NewS3OutputService(bitmovin)
 	s3Output := &models.S3Output{
@@ -53,7 +54,7 @@ func main() {
 		BucketName: stringToPtr(s3OutputBucketName),
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	t := time.Now()
 	outputBasePath := outputBasePath + "/" + t.Format("2006-01-02-15-04-05")
@@ -64,7 +65,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	videoInputStream := models.InputStream{
 		InputID:       httpResp.Data.Result.ID,
@@ -124,7 +125,7 @@ func main() {
 		}
 
 		videoConfigResp, err := h265S.Create(videoConfig)
-		errorHandler(videoConfigResp.Status, err)
+		errorHandler(err)
 
 		videoStream := &models.Stream{
 			CodecConfigurationID: videoConfigResp.Data.Result.ID,
@@ -132,7 +133,7 @@ func main() {
 		}
 
 		videoStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream)
-		errorHandler(videoStreamResp.Status, err)
+		errorHandler(err)
 
 		videoMuxingStream := models.StreamItem{
 			StreamID: videoStreamResp.Data.Result.ID,
@@ -153,7 +154,7 @@ func main() {
 		}
 
 		videoMuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, videoMuxing)
-		errorHandler(videoMuxingResp.Status, err)
+		errorHandler(err)
 
 		codecConfigDefinition.streamId = videoStreamResp.Data.Result.ID
 		codecConfigDefinition.muxingId = videoMuxingResp.Data.Result.ID
@@ -166,14 +167,14 @@ func main() {
 		SamplingRate: floatToPtr(48000.0),
 	}
 	aacResp, err := aacS.Create(aacConfig)
-	errorHandler(aacResp.Status, err)
+	errorHandler(err)
 
 	audioStream := &models.Stream{
 		CodecConfigurationID: aacResp.Data.Result.ID,
 		InputStreams:         ais,
 	}
 	aacStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
-	errorHandler(aacStreamResp.Status, err)
+	errorHandler(err)
 
 	audioMuxingStream := models.StreamItem{
 		StreamID: aacStreamResp.Data.Result.ID,
@@ -194,10 +195,10 @@ func main() {
 	}
 
 	audioMuxingResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, audioMuxing)
-	errorHandler(audioMuxingResp.Status, err)
+	errorHandler(err)
 
-	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.Start(*encodingResp.Data.Result.ID)
+	errorHandler(err)
 
 	var status string
 	status = ""
@@ -230,7 +231,7 @@ func main() {
 	}
 	hlsService := services.NewHLSManifestService(bitmovin)
 	hlsManifestResp, err := hlsService.Create(hlsManifest)
-	errorHandler(hlsManifestResp.Status, err)
+	errorHandler(err)
 
 	audioMediaInfo := &models.MediaInfo{
 		Type:            bitmovintypes.MediaTypeAudio,
@@ -247,8 +248,8 @@ func main() {
 		StreamID:        aacStreamResp.Data.Result.ID,
 		MuxingID:        audioMuxingResp.Data.Result.ID,
 	}
-	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
-	errorHandler(audioMediaInfoResp.Status, err)
+	_, err = hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
+	errorHandler(err)
 
 	for _, codecConfigDefinition := range videoEncodingProfiles {
 		videoStreamInfo := &models.StreamInfo{
@@ -260,12 +261,12 @@ func main() {
 			MuxingID:    codecConfigDefinition.muxingId,
 		}
 
-		videoStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, videoStreamInfo)
-		errorHandler(videoStreamInfoResponse.Status, err)
+		_, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, videoStreamInfo)
+		errorHandler(err)
 	}
 
-	startResp, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
+	errorHandler(err)
 
 	status = ""
 	for status != "FINISHED" {
@@ -287,16 +288,20 @@ func main() {
 	}
 
 	// Delete Encoding
-	deleteResp, err := encodingS.Delete(*encodingResp.Data.Result.ID)
-	errorHandler(deleteResp.Status, err)
+	_, err = encodingS.Delete(*encodingResp.Data.Result.ID)
+	errorHandler(err)
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -29,7 +30,7 @@ func main() {
 	}
 
 	inputResp, err := gcsIS.Create(gcsInput)
-	errorHandler(inputResp.Status, err)
+	errorHandler(err)
 
 	// Creating the GCS Output
 	gcsOS := services.NewGCSOutputService(bitmovin)
@@ -40,7 +41,7 @@ func main() {
 		CloudRegion: bitmovintypes.GoogleCloudRegionEuropeWest1,
 	}
 	gcsOutputResp, err := gcsOS.Create(gcsOutput)
-	errorHandler(gcsOutputResp.Status, err)
+	errorHandler(err)
 
 	t := time.Now()
 	outputBasePath := outputBasePath + "/" + t.Format("2006-01-02-15-04-05") + "/"
@@ -52,17 +53,17 @@ func main() {
 		EncoderVersion: "STABLE",
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	h265S := services.NewH265CodecConfigurationService(bitmovin)
 	videoConfig := newHdrVideoConfig()
 	videoResp, err := h265S.Create(videoConfig)
-	errorHandler(videoResp.Status, err)
+	errorHandler(err)
 
 	aacS := services.NewAACCodecConfigurationService(bitmovin)
 	audioConfig := newAudioConfig()
 	aacResp, err := aacS.Create(audioConfig)
-	errorHandler(aacResp.Status, err)
+	errorHandler(err)
 
 	videoInputStream := models.InputStream{
 		InputID:       inputResp.Data.Result.ID,
@@ -83,7 +84,7 @@ func main() {
 	}
 
 	videoStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream)
-	errorHandler(videoStreamResp.Status, err)
+	errorHandler(err)
 
 	ais := []models.InputStream{audioInputStream}
 	audioStream := &models.Stream{
@@ -91,7 +92,7 @@ func main() {
 		InputStreams:         ais,
 	}
 	aacStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
-	errorHandler(aacStreamResp.Status, err)
+	errorHandler(err)
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
@@ -131,8 +132,8 @@ func main() {
 	*/
 	fmt.Printf("Starting encoding with id %s...\n", *encodingResp.Data.Result.ID)
 
-	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.Start(*encodingResp.Data.Result.ID)
+	errorHandler(err)
 
 	var status string
 	status = ""
@@ -157,12 +158,16 @@ func main() {
 	fmt.Println("Encoding finished successfully!")
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 
