@@ -29,6 +29,7 @@ type H264CodecConfiguration struct {
 	RcLookahead            *int64                               `json:"rcLookahead,omitempty"`
 	Partitions             []bitmovintypes.Partition            `json:"partitions,omitempty"`
 	CRF                    *float64                             `json:"crf,omitempty"`
+	ColorConfig            ColorConfig                          `json:"colorConfig,omitempty"`
 	Slices                 *int64                               `json:"slices,omitempty"`
 	MotionEstimationMethod bitmovintypes.MotionEstimationMethod `json:"motionEstimationMethod,omitempty"`
 	SubMe                  bitmovintypes.SubMe                  `json:"subMe,omitempty"`
