@@ -26,6 +26,7 @@ type VP8CodecConfiguration struct {
 	ARNRMaxFrames     *int64                   `json:"arnrMaxFrames,omitempty"`
 	ARNRStrength      *int64                   `json:"arnrStrength,omitempty"`
 	ARNRType          bitmovintypes.VPARNRType `json:"arnrType,omitempty"`
+	ColorConfig       ColorConfig              `json:"colorConfig,omitempty"`
 
 	NoiseSensitivity bitmovintypes.VP8NoiseSensitivity `json:"noiseSensitivity,omitempty"`
 }
@@ -90,6 +91,7 @@ type VP9CodecConfiguration struct {
 	ARNRMaxFrames     *int64                   `json:"arnrMaxFrames,omitempty"`
 	ARNRStrength      *int64                   `json:"arnrStrength,omitempty"`
 	ARNRType          bitmovintypes.VPARNRType `json:"arnrType,omitempty"`
+	ColorConfig       ColorConfig              `json:"colorConfig,omitempty"`
 
 	TileColumns      *int64                  `json:"tileColumns,omitempty"`
 	TileRows         *int64                  `json:"tileRows,omitempty"`

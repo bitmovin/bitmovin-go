@@ -12,4 +12,7 @@ type ColorConfig struct {
 	ColorTransfer          bitmovintypes.ColorTransfer  `json:"colorTransfer,omitempty"`
 	ColorPrimaries         bitmovintypes.ColorPrimaries `json:"colorPrimaries,omitempty"`
 	ColorSpace             bitmovintypes.ColorSpace     `json:"colorSpace,omitempty"`
+	ColorRange             bitmovintypes.ColorRange     `json:"colorRange,omitempty"`
+	InputColorSpace        bitmovintypes.ColorSpace     `json:"inputColorSpace,omitempty"`
+	InputColorRange        bitmovintypes.ColorRange     `json:"inputColorRange,omitempty"`
 }
