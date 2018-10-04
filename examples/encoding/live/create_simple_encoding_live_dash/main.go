@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -22,7 +22,7 @@ func main() {
 	// Creating the RTMP Input
 	rtmpIS := services.NewRTMPInputService(bitmovin)
 	rtmpInputListResp, err := rtmpIS.List(0, 10)
-	errorHandler(rtmpInputListResp.Status, err)
+	errorHandler(err)
 
 	if len(rtmpInputListResp.Data.Result.Items) < 1 {
 		fmt.Println("No RTMP inputs on account!")
@@ -37,7 +37,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionUSEast1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
@@ -45,7 +45,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleUSEast1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	encodingID := *encodingResp.Data.Result.ID
 
@@ -67,9 +67,9 @@ func main() {
 		Profile:   bitmovintypes.H264ProfileHigh,
 	}
 	video1080pResp, err := h264S.Create(video1080pConfig)
-	errorHandler(video1080pResp.Status, err)
+	errorHandler(err)
 	video720Resp, err := h264S.Create(video720Config)
-	errorHandler(video720Resp.Status, err)
+	errorHandler(err)
 
 	aacS := services.NewAACCodecConfigurationService(bitmovin)
 	aacConfig := &models.AACCodecConfiguration{
@@ -78,7 +78,7 @@ func main() {
 		SamplingRate: floatToPtr(48000.0),
 	}
 	aacResp, err := aacS.Create(aacConfig)
-	errorHandler(aacResp.Status, err)
+	errorHandler(err)
 
 	videoInputStream := models.InputStream{
 		InputID:       rtmpInputListResp.Data.Result.Items[0].ID,
@@ -104,9 +104,9 @@ func main() {
 	}
 
 	videoStream1080pResp, err := encodingS.AddStream(encodingID, videoStream1080p)
-	errorHandler(videoStream1080pResp.Status, err)
+	errorHandler(err)
 	videoStream720pResp, err := encodingS.AddStream(encodingID, videoStream720p)
-	errorHandler(videoStream720pResp.Status, err)
+	errorHandler(err)
 
 	ais := []models.InputStream{audioInputStream}
 	audioStream := &models.Stream{
@@ -114,7 +114,7 @@ func main() {
 		InputStreams:         ais,
 	}
 	aacStreamResp, err := encodingS.AddStream(encodingID, audioStream)
-	errorHandler(aacStreamResp.Status, err)
+	errorHandler(err)
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
@@ -155,7 +155,7 @@ func main() {
 		Outputs:         []models.Output{videoMuxing1080pOutput},
 	}
 	videoMuxing1080pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing1080p)
-	errorHandler(videoMuxing1080pResp.Status, err)
+	errorHandler(err)
 
 	videoMuxing720p := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
@@ -165,7 +165,7 @@ func main() {
 		Outputs:         []models.Output{videoMuxing720pOutput},
 	}
 	videoMuxing720pResp, err := encodingS.AddFMP4Muxing(encodingID, videoMuxing720p)
-	errorHandler(videoMuxing720pResp.Status, err)
+	errorHandler(err)
 
 	audioMuxing := &models.FMP4Muxing{
 		SegmentLength:   floatToPtr(4.0),
@@ -175,7 +175,7 @@ func main() {
 		Outputs:         []models.Output{audioMuxingOutput},
 	}
 	audioMuxingResp, err := encodingS.AddFMP4Muxing(encodingID, audioMuxing)
-	errorHandler(audioMuxingResp.Status, err)
+	errorHandler(err)
 
 	manifestOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
@@ -188,21 +188,21 @@ func main() {
 	}
 	dashService := services.NewDashManifestService(bitmovin)
 	dashManifestResp, err := dashService.Create(dashManifest)
-	errorHandler(dashManifestResp.Status, err)
+	errorHandler(err)
 
 	period := &models.Period{}
 	periodResp, err := dashService.AddPeriod(*dashManifestResp.Data.Result.ID, period)
-	errorHandler(periodResp.Status, err)
+	errorHandler(err)
 
 	vas := &models.VideoAdaptationSet{}
 	vasResp, err := dashService.AddVideoAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, vas)
-	errorHandler(vasResp.Status, err)
+	errorHandler(err)
 
 	aas := &models.AudioAdaptationSet{
 		Language: stringToPtr("en"),
 	}
 	aasResp, err := dashService.AddAudioAdaptationSet(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, aas)
-	errorHandler(aasResp.Status, err)
+	errorHandler(err)
 
 	fmp4Rep1080 := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
@@ -210,8 +210,8 @@ func main() {
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/1080p"),
 	}
-	fmp4Rep1080Resp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep1080)
-	errorHandler(fmp4Rep1080Resp.Status, err)
+	_, err = dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep1080)
+	errorHandler(err)
 
 	fmp4Rep720 := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
@@ -219,8 +219,8 @@ func main() {
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../video/720p"),
 	}
-	fmp4Rep720Resp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep720)
-	errorHandler(fmp4Rep720Resp.Status, err)
+	_, err = dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *vasResp.Data.Result.ID, fmp4Rep720)
+	errorHandler(err)
 
 	fmp4RepAudio := &models.FMP4Representation{
 		Type:        bitmovintypes.FMP4RepresentationTypeTemplate,
@@ -228,8 +228,8 @@ func main() {
 		EncodingID:  encodingResp.Data.Result.ID,
 		SegmentPath: stringToPtr("../audio"),
 	}
-	fmp4RepAudioResp, err := dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, fmp4RepAudio)
-	errorHandler(fmp4RepAudioResp.Status, err)
+	_, err = dashService.AddFMP4Representation(*dashManifestResp.Data.Result.ID, *periodResp.Data.Result.ID, *aasResp.Data.Result.ID, fmp4RepAudio)
+	errorHandler(err)
 
 	liveDashManifest := models.LiveDashManifest{
 		ManifestID:     dashManifestResp.Data.Result.ID,
@@ -241,15 +241,22 @@ func main() {
 		DashManifests: []models.LiveDashManifest{liveDashManifest},
 	}
 
-	startResp, err := encodingS.StartLive(encodingID, liveStreamConfig)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.StartLive(encodingID, liveStreamConfig)
+	errorHandler(err)
 
 	for numRetries := 0; numRetries < MaxRetries; numRetries++ {
 		time.Sleep(10 * time.Second)
 		statusResp, err := encodingS.RetrieveLiveStatus(encodingID)
 		if err != nil {
-			if !strings.HasPrefix(err.Error(), "ERROR 2023") {
-				fmt.Println("Error in starting live encoding")
+			be, ok := err.(models.BitmovinError)
+			if ok {
+				if be.DataEnvelope.Data.Code != 2023 {
+					fmt.Println("Error in starting live encoding")
+					fmt.Println(err)
+					return
+				}
+			} else {
+				fmt.Println("General Error, exiting.")
 				fmt.Println(err)
 				return
 			}
@@ -278,12 +285,16 @@ func main() {
 	fmt.Println("Maximum number of retries reached.")
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 
