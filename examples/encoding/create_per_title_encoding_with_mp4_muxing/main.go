@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -37,7 +38,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3InputResp, err := s3IS.Create(s3Input)
-	errorHandler(s3InputResp.Status, err)
+	errorHandler(err)
 
 	// Create the output resource to write the output files
 	s3OS := services.NewS3OutputService(bitmovin)
@@ -48,7 +49,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	// The encoding is created. The cloud region is set to AUTO to use the best cloud region depending on the input
 	encodingS := services.NewEncodingService(bitmovin)
@@ -57,7 +58,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	// Select the video and audio input stream that should be encoded
 	vis := models.InputStream{
@@ -98,7 +99,7 @@ func createPerTitleVideoStream(encodingResp *models.EncodingResponse, vis models
 	}
 
 	vcResp, err := h264S.Create(vc)
-	errorHandler(vcResp.Status, err)
+	errorHandler(err)
 
 	vs := &models.Stream{
 		CodecConfigurationID: vcResp.Data.Result.ID,
@@ -107,7 +108,7 @@ func createPerTitleVideoStream(encodingResp *models.EncodingResponse, vis models
 	}
 
 	vsResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, vs)
-	errorHandler(vsResp.Status, err)
+	errorHandler(err)
 
 	return vsResp
 }
@@ -129,7 +130,7 @@ func createAudioStream(encodingResp *models.EncodingResponse, ais models.InputSt
 	}
 
 	acResp, err := aacS.Create(ac)
-	errorHandler(acResp.Status, err)
+	errorHandler(err)
 
 	// Add audio stream to encoding
 	as := &models.Stream{
@@ -139,7 +140,7 @@ func createAudioStream(encodingResp *models.EncodingResponse, ais models.InputSt
 	}
 
 	asResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, as)
-	errorHandler(asResp.Status, err)
+	errorHandler(err)
 
 	return asResp
 }
@@ -180,8 +181,8 @@ func createMp4Muxing(encodingResp *models.EncodingResponse, s3OutputResp *models
 		Outputs:  []models.Output{mop},
 		Name:     stringToPtr(`MP4 Muxing`),
 	}
-	mxResp, err := encodingS.AddMP4Muxing(*encodingResp.Data.Result.ID, mx)
-	errorHandler(mxResp.Status, err)
+	_, err := encodingS.AddMP4Muxing(*encodingResp.Data.Result.ID, mx)
+	errorHandler(err)
 }
 
 // The encoding will be started with the per title object and the auto representations set. If the auto
@@ -206,8 +207,8 @@ func startEncoding(encodingResp *models.EncodingResponse, encodingS *services.En
 	}
 
 	// Start the encoding
-	startResp, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
-	errorHandler(startResp.Status, err)
+	_, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
+	errorHandler(err)
 
 	waitForEncodingToBeFinished(encodingResp, encodingS)
 	fmt.Println("Per-Title Encoding finished successfully!")
@@ -236,12 +237,16 @@ func waitForEncodingToBeFinished(encodingResp *models.EncodingResponse, encoding
 	}
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 

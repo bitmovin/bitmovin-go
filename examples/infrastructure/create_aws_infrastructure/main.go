@@ -50,15 +50,6 @@ func main() {
 	fmt.Printf("AWSInfrastructureRegionSettings Response: %s\n", getAsJsonString(*awsInfrastructureRegionSettingsResp))
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
-	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
-	}
-}
-
 func stringToPtr(s string) *string {
 	return &s
 }

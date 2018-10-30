@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -20,7 +21,7 @@ func main() {
 		Host: stringToPtr("YOUR HTTP HOST"),
 	}
 	httpResp, err := httpIS.Create(httpInput)
-	errorHandler(httpResp.Status, err)
+	errorHandler(err)
 
 	s3OS := services.NewS3OutputService(bitmovin)
 	s3Output := &models.S3Output{
@@ -30,7 +31,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
@@ -38,7 +39,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	vp8S := services.NewVP8CodecConfigurationService(bitmovin)
 	videoConfig := &models.VP8CodecConfiguration{
@@ -49,7 +50,7 @@ func main() {
 		Height:    intToPtr(360),
 	}
 	videoResp, err := vp8S.Create(videoConfig)
-	errorHandler(videoResp.Status, err)
+	errorHandler(err)
 
 	vorbisS := services.NewVorbisCodecConfigurationService(bitmovin)
 	vorbisConfig := &models.VorbisCodecConfiguration{
@@ -58,7 +59,7 @@ func main() {
 		SamplingRate: floatToPtr(48000.0),
 	}
 	vorbisResp, err := vorbisS.Create(vorbisConfig)
-	errorHandler(vorbisResp.Status, err)
+	errorHandler(err)
 
 	videoInputStream := models.InputStream{
 		InputID:       httpResp.Data.Result.ID,
@@ -77,7 +78,7 @@ func main() {
 		InputStreams:         vis,
 	}
 	videoStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream)
-	errorHandler(videoStreamResp.Status, err)
+	errorHandler(err)
 
 	ais := []models.InputStream{audioInputStream}
 	audioStream := &models.Stream{
@@ -85,7 +86,7 @@ func main() {
 		InputStreams:         ais,
 	}
 	vorbisStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
-	errorHandler(vorbisStreamResp.Status, err)
+	errorHandler(err)
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
@@ -110,11 +111,11 @@ func main() {
 		Outputs:  []models.Output{videoMuxingOutput},
 		Filename: stringToPtr("yourfilename.webm"),
 	}
-	webmMuxingResp, err := encodingS.AddProgressiveWebMMuxing(*encodingResp.Data.Result.ID, webmMuxing)
-	errorHandler(webmMuxingResp.Status, err)
+	_, err = encodingS.AddProgressiveWebMMuxing(*encodingResp.Data.Result.ID, webmMuxing)
+	errorHandler(err)
 
-	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.Start(*encodingResp.Data.Result.ID)
+	errorHandler(err)
 
 	var status string
 	status = ""
@@ -137,12 +138,16 @@ func main() {
 	}
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 

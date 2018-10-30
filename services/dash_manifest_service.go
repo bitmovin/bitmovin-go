@@ -344,3 +344,22 @@ func (s *DashManifestService) AddContentProtectionToAdaptationSet(manifestID str
 	}
 	return &r, nil
 }
+
+func (s *DashManifestService) AddMP4Representation(manifestID string, periodID string, adaptationSetID string, a *models.MP4Representation) (*models.MP4RepresentationResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + "/" + periodID + "/adaptationsets/" + adaptationSetID + "/representations/mp4"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.MP4RepresentationResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+

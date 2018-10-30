@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -95,7 +96,7 @@ func main() {
 		Host: stringToPtr(httpsInput),
 	}
 	httpResp, err := httpIS.Create(httpInput)
-	errorHandler(httpResp.Status, err)
+	errorHandler(err)
 
 	//Creating S3 Output
 	s3OS := services.NewS3OutputService(bitmovin)
@@ -106,7 +107,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	// Create encoding
 	encodingS := services.NewEncodingService(bitmovin)
@@ -115,7 +116,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	// Add audio and video codec configs to encoding
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
@@ -130,7 +131,7 @@ func main() {
 				Profile: bitmovintypes.H264ProfileHigh,
 			}
 			vcResp, err := h264S.Create(vc)
-			errorHandler(vcResp.Status, err)
+			errorHandler(err)
 			ec.vConfResp = vcResp
 		}
 		if ec.aRep != nil {
@@ -140,7 +141,7 @@ func main() {
 				SamplingRate: ec.aRep.sampleRate,
 			}
 			acResp, err := aacS.Create(ac)
-			errorHandler(acResp.Status, err)
+			errorHandler(err)
 			ec.aConfResp = acResp
 		}
 	}
@@ -168,7 +169,7 @@ func main() {
 				InputStreams:         visList,
 			}
 			sResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, s)
-			errorHandler(sResp.Status, err)
+			errorHandler(err)
 			ec.streamResp = sResp
 		}
 		if ec.aConfResp != nil {
@@ -177,7 +178,7 @@ func main() {
 				InputStreams:         aisList,
 			}
 			sResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, s)
-			errorHandler(sResp.Status, err)
+			errorHandler(err)
 			ec.streamResp = sResp
 		}
 	}
@@ -208,7 +209,7 @@ func main() {
 					Outputs:         []models.Output{mop},
 				}
 				vmxResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, vmx)
-				errorHandler(vmxResp.Status, err)
+				errorHandler(err)
 				ec.fmp4MxResp = vmxResp
 			}
 			if ec.aRep != nil {
@@ -225,7 +226,7 @@ func main() {
 					Outputs:         []models.Output{mop},
 				}
 				amxResp, err := encodingS.AddFMP4Muxing(*encodingResp.Data.Result.ID, amx)
-				errorHandler(amxResp.Status, err)
+				errorHandler(err)
 				ec.fmp4MxResp = amxResp
 			}
 
@@ -252,7 +253,7 @@ func main() {
 					Outputs:       []models.Output{mop},
 				}
 				vmxResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, vmx)
-				errorHandler(vmxResp.Status, err)
+				errorHandler(err)
 				ec.tsMxResp = vmxResp
 			}
 			if ec.aRep != nil {
@@ -268,7 +269,7 @@ func main() {
 					Outputs:       []models.Output{mop},
 				}
 				amxResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, amx)
-				errorHandler(amxResp.Status, err)
+				errorHandler(err)
 				ec.tsMxResp = amxResp
 			}
 		}
@@ -290,31 +291,31 @@ func main() {
 		Outputs:      []models.Output{manifestOutput},
 	}
 	vodDashMResp, err := dashService.Create(vodDashM)
-	errorHandler(vodDashMResp.Status, err)
+	errorHandler(err)
 
 	previewDashM := &models.DashManifest{
 		ManifestName: stringToPtr(previewDashManifestName),
 		Outputs:      []models.Output{manifestOutput},
 	}
 	previewDashMResp, err := dashService.Create(previewDashM)
-	errorHandler(previewDashMResp.Status, err)
+	errorHandler(err)
 
 	period := &models.Period{}
 	//Add to vod manifest
 	vodPeriodResp, err := dashService.AddPeriod(*vodDashMResp.Data.Result.ID, period)
-	errorHandler(vodPeriodResp.Status, err)
+	errorHandler(err)
 	// Add to preview manifest
 	previewPeriodResp, err := dashService.AddPeriod(*previewDashMResp.Data.Result.ID, period)
-	errorHandler(previewPeriodResp.Status, err)
+	errorHandler(err)
 
 	vas := &models.VideoAdaptationSet{}
 	// Add to vod manifest
 	vodVasResp, err := dashService.AddVideoAdaptationSet(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, vas)
-	errorHandler(vodVasResp.Status, err)
+	errorHandler(err)
 
 	// Add to preview manifest
 	previewVasResp, err := dashService.AddVideoAdaptationSet(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, vas)
-	errorHandler(previewVasResp.Status, err)
+	errorHandler(err)
 
 	vodAasMap := make(map[string]*models.AudioAdaptationSetResponse)
 	previewAasMap := make(map[string]*models.AudioAdaptationSetResponse)
@@ -325,11 +326,11 @@ func main() {
 			}
 			// Add to vod manifest
 			vodAasResp, err := dashService.AddAudioAdaptationSet(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, aas)
-			errorHandler(vodAasResp.Status, err)
+			errorHandler(err)
 
 			// Add to preview manifest
 			previewAasResp, err := dashService.AddAudioAdaptationSet(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, aas)
-			errorHandler(previewAasResp.Status, err)
+			errorHandler(err)
 
 			vodAasMap[*ec.aRep.lang] = vodAasResp
 			previewAasMap[*ec.aRep.lang] = previewAasResp
@@ -342,14 +343,14 @@ func main() {
 		Outputs:      []models.Output{manifestOutput},
 	}
 	vodHlsMResp, err := hlsService.Create(vodHlsM)
-	errorHandler(vodHlsMResp.Status, err)
+	errorHandler(err)
 
 	previewHlsM := &models.HLSManifest{
 		ManifestName: stringToPtr(previewHlsManifestName),
 		Outputs:      []models.Output{manifestOutput},
 	}
 	previewHlsMResp, err := hlsService.Create(previewHlsM)
-	errorHandler(previewHlsMResp.Status, err)
+	errorHandler(err)
 
 	for _, ec := range encodingConfigs {
 		if ec.vRep != nil {
@@ -361,12 +362,12 @@ func main() {
 					SegmentPath: stringToPtr(fmt.Sprintf("%s_dash", *ec.vRep.outputPath)),
 				}
 				// Add to vod manifest
-				fmp4RepResp, err := dashService.AddFMP4Representation(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, *vodVasResp.Data.Result.ID, fmp4Rep)
-				errorHandler(fmp4RepResp.Status, err)
+				_, err := dashService.AddFMP4Representation(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, *vodVasResp.Data.Result.ID, fmp4Rep)
+				errorHandler(err)
 
 				// Add to preview manifest
-				fmp4RepResp, err = dashService.AddFMP4Representation(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, *previewVasResp.Data.Result.ID, fmp4Rep)
-				errorHandler(fmp4RepResp.Status, err)
+				_, err = dashService.AddFMP4Representation(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, *previewVasResp.Data.Result.ID, fmp4Rep)
+				errorHandler(err)
 			}
 			if ec.tsMxResp != nil {
 				vsi := &models.StreamInfo{
@@ -378,12 +379,12 @@ func main() {
 					MuxingID:    ec.tsMxResp.Data.Result.ID,
 				}
 				// Add to vod manifest
-				vsiResp, err := hlsService.AddStreamInfo(*vodHlsMResp.Data.Result.ID, vsi)
-				errorHandler(vsiResp.Status, err)
+				_, err := hlsService.AddStreamInfo(*vodHlsMResp.Data.Result.ID, vsi)
+				errorHandler(err)
 
 				// Add to preview manifest
-				vsiResp, err = hlsService.AddStreamInfo(*previewHlsMResp.Data.Result.ID, vsi)
-				errorHandler(vsiResp.Status, err)
+				_, err = hlsService.AddStreamInfo(*previewHlsMResp.Data.Result.ID, vsi)
+				errorHandler(err)
 			}
 		}
 		if ec.aRep != nil {
@@ -398,12 +399,12 @@ func main() {
 				previewAasResp := previewAasMap[*ec.aRep.lang]
 
 				// Add to vod manifest
-				fmp4RepResp, err := dashService.AddFMP4Representation(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, *vodAasResp.Data.Result.ID, fmp4Rep)
-				errorHandler(fmp4RepResp.Status, err)
+				_, err := dashService.AddFMP4Representation(*vodDashMResp.Data.Result.ID, *vodPeriodResp.Data.Result.ID, *vodAasResp.Data.Result.ID, fmp4Rep)
+				errorHandler(err)
 
 				//Add to preview manifest
-				fmp4RepResp, err = dashService.AddFMP4Representation(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, *previewAasResp.Data.Result.ID, fmp4Rep)
-				errorHandler(fmp4RepResp.Status, err)
+				_, err = dashService.AddFMP4Representation(*previewDashMResp.Data.Result.ID, *previewPeriodResp.Data.Result.ID, *previewAasResp.Data.Result.ID, fmp4Rep)
+				errorHandler(err)
 			}
 			if ec.tsMxResp != nil {
 				audioMediaInfo := &models.MediaInfo{
@@ -422,12 +423,12 @@ func main() {
 					MuxingID:        ec.tsMxResp.Data.Result.ID,
 				}
 				// Add to vod manifest
-				audioMediaInfoResp, err := hlsService.AddMediaInfo(*vodHlsMResp.Data.Result.ID, audioMediaInfo)
-				errorHandler(audioMediaInfoResp.Status, err)
+				_, err := hlsService.AddMediaInfo(*vodHlsMResp.Data.Result.ID, audioMediaInfo)
+				errorHandler(err)
 
 				// Add to preview manifest
-				audioMediaInfoResp, err = hlsService.AddMediaInfo(*previewHlsMResp.Data.Result.ID, audioMediaInfo)
-				errorHandler(audioMediaInfoResp.Status, err)
+				_, err = hlsService.AddMediaInfo(*previewHlsMResp.Data.Result.ID, audioMediaInfo)
+				errorHandler(err)
 			}
 		}
 
@@ -454,8 +455,8 @@ func main() {
 		PreviewDashManifests: []models.PreviewDashManifest{previewDash},
 	}
 
-	startResp, err := encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.StartWithOptions(*encodingResp.Data.Result.ID, options)
+	errorHandler(err)
 
 	waitForEncodingToBeFinished(encodingResp, encodingS)
 	fmt.Println("Encoding finished successfully!")
@@ -484,12 +485,16 @@ func waitForEncodingToBeFinished(encodingResp *models.EncodingResponse, encoding
 	}
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 

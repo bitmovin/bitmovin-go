@@ -3,11 +3,12 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type DashManifest struct {
-	ID           *string  `json:"id"`
-	Name         *string  `json:"name"`
-	Description  *string  `json:"description"`
-	Outputs      []Output `json:"outputs"`
-	ManifestName *string  `json:"manifestName"`
+	ID           *string                           `json:"id,omitempty"`
+	Name         *string                           `json:"name,omitempty"`
+	Description  *string                           `json:"description,omitempty"`
+	Outputs      []Output                          `json:"outputs,omitempty"`
+	ManifestName *string                           `json:"manifestName,omitempty"`
+	Profile      bitmovintypes.DASHManifestProfile `json:"profile,omitempty"`
 }
 
 func (h *DashManifest) AddOutput(output *Output) {
@@ -199,4 +200,30 @@ type AdaptationSetContentProtectionResponse struct {
 	RequestID *string                            `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus       `json:"status,omitempty"`
 	Data      AdaptationSetContentProtectionData `json:"data,omitempty"`
+}
+
+type MP4Representation struct {
+	ID         *string `json:"id,omitempty"`
+	MuxingID   *string `json:"muxingId,omitempty"`
+	EncodingID *string `json:"encodingId,omitempty"`
+	FilePath   *string `json:"filePath,omitempty"`
+}
+
+type MP4RepresentationData struct {
+	//Success fields
+	Result   MP4Representation `json:"result,omitempty"`
+	Messages []Message         `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type MP4RepresentationResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      MP4RepresentationData        `json:"data,omitempty"`
 }

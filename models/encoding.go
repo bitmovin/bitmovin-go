@@ -212,15 +212,16 @@ type TSMuxingListResponse struct {
 }
 
 type MP4Muxing struct {
-	ID                   *string                     `json:"id,omitempty"`
-	Name                 *string                     `json:"name,omitempty"`
-	Description          *string                     `json:"description,omitempty"`
-	CustomData           map[string]interface{}      `json:"customData,omitempty"`
-	Streams              []StreamItem                `json:"streams,omitempty"`
-	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
-	Outputs              []Output                    `json:"outputs,omitempty"`
-	Filename             *string                     `json:"filename,omitempty"`
-	FragmentDuration     *int64                      `json:"fragmentDuration,omitempty"`
+	ID                              *string                                       `json:"id,omitempty"`
+	Name                            *string                                       `json:"name,omitempty"`
+	Description                     *string                                       `json:"description,omitempty"`
+	CustomData                      map[string]interface{}                        `json:"customData,omitempty"`
+	Streams                         []StreamItem                                  `json:"streams,omitempty"`
+	StreamConditionsMode            bitmovintypes.ConditionMode                   `json:"streamConditionsMode,omitempty"`
+	Outputs                         []Output                                      `json:"outputs,omitempty"`
+	Filename                        *string                                       `json:"filename,omitempty"`
+	FragmentDuration                *int64                                        `json:"fragmentDuration,omitempty"`
+	FragmentedMP4MuxingManifestType bitmovintypes.FragmentedMP4MuxingManifestType `json:"fragmentedMP4MuxingManifestType,omitempty"`
 }
 
 type MP4MuxingData struct {

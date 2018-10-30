@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/bitmovin/bitmovin-go/bitmovin"
@@ -20,7 +21,7 @@ func main() {
 		Host: stringToPtr("YOUR HTTP HOST"),
 	}
 	httpResp, err := httpIS.Create(httpInput)
-	errorHandler(httpResp.Status, err)
+	errorHandler(err)
 
 	s3OS := services.NewS3OutputService(bitmovin)
 	s3Output := &models.S3Output{
@@ -30,7 +31,7 @@ func main() {
 		CloudRegion: bitmovintypes.AWSCloudRegionEUWest1,
 	}
 	s3OutputResp, err := s3OS.Create(s3Output)
-	errorHandler(s3OutputResp.Status, err)
+	errorHandler(err)
 
 	encodingS := services.NewEncodingService(bitmovin)
 	encoding := &models.Encoding{
@@ -38,7 +39,7 @@ func main() {
 		CloudRegion: bitmovintypes.CloudRegionGoogleEuropeWest1,
 	}
 	encodingResp, err := encodingS.Create(encoding)
-	errorHandler(encodingResp.Status, err)
+	errorHandler(err)
 
 	h264S := services.NewH264CodecConfigurationService(bitmovin)
 	video1080pConfig := &models.H264CodecConfiguration{
@@ -58,9 +59,9 @@ func main() {
 		Profile:   bitmovintypes.H264ProfileHigh,
 	}
 	video1080pResp, err := h264S.Create(video1080pConfig)
-	errorHandler(video1080pResp.Status, err)
+	errorHandler(err)
 	video720Resp, err := h264S.Create(video720Config)
-	errorHandler(video720Resp.Status, err)
+	errorHandler(err)
 
 	aacS := services.NewAACCodecConfigurationService(bitmovin)
 	aacConfig := &models.AACCodecConfiguration{
@@ -69,7 +70,7 @@ func main() {
 		SamplingRate: floatToPtr(48000.0),
 	}
 	aacResp, err := aacS.Create(aacConfig)
-	errorHandler(aacResp.Status, err)
+	errorHandler(err)
 
 	videoInputStream := models.InputStream{
 		InputID:       httpResp.Data.Result.ID,
@@ -93,9 +94,9 @@ func main() {
 	}
 
 	videoStream1080pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream1080p)
-	errorHandler(videoStream1080pResp.Status, err)
+	errorHandler(err)
 	videoStream720pResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, videoStream720p)
-	errorHandler(videoStream720pResp.Status, err)
+	errorHandler(err)
 
 	ais := []models.InputStream{audioInputStream}
 	audioStream := &models.Stream{
@@ -103,7 +104,7 @@ func main() {
 		InputStreams:         ais,
 	}
 	aacStreamResp, err := encodingS.AddStream(*encodingResp.Data.Result.ID, audioStream)
-	errorHandler(aacStreamResp.Status, err)
+	errorHandler(err)
 
 	aclEntry := models.ACLItem{
 		Permission: bitmovintypes.ACLPermissionPublicRead,
@@ -143,7 +144,7 @@ func main() {
 		Outputs:       []models.Output{videoMuxing1080pOutput},
 	}
 	videoMuxing1080pResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, videoMuxing1080p)
-	errorHandler(videoMuxing1080pResp.Status, err)
+	errorHandler(err)
 
 	videoMuxing720p := &models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
@@ -152,7 +153,7 @@ func main() {
 		Outputs:       []models.Output{videoMuxing720pOutput},
 	}
 	videoMuxing720pResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, videoMuxing720p)
-	errorHandler(videoMuxing720pResp.Status, err)
+	errorHandler(err)
 
 	audioMuxing := &models.TSMuxing{
 		SegmentLength: floatToPtr(4.0),
@@ -161,10 +162,10 @@ func main() {
 		Outputs:       []models.Output{audioMuxingOutput},
 	}
 	audioMuxingResp, err := encodingS.AddTSMuxing(*encodingResp.Data.Result.ID, audioMuxing)
-	errorHandler(audioMuxingResp.Status, err)
+	errorHandler(err)
 
-	startResp, err := encodingS.Start(*encodingResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = encodingS.Start(*encodingResp.Data.Result.ID)
+	errorHandler(err)
 
 	var status string
 	status = ""
@@ -188,7 +189,7 @@ func main() {
 
 	manifestOutput := models.Output{
 		OutputID:   s3OutputResp.Data.Result.ID,
-		OutputPath: stringToPtr("golang_hls_test/manifest"),
+		OutputPath: stringToPtr("golang_test/manifest"),
 		ACL:        acl,
 	}
 	hlsManifest := &models.HLSManifest{
@@ -197,7 +198,7 @@ func main() {
 	}
 	hlsService := services.NewHLSManifestService(bitmovin)
 	hlsManifestResp, err := hlsService.Create(hlsManifest)
-	errorHandler(hlsManifestResp.Status, err)
+	errorHandler(err)
 
 	audioMediaInfo := &models.MediaInfo{
 		Type:            bitmovintypes.MediaTypeAudio,
@@ -214,8 +215,8 @@ func main() {
 		StreamID:        aacStreamResp.Data.Result.ID,
 		MuxingID:        audioMuxingResp.Data.Result.ID,
 	}
-	audioMediaInfoResp, err := hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
-	errorHandler(audioMediaInfoResp.Status, err)
+	_, err = hlsService.AddMediaInfo(*hlsManifestResp.Data.Result.ID, audioMediaInfo)
+	errorHandler(err)
 
 	video1080pStreamInfo := &models.StreamInfo{
 		Audio:       stringToPtr("audio_group"),
@@ -225,8 +226,8 @@ func main() {
 		StreamID:    videoStream1080pResp.Data.Result.ID,
 		MuxingID:    videoMuxing1080pResp.Data.Result.ID,
 	}
-	video1080pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video1080pStreamInfo)
-	errorHandler(video1080pStreamInfoResponse.Status, err)
+	_, err = hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video1080pStreamInfo)
+	errorHandler(err)
 
 	video720pStreamInfo := &models.StreamInfo{
 		Audio:       stringToPtr("audio_group"),
@@ -236,11 +237,11 @@ func main() {
 		StreamID:    videoStream720pResp.Data.Result.ID,
 		MuxingID:    videoMuxing720pResp.Data.Result.ID,
 	}
-	video720pStreamInfoResponse, err := hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video720pStreamInfo)
-	errorHandler(video720pStreamInfoResponse.Status, err)
+	_, err = hlsService.AddStreamInfo(*hlsManifestResp.Data.Result.ID, video720pStreamInfo)
+	errorHandler(err)
 
-	startResp, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
-	errorHandler(startResp.Status, err)
+	_, err = hlsService.Start(*hlsManifestResp.Data.Result.ID)
+	errorHandler(err)
 
 	status = ""
 	for status != "FINISHED" {
@@ -262,12 +263,16 @@ func main() {
 	}
 }
 
-func errorHandler(responseStatus bitmovintypes.ResponseStatus, err error) {
+func errorHandler(err error) {
 	if err != nil {
-		fmt.Println("go error")
-		fmt.Println(err)
-	} else if responseStatus == "ERROR" {
-		fmt.Println("api error")
+		switch err.(type) {
+		case models.BitmovinError:
+			fmt.Println("Bitmovin Error")
+		default:
+			fmt.Println("General Error")
+		}
+		fmt.Println(err.Error())
+		os.Exit(1)
 	}
 }
 
