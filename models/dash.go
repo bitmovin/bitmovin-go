@@ -3,11 +3,11 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type DashManifest struct {
-	ID           *string                           `json:"id"`
-	Name         *string                           `json:"name"`
-	Description  *string                           `json:"description"`
-	Outputs      []Output                          `json:"outputs"`
-	ManifestName *string                           `json:"manifestName"`
+	ID           *string                           `json:"id,omitempty"`
+	Name         *string                           `json:"name,omitempty"`
+	Description  *string                           `json:"description,omitempty"`
+	Outputs      []Output                          `json:"outputs,omitempty"`
+	ManifestName *string                           `json:"manifestName,omitempty"`
 	Profile      bitmovintypes.DASHManifestProfile `json:"profile,omitempty"`
 }
 
