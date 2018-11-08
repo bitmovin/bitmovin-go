@@ -33,6 +33,7 @@ type H264CodecConfiguration struct {
 	Slices                 *int64                               `json:"slices,omitempty"`
 	MotionEstimationMethod bitmovintypes.MotionEstimationMethod `json:"motionEstimationMethod,omitempty"`
 	SubMe                  bitmovintypes.SubMe                  `json:"subMe,omitempty"`
+	SceneCutThreshold      *int64                               `json:"sceneCutThreshold,omitempty"`
 }
 
 type H264CodecConfigurationData struct {
