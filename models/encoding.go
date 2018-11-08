@@ -550,12 +550,15 @@ type PerTitle struct {
 }
 
 type H264PerTitleConfiguration struct {
-	AutoRepresentations *AutoRepresentations `json:"autoRepresentations,omitempty"`
-	MinBitrate          *int64               `json:"minBitrate,omitempty"`
-	MaxBitrate          *int64               `json:"maxBitrate,omitempty"`
-	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
-	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
-	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
+	AutoRepresentations   *AutoRepresentations `json:"autoRepresentations,omitempty"`
+	MinBitrate            *int64               `json:"minBitrate,omitempty"`
+	MaxBitrate            *int64               `json:"maxBitrate,omitempty"`
+	MinBitrateStepSize    *float64             `json:"minBitrateStepSize,omitempty"`
+	MaxBitrateStepSize    *float64             `json:"maxBitrateStepSize,omitempty"`
+	TargetQualityCrf      *float64             `json:"targetQualityCrf,omitempty"`
+	CodecMinBitrateFactor *float64             `json:"codecMinBitrateFactor,omitempty"`
+	CodecMaxBitrateFactor *float64             `json:"codecMaxBitrateFactor,omitempty"`
+	CodecBufsizeFactor    *float64             `json:"codecBufsizeFactor,omitempty"`
 }
 
 type AutoRepresentations struct {
