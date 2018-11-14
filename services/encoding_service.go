@@ -168,6 +168,66 @@ func (s *EncodingService) RetrieveStreamCustomData(encodingID string, streamID s
 	return &r, nil
 }
 
+func (s *EncodingService) AddKeyframe(encodingID string, a *models.Keyframe) (*models.KeyframeResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/" + "keyframes"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.KeyframeResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveKeyframe(encodingID string, keyframeID string) (*models.KeyframeResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "keyframes" + "/" + keyframeID
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.KeyframeResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) DeleteKeyframe(encodingID string, keyframeID string) (*models.KeyframeResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "keyframes" + "/" + keyframeID
+	o, err := s.RestService.Delete(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.KeyframeResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) ListKeyframes(encodingID string, offset int64, limit int64) (*models.KeyframeListResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "keyframes"
+	o, err := s.RestService.List(path, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.KeyframeListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *EncodingService) RetrieveStreamInputData(encodingID string, streamID string) (*models.StreamInputResponse, error) {
 	path := EncodingEndpoint + "/" + encodingID + "/" + "streams" + "/" + streamID + "/input"
 	o, err := s.RestService.Retrieve(path)
