@@ -388,7 +388,7 @@ type ProgressiveTSMuxing struct {
 	CustomData           map[string]interface{}      `json:"customData,omitempty"`
 	Streams              []StreamItem                `json:"streams,omitempty"`
 	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
-	SegmentLength        *float64                      `json:"segmentLength,omitempty"`
+	SegmentLength        *float64                    `json:"segmentLength,omitempty"`
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
 	StartOffset          *int64                      `json:"startOffset,omitempty"`
@@ -397,7 +397,7 @@ type ProgressiveTSMuxing struct {
 type ProgressiveTSMuxingData struct {
 	//Success fields
 	Result   ProgressiveTSMuxing `json:"result,omitempty"`
-	Messages []Message            `json:"messages,omitempty"`
+	Messages []Message           `json:"messages,omitempty"`
 
 	//Error fields
 	Code             *int64   `json:"code,omitempty"`
@@ -414,10 +414,10 @@ type ProgressiveTSMuxingResponse struct {
 }
 
 type ProgressiveTSMuxingListResult struct {
-	TotalCount *int64                 `json:"totalCount,omitempty"`
-	Previous   *string                `json:"previous,omitempty"`
-	Next       *string                `json:"next,omitempty"`
-	Items      []ProgressiveTSMuxing  `json:"items,omitempty"`
+	TotalCount *int64                `json:"totalCount,omitempty"`
+	Previous   *string               `json:"previous,omitempty"`
+	Next       *string               `json:"next,omitempty"`
+	Items      []ProgressiveTSMuxing `json:"items,omitempty"`
 }
 
 type ProgressiveTSMuxingListData struct {
@@ -436,8 +436,8 @@ type ProgressiveTSMuxingInformationResult struct {
 
 type ProgressiveTSMuxingInformationData struct {
 	//Success fields
-	Result   ProgressiveTSMuxingInformationResult  `json:"result,omitempty"`
-	Messages []Message                             `json:"messages,omitempty"`
+	Result   ProgressiveTSMuxingInformationResult `json:"result,omitempty"`
+	Messages []Message                            `json:"messages,omitempty"`
 
 	//Error fields
 	Code             *int64   `json:"code,omitempty"`
@@ -448,15 +448,15 @@ type ProgressiveTSMuxingInformationData struct {
 }
 
 type ProgressiveTSMuxingInformationResponse struct {
-	RequestID *string                             `json:"requestId,omitempty"`
-	Status    bitmovintypes.ResponseStatus        `json:"status,omitempty"`
-	Data      ProgressiveTSMuxingInformationData  `json:"data,omitempty"`
+	RequestID *string                            `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus       `json:"status,omitempty"`
+	Data      ProgressiveTSMuxingInformationData `json:"data,omitempty"`
 }
 
 type ProgressiveTSMuxingListResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      ProgressiveTSMuxingListData `json:"data,omitempty"`
+	Data      ProgressiveTSMuxingListData  `json:"data,omitempty"`
 }
 
 type ProgressiveWebMMuxing struct {
