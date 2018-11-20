@@ -388,7 +388,7 @@ type ProgressiveTSMuxing struct {
 	CustomData           map[string]interface{}      `json:"customData,omitempty"`
 	Streams              []StreamItem                `json:"streams,omitempty"`
 	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
-	SegmentLength        *int64                      `json:"segmentLength,omitempty"`
+	SegmentLength        *float64                      `json:"segmentLength,omitempty"`
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
 	StartOffset          *int64                      `json:"startOffset,omitempty"`
