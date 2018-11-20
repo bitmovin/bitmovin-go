@@ -381,6 +381,84 @@ type ProgressiveMOVMuxingListResponse struct {
 	Data      ProgressiveMOVMuxingListData `json:"data,omitempty"`
 }
 
+type ProgressiveTSMuxing struct {
+	ID                   *string                     `json:"id,omitempty"`
+	Name                 *string                     `json:"name,omitempty"`
+	Description          *string                     `json:"description,omitempty"`
+	CustomData           map[string]interface{}      `json:"customData,omitempty"`
+	Streams              []StreamItem                `json:"streams,omitempty"`
+	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
+	SegmentLength        *int64                      `json:"segmentLength,omitempty"`
+	Outputs              []Output                    `json:"outputs,omitempty"`
+	Filename             *string                     `json:"filename,omitempty"`
+	StartOffset          *int64                      `json:"startOffset,omitempty"`
+}
+
+type ProgressiveTSMuxingData struct {
+	//Success fields
+	Result   ProgressiveTSMuxing `json:"result,omitempty"`
+	Messages []Message            `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type ProgressiveTSMuxingResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      ProgressiveTSMuxingData      `json:"data,omitempty"`
+}
+
+type ProgressiveTSMuxingListResult struct {
+	TotalCount *int64                 `json:"totalCount,omitempty"`
+	Previous   *string                `json:"previous,omitempty"`
+	Next       *string                `json:"next,omitempty"`
+	Items      []ProgressiveTSMuxing  `json:"items,omitempty"`
+}
+
+type ProgressiveTSMuxingListData struct {
+	Result ProgressiveTSMuxingListResult `json:"result,omitempty"`
+}
+
+type ProgressiveTSMuxingInformationResult struct {
+	MimeType         *string      `json:"mimeType,omitempty"`
+	FileSize         *int64       `json:"fileSize,omitempty"`
+	ContainerFormat  *string      `json:"containerFormat,omitempty"`
+	ContainerBitrate *int64       `json:"containerBitrate,omitempty"`
+	Duration         *float64     `json:"duration,omitempty"`
+	VideoTracks      []VideoTrack `json:"videoTracks,omitempty"`
+	AudioTracks      []AudioTrack `json:"audioTracks,omitempty"`
+}
+
+type ProgressiveTSMuxingInformationData struct {
+	//Success fields
+	Result   ProgressiveTSMuxingInformationResult  `json:"result,omitempty"`
+	Messages []Message                             `json:"messages,omitempty"`
+
+	//Error fields
+	Code             *int64   `json:"code,omitempty"`
+	Message          *string  `json:"message,omitempty"`
+	DeveloperMessage *string  `json:"developerMessage,omitempty"`
+	Links            []Link   `json:"links,omitempty"`
+	Details          []Detail `json:"details,omitempty"`
+}
+
+type ProgressiveTSMuxingInformationResponse struct {
+	RequestID *string                             `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus        `json:"status,omitempty"`
+	Data      ProgressiveTSMuxingInformationData  `json:"data,omitempty"`
+}
+
+type ProgressiveTSMuxingListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      ProgressiveTSMuxingListData `json:"data,omitempty"`
+}
+
 type ProgressiveWebMMuxing struct {
 	ID                   *string                     `json:"id,omitempty"`
 	Name                 *string                     `json:"name,omitempty"`
