@@ -506,6 +506,94 @@ func (s *EncodingService) RetrieveProgressiveMOVMuxingInformation(encodingID str
 	return &r, nil
 }
 
+func (s *EncodingService) AddProgressiveTSMuxing(encodingID string, a *models.ProgressiveTSMuxing) (*models.ProgressiveTSMuxingResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ProgressiveTSMuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveProgressiveTSMuxing(encodingID string, progressiveTSID string) (*models.ProgressiveTSMuxingResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts" + "/" + progressiveTSID
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ProgressiveTSMuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) DeleteProgressiveTSMuxing(encodingID string, progressiveTSID string) (*models.ProgressiveTSMuxingResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts" + "/" + progressiveTSID
+	o, err := s.RestService.Delete(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ProgressiveTSMuxingResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) ListProgressiveTSMuxing(encodingID string, offset int64, limit int64) (*models.ProgressiveTSMuxingListResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts"
+	o, err := s.RestService.List(path, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ProgressiveTSMuxingListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveProgressiveTSMuxingCustomData(encodingID string, progressiveTSID string, offset int64, limit int64) (*models.CustomDataResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts" + "/" + progressiveTSID
+	o, err := s.RestService.RetrieveCustomData(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CustomDataResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *EncodingService) RetrieveProgressiveTSMuxingInformation(encodingID string, progressiveTSID string) (*models.ProgressiveTSMuxingInformationResponse, error) {
+	path := EncodingEndpoint + "/" + encodingID + "/" + "muxings/progressive-ts" + "/" + progressiveTSID + "/information"
+	o, err := s.RestService.Retrieve(path)
+	if err != nil {
+		return nil, err
+	}
+	var r models.ProgressiveTSMuxingInformationResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *EncodingService) AddProgressiveWebMMuxing(encodingID string, a *models.ProgressiveWebMMuxing) (*models.ProgressiveWebMMuxingResponse, error) {
 	b, err := json.Marshal(*a)
 	if err != nil {
