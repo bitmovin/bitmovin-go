@@ -103,6 +103,42 @@ func (s *HLSManifestService) AddStreamInfo(manifestID string, a *models.StreamIn
 	return &r, nil
 }
 
+func (s *HLSManifestService) AddCustomTagToStreamInfo(manifestID string, streamInfoID string, a *models.CustomTag) (*models.CustomTagResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := HLSManifestEndpoint + "/" + manifestID + "/streams/" + streamInfoID + "/custom-tags"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CustomTagResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *HLSManifestService) AddCustomTagToMediaInfo(manifestID string, mediaInfoID string, a *models.CustomTag) (*models.CustomTagResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := HLSManifestEndpoint + "/" + manifestID + "/media/" + mediaInfoID + "/custom-tags"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CustomTagResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *HLSManifestService) Start(manifestID string) (*models.StartStopResponse, error) {
 	path := HLSManifestEndpoint + "/" + manifestID + "/start"
 	o, err := s.RestService.Create(path, nil)
