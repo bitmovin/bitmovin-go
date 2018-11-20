@@ -643,8 +643,17 @@ type AutoRepresentations struct {
 	AdoptConfigurationThreshold *float64 `json:"adoptConfigurationThreshold,omitempty"`
 }
 
+type Trimming struct {
+	Offset                        *float64 `json:"offset,omitempty"`
+	Duration                      *float64 `json:"duration,omitempty"`
+	IgnoreDurationIfInputTooShort *bool    `json:"ignoreDurationIfInputTooShort,omitempty"`
+	StartPicTiming                *string  `json:"startPicTiming,omitempty"`
+	EndPicTiming                  *string  `json:"endPicTiming,omitempty"`
+}
+
 type StartOptions struct {
 	Scheduling             *EncodingScheduling        `json:"scheduling,omitempty"`
+	Trimming               *Trimming                  `json:"trimming,omitempty"`
 	HandleVariableInputFps *bool                      `json:"handleVariableInputFps,omitempty"`
 	PreviewDashManifests   []PreviewDashManifest      `json:"previewDashManifests,omitempty"`
 	PreviewHlsManifests    []PreviewHlsManifest       `json:"previewHlsManifests,omitempty"`
