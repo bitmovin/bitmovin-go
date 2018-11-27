@@ -59,15 +59,17 @@ type PlayReadyCencDrm struct {
 }
 
 type CencDrm struct {
-	ID          *string                `json:"id,omitempty"`
-	Name        *string                `json:"name,omitempty"`
-	Description *string                `json:"description,omitempty"`
-	CustomData  map[string]interface{} `json:"customData,omitempty"`
-	Key         *string                `json:"key,omitempty"`
-	KID         *string                `json:"kid,omitempty"`
-	Outputs     []Output               `json:"outputs,omitempty"`
-	Widevine    WidevineCencDrm        `json:"widevine,omitempty"`
-	PlayReady   PlayReadyCencDrm       `json:"playReady,omitEmpty"`
+	ID                      *string                `json:"id,omitempty"`
+	Name                    *string                `json:"name,omitempty"`
+	Description             *string                `json:"description,omitempty"`
+	CustomData              map[string]interface{} `json:"customData,omitempty"`
+	Key                     *string                `json:"key,omitempty"`
+	KID                     *string                `json:"kid,omitempty"`
+	Outputs                 []Output               `json:"outputs,omitempty"`
+	Widevine                WidevineCencDrm        `json:"widevine,omitempty"`
+	PlayReady               PlayReadyCencDrm       `json:"playReady,omitEmpty"`
+	IvSize                  bitmovintypes.IvSize   `json:"ivSize,omitEmpty"`
+	EnablePiffCompatibility *bool                  `json:"enablePiffCompatibility,omitEmpty"`
 }
 
 func (p *CencDrm) AddOutput(output *Output) {
