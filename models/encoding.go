@@ -626,7 +626,7 @@ type LiveStatusResponse struct {
 type PerTitle struct {
 	H264Configuration *H264PerTitleConfiguration `json:"h264Configuration,omitempty"`
 	H265Configuration *H265PerTitleConfiguration `json:"h265Configuration,omitempty"`
-	VP9Configuration *VP9PerTitleConfiguration `json:"vp9Configuration,omitempty"`
+	VP9Configuration  *VP9PerTitleConfiguration  `json:"vp9Configuration,omitempty"`
 }
 
 type H264PerTitleConfiguration struct {
@@ -642,21 +642,21 @@ type H264PerTitleConfiguration struct {
 }
 
 type H265PerTitleConfiguration struct {
-	AutoRepresentations   *AutoRepresentations `json:"autoRepresentations,omitempty"`
-	MinBitrate            *int64               `json:"minBitrate,omitempty"`
-	MaxBitrate            *int64               `json:"maxBitrate,omitempty"`
-	MinBitrateStepSize    *float64             `json:"minBitrateStepSize,omitempty"`
-	MaxBitrateStepSize    *float64             `json:"maxBitrateStepSize,omitempty"`
-	TargetQualityCrf      *float64             `json:"targetQualityCrf,omitempty"`
+	AutoRepresentations *AutoRepresentations `json:"autoRepresentations,omitempty"`
+	MinBitrate          *int64               `json:"minBitrate,omitempty"`
+	MaxBitrate          *int64               `json:"maxBitrate,omitempty"`
+	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
+	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
+	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
 }
 
 type VP9PerTitleConfiguration struct {
-	AutoRepresentations   *AutoRepresentations `json:"autoRepresentations,omitempty"`
-	MinBitrate            *int64               `json:"minBitrate,omitempty"`
-	MaxBitrate            *int64               `json:"maxBitrate,omitempty"`
-	MinBitrateStepSize    *float64             `json:"minBitrateStepSize,omitempty"`
-	MaxBitrateStepSize    *float64             `json:"maxBitrateStepSize,omitempty"`
-	TargetQualityCrf      *float64             `json:"targetQualityCrf,omitempty"`
+	AutoRepresentations *AutoRepresentations `json:"autoRepresentations,omitempty"`
+	MinBitrate          *int64               `json:"minBitrate,omitempty"`
+	MaxBitrate          *int64               `json:"maxBitrate,omitempty"`
+	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
+	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
+	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
 }
 
 type AutoRepresentations struct {
