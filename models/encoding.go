@@ -626,7 +626,7 @@ type LiveStatusResponse struct {
 type PerTitle struct {
 	H264Configuration *H264PerTitleConfiguration `json:"h264Configuration,omitempty"`
 	H265Configuration *H265PerTitleConfiguration `json:"h265Configuration,omitempty"`
-	H264Configuration *VP9PerTitleConfiguration `json:"vp9Configuration,omitempty"`
+	VP9Configuration *VP9PerTitleConfiguration `json:"vp9Configuration,omitempty"`
 }
 
 type H264PerTitleConfiguration struct {
