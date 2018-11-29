@@ -38,8 +38,8 @@ type H265CodecConfiguration struct {
 	MaxContentLightLevel        *int64                     `json:"maxContentLightLevel,omitempty"`
 	MaxPictureAverageLightLevel *int64                     `json:"maxPictureAverageLightLevel,omitempty"`
 	HDR                         *bool                      `json:"hdr,omitempty"`
-	PixelFormat                 bitmovintypes.PixelFormat  `json:"pixelFormat,omitempty`
-	SceneCutThreshold      *int64                               `json:"sceneCutThreshold,omitempty"`
+	PixelFormat                 bitmovintypes.PixelFormat  `json:"pixelFormat,omitempty"`
+	SceneCutThreshold           *int64                     `json:"sceneCutThreshold,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
