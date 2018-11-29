@@ -14,8 +14,9 @@ type DrmService struct {
 }
 
 const (
-	Fmp4DrmEndpoint string = "encoding/encodings/{encoding_id}/muxings/fmp4/{fmp4_id}/drm"
-	TsDrmEndpoint   string = "encoding/encodings/{encoding_id}/muxings/ts/{ts_id}/drm"
+	Fmp4DrmEndpoint          string = "encoding/encodings/{encoding_id}/muxings/fmp4/{fmp4_id}/drm"
+	TsDrmEndpoint            string = "encoding/encodings/{encoding_id}/muxings/ts/{ts_id}/drm"
+	ProgressiveTsDrmEndpoint string = "encoding/encodings/{encoding_id}/muxings/progressive-ts/{progressive_ts_id}/drm"
 )
 
 func NewDrmService(bitmovin *bitmovin.Bitmovin) *DrmService {
@@ -143,6 +144,40 @@ func (s *DrmService) CreateTsDrm(encodingId string, tsMuxingId string, drm inter
 
 	default:
 		err := fmt.Sprintf("TS DRM type %T is not supported!\n", v)
+		return nil, errors.New(err)
+	}
+}
+
+func (s *DrmService) CreateProgressiveTsDrm(encodingId string, progressiveTsMuxingId string, drm interface{}) (interface{}, error) {
+
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{progressive_ts_id}", progressiveTsMuxingId,
+	)
+	requestUrl := replacer.Replace(ProgressiveTsDrmEndpoint)
+
+	switch v := drm.(type) {
+	case models.FairPlayDrm:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+
+		enpointUrl := requestUrl + "/fairplay"
+		response, err := s.RestService.Create(enpointUrl, b)
+		if err != nil {
+			return nil, err
+		}
+
+		var result models.FairPlayDrmResponse
+		err = json.Unmarshal(response, &result)
+		if err != nil {
+			return nil, err
+		}
+		return &result, nil
+
+	default:
+		err := fmt.Sprintf("Progressive TS DRM type %T is not supported!\n", v)
 		return nil, errors.New(err)
 	}
 }
