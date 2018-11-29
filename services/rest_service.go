@@ -36,6 +36,7 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
+
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
