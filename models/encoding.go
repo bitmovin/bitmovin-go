@@ -212,8 +212,8 @@ type TSMuxingListResponse struct {
 }
 
 type InternalChunkLengthConfig struct {
-	Mode              *string `json:"mode,omitempty"`
-	CustomChunkLength *int64  `json:"customChunkLength,omitempty"`
+	Mode              *string  `json:"mode,omitempty"`
+	CustomChunkLength *float64 `json:"customChunkLength,omitempty"`
 }
 
 type MP4Muxing struct {
