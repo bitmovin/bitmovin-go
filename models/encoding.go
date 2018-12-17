@@ -212,8 +212,8 @@ type TSMuxingListResponse struct {
 }
 
 type InternalChunkLengthConfig struct {
-	Mode              *string  `json:"mode,omitempty"`
-	CustomChunkLength *float64 `json:"customChunkLength,omitempty"`
+	Mode              bitmovintypes.InternalChunkLengthMode `json:"mode,omitempty"`
+	CustomChunkLength *float64                              `json:"customChunkLength,omitempty"`
 }
 
 type MP4Muxing struct {
@@ -227,7 +227,7 @@ type MP4Muxing struct {
 	Filename                        *string                                       `json:"filename,omitempty"`
 	FragmentDuration                *int64                                        `json:"fragmentDuration,omitempty"`
 	FragmentedMP4MuxingManifestType bitmovintypes.FragmentedMP4MuxingManifestType `json:"fragmentedMP4MuxingManifestType,omitempty"`
-	InternalChunkLength             *InternalChunkLengthConfig                     `json:"internalChunkLength,omitempty"`
+	InternalChunkLength             *InternalChunkLengthConfig                    `json:"internalChunkLength,omitempty"`
 }
 
 type MP4MuxingData struct {
@@ -320,6 +320,7 @@ type ProgressiveMOVMuxing struct {
 	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
+	InternalChunkLength  *InternalChunkLengthConfig  `json:"internalChunkLength,omitempty"`
 }
 
 type ProgressiveMOVMuxingData struct {
@@ -398,6 +399,7 @@ type ProgressiveTSMuxing struct {
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
 	StartOffset          *int64                      `json:"startOffset,omitempty"`
+	InternalChunkLength  *InternalChunkLengthConfig  `json:"internalChunkLength,omitempty"`
 }
 
 type ProgressiveTSMuxingData struct {
@@ -474,6 +476,7 @@ type ProgressiveWebMMuxing struct {
 	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
+	InternalChunkLength  *InternalChunkLengthConfig  `json:"internalChunkLength,omitempty"`
 }
 
 type ProgressiveWebMMuxingData struct {
