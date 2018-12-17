@@ -227,7 +227,7 @@ type MP4Muxing struct {
 	Filename                        *string                                       `json:"filename,omitempty"`
 	FragmentDuration                *int64                                        `json:"fragmentDuration,omitempty"`
 	FragmentedMP4MuxingManifestType bitmovintypes.FragmentedMP4MuxingManifestType `json:"fragmentedMP4MuxingManifestType,omitempty"`
-	InternalChunkLength             InternalChunkLengthConfig                     `json:"internalChunkLength,omitempty"`
+	InternalChunkLength             *InternalChunkLengthConfig                     `json:"internalChunkLength,omitempty"`
 }
 
 type MP4MuxingData struct {
