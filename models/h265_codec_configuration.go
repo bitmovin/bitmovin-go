@@ -41,8 +41,8 @@ type H265CodecConfiguration struct {
 	PixelFormat                            bitmovintypes.PixelFormat  `json:"pixelFormat,omitempty"`
 	SceneCutThreshold                      *int64                     `json:"sceneCutThreshold,omitempty"`
 	AdaptiveQuantizationMode               bitmovintypes.H265AQMode   `json:"adaptiveQuantizationMode,omitempty"`
-	PsyRateDistortionOptimization          *int64                     `json:"psyRateDistortionOptimization,omitempty"`
-	PsyRateDistortionOptimizedQuantization *int64                     `json:"psyRateDistortionOptimizedQuantization,omitempty"`
+	PsyRateDistortionOptimization          *float64                   `json:"psyRateDistortionOptimization,omitempty"`
+	PsyRateDistortionOptimizedQuantization *float64                   `json:"psyRateDistortionOptimizedQuantization,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
