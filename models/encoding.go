@@ -648,6 +648,7 @@ type H264PerTitleConfiguration struct {
 	CodecMinBitrateFactor *float64             `json:"codecMinBitrateFactor,omitempty"`
 	CodecMaxBitrateFactor *float64             `json:"codecMaxBitrateFactor,omitempty"`
 	CodecBufsizeFactor    *float64             `json:"codecBufsizeFactor,omitempty"`
+	ComplexityFactor      *float64             `json:"complexityFactor,omitempty"`
 }
 
 type H265PerTitleConfiguration struct {
@@ -660,6 +661,7 @@ type H265PerTitleConfiguration struct {
 	CodecMinBitrateFactor *float64             `json:"codecMinBitrateFactor,omitempty"`
 	CodecMaxBitrateFactor *float64             `json:"codecMaxBitrateFactor,omitempty"`
 	CodecBufsizeFactor    *float64             `json:"codecBufsizeFactor,omitempty"`
+	ComplexityFactor      *float64             `json:"complexityFactor,omitempty"`
 }
 
 type VP9PerTitleConfiguration struct {
@@ -669,6 +671,7 @@ type VP9PerTitleConfiguration struct {
 	MinBitrateStepSize  *float64             `json:"minBitrateStepSize,omitempty"`
 	MaxBitrateStepSize  *float64             `json:"maxBitrateStepSize,omitempty"`
 	TargetQualityCrf    *float64             `json:"targetQualityCrf,omitempty"`
+	ComplexityFactor    *float64             `json:"complexityFactor,omitempty"`
 }
 
 type AutoRepresentations struct {
