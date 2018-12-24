@@ -12,7 +12,7 @@ type H265CodecConfiguration struct {
 	Width                                  *int64                     `json:"width,omitempty"`
 	Height                                 *int64                     `json:"height,omitempty"`
 	Profile                                bitmovintypes.H265Profile  `json:"profile,omitempty"`
-	BFrames                                *int64                     `json:"bFrames,omitempty"`
+	BFrames                                *int64                     `json:"bframes,omitempty"`
 	RefFrames                              *int64                     `json:"refFrames,omitempty"`
 	QP                                     *int64                     `json:"qp,omitempty"`
 	MaxBitrate                             *int64                     `json:"maxBitrate,omitempty"`
