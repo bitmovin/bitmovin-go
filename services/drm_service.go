@@ -255,7 +255,7 @@ func (s *DrmService) CreateMp4Drm(encodingId string, mp4MuxingId string, drm int
 	}
 }
 
-func (s *DrmService) ListMP4CencDrm(encodingID string, mp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
+func (s *DrmService) ListMP4CencDrm(encodingId string, mp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
 	replacer := strings.NewReplacer(
 		"{encoding_id}", encodingId,
 		"{mp4_id}", mp4MuxingId,
