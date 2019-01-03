@@ -58,6 +58,11 @@ type PlayReadyCencDrm struct {
 	PSSH  *string `json:"pssh,omitEmpty"`
 }
 
+type FairPlayCencDrm struct {
+	IV *string `json:"iv,omitEmpty"`
+	URI  *string `json:"uri,omitEmpty"`
+}
+
 type CencDrm struct {
 	ID                      *string                `json:"id,omitempty"`
 	Name                    *string                `json:"name,omitempty"`
@@ -66,8 +71,9 @@ type CencDrm struct {
 	Key                     *string                `json:"key,omitempty"`
 	KID                     *string                `json:"kid,omitempty"`
 	Outputs                 []Output               `json:"outputs,omitempty"`
-	Widevine                *WidevineCencDrm        `json:"widevine,omitempty"`
-	PlayReady               *PlayReadyCencDrm       `json:"playReady,omitEmpty"`
+	Widevine                WidevineCencDrm        `json:"widevine,omitempty"`
+	PlayReady               PlayReadyCencDrm       `json:"playReady,omitEmpty"`
+	FairPlay				FairPlayCencDrm         `json:"fairPlay,omitEmpty"`
 	IvSize                  bitmovintypes.IvSize   `json:"ivSize,omitEmpty"`
 	EnablePiffCompatibility *bool                  `json:"enablePiffCompatibility,omitEmpty"`
 }
