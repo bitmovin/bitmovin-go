@@ -255,12 +255,31 @@ func (s *DrmService) CreateMp4Drm(encodingId string, mp4MuxingId string, drm int
 	}
 }
 
-func (s *DrmService) ListMP4CencDrm(encodingId string, mp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
+func (s *DrmService) ListMp4CencDrm(encodingId string, mp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
 	replacer := strings.NewReplacer(
 		"{encoding_id}", encodingId,
 		"{mp4_id}", mp4MuxingId,
 	)
 	requestUrl := replacer.Replace(Mp4DrmEndpoint)
+	endpointUrl := requestUrl + "/cenc"
+	o, err := s.RestService.List(endpointUrl, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CencDrmListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *DrmService) ListFmp4CencDrm(encodingId string, fmp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{fmp4_id}", fmp4MuxingId,
+	)
+	requestUrl := replacer.Replace(Fmp4DrmEndpoint)
 	endpointUrl := requestUrl + "/cenc"
 	o, err := s.RestService.List(endpointUrl, offset, limit)
 	if err != nil {
