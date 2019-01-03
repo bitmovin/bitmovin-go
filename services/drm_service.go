@@ -17,6 +17,7 @@ const (
 	Fmp4DrmEndpoint          string = "encoding/encodings/{encoding_id}/muxings/fmp4/{fmp4_id}/drm"
 	TsDrmEndpoint            string = "encoding/encodings/{encoding_id}/muxings/ts/{ts_id}/drm"
 	ProgressiveTsDrmEndpoint string = "encoding/encodings/{encoding_id}/muxings/progressive-ts/{progressive_ts_id}/drm"
+	Mp4DrmEndpoint          string = "encoding/encodings/{encoding_id}/muxings/mp4/{mp4_id}/drm"
 )
 
 func NewDrmService(bitmovin *bitmovin.Bitmovin) *DrmService {
@@ -178,6 +179,78 @@ func (s *DrmService) CreateProgressiveTsDrm(encodingId string, progressiveTsMuxi
 
 	default:
 		err := fmt.Sprintf("Progressive TS DRM type %T is not supported!\n", v)
+		return nil, errors.New(err)
+	}
+}
+
+func (s *DrmService) CreateMp4Drm(encodingId string, mp4MuxingId string, drm interface{}) (interface{}, error) {
+
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{mp4_id}", mp4MuxingId,
+	)
+	requestUrl := replacer.Replace(Mp4DrmEndpoint)
+
+	switch v := drm.(type) {
+	case models.WidevineDrm:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+
+		enpointUrl := requestUrl + "/widevine"
+		response, err := s.RestService.Create(enpointUrl, b)
+		if err != nil {
+			return nil, err
+		}
+
+		var result models.WidevineDrmResponse
+		err = json.Unmarshal(response, &result)
+		if err != nil {
+			return nil, err
+		}
+		return &result, nil
+
+	case models.PlayReadyDrm:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+
+		endpointUrl := requestUrl + "/playready"
+		response, err := s.RestService.Create(endpointUrl, b)
+		if err != nil {
+			return nil, err
+		}
+
+		var result models.PlayReadyDrmResponse
+		err = json.Unmarshal(response, &result)
+		if err != nil {
+			return nil, err
+		}
+		return &result, nil
+
+	case models.CencDrm:
+		b, err := json.Marshal(v)
+		if err != nil {
+			return nil, err
+		}
+
+		endpointUrl := requestUrl + "/cenc"
+		response, err := s.RestService.Create(endpointUrl, b)
+		if err != nil {
+			return nil, err
+		}
+
+		var result models.CencDrmResponse
+		err = json.Unmarshal(response, &result)
+		if err != nil {
+			return nil, err
+		}
+		return &result, nil
+
+	default:
+		err := fmt.Sprintf("FMP4 DRM type %T is not supported!\n", v)
 		return nil, errors.New(err)
 	}
 }
