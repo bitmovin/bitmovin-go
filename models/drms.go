@@ -131,3 +131,20 @@ type CencDrmResponse struct {
 	DrmResponse
 	Data CencDrmData `json:"data,omitempty"`
 }
+
+type CencDrmListResult struct {
+	TotalCount *int64      `json:"totalCount,omitempty"`
+	Previous   *string     `json:"previous,omitempty"`
+	Next       *string     `json:"next,omitempty"`
+	Items      []CencDrm `json:"items,omitempty"`
+}
+
+type CencDrmListData struct {
+	Result CencDrmListResult `json:"result,omitempty"`
+}
+
+type CencDrmListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      CencDrmListData            `json:"data,omitempty"`
+}

@@ -254,3 +254,22 @@ func (s *DrmService) CreateMp4Drm(encodingId string, mp4MuxingId string, drm int
 		return nil, errors.New(err)
 	}
 }
+
+func (s *DrmService) ListMP4CencDrm(encodingID string, mp4MuxingId string, offset int64, limit int64) (*models.CencDrmListResponse, error) {
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{mp4_id}", mp4MuxingId,
+	)
+	requestUrl := replacer.Replace(Mp4DrmEndpoint)
+	endpointUrl := requestUrl + "/cenc"
+	o, err := s.RestService.List(endpointUrl, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.CencDrmListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
