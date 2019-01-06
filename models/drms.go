@@ -71,9 +71,9 @@ type CencDrm struct {
 	Key                     *string                `json:"key,omitempty"`
 	KID                     *string                `json:"kid,omitempty"`
 	Outputs                 []Output               `json:"outputs,omitempty"`
-	Widevine                *WidevineCencDrm        `json:"widevine,omitempty"`
-	PlayReady               *PlayReadyCencDrm       `json:"playReady,omitEmpty"`
-	FairPlay				*FairPlayCencDrm         `json:"fairPlay,omitEmpty"`
+	Widevine                *WidevineCencDrm       `json:"widevine,omitempty"`
+	PlayReady               *PlayReadyCencDrm      `json:"playReady,omitEmpty"`
+	FairPlay                *FairPlayCencDrm       `json:"fairPlay,omitEmpty"`
 	IvSize                  bitmovintypes.IvSize   `json:"ivSize,omitEmpty"`
 	EnablePiffCompatibility *bool                  `json:"enablePiffCompatibility,omitEmpty"`
 }
@@ -152,13 +152,13 @@ type CencDrmListData struct {
 type CencDrmListResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      CencDrmListData            `json:"data,omitempty"`
+	Data      CencDrmListData              `json:"data,omitempty"`
 }
 
 type FairPlayDrmListResult struct {
-	TotalCount *int64      `json:"totalCount,omitempty"`
-	Previous   *string     `json:"previous,omitempty"`
-	Next       *string     `json:"next,omitempty"`
+	TotalCount *int64        `json:"totalCount,omitempty"`
+	Previous   *string       `json:"previous,omitempty"`
+	Next       *string       `json:"next,omitempty"`
 	Items      []FairPlayDrm `json:"items,omitempty"`
 }
 
@@ -169,5 +169,5 @@ type FairPlayDrmListData struct {
 type FairPlayDrmListResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      FairPlayDrmListData            `json:"data,omitempty"`
+	Data      FairPlayDrmListData          `json:"data,omitempty"`
 }
