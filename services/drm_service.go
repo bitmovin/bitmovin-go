@@ -292,3 +292,41 @@ func (s *DrmService) ListFmp4CencDrm(encodingId string, fmp4MuxingId string, off
 	}
 	return &r, nil
 }
+
+func (s *DrmService) ListTsFairPlayDrm(encodingId string, tsMuxingId string, offset int64, limit int64) (*models.FairPlayDrmListResponse, error) {
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{ts_id}", tsMuxingId,
+	)
+	requestUrl := replacer.Replace(TsDrmEndpoint)
+	endpointUrl := requestUrl + "/fairplay"
+	o, err := s.RestService.List(endpointUrl, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.FairPlayDrmListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
+func (s *DrmService) ListProgressiveTsFairPlayDrm(encodingId string, progressiveTsMuxingId string, offset int64, limit int64) (*models.FairPlayDrmListResponse, error) {
+	replacer := strings.NewReplacer(
+		"{encoding_id}", encodingId,
+		"{progressive_ts_id}", progressiveTsMuxingId,
+	)
+	requestUrl := replacer.Replace(ProgressiveTsDrmEndpoint)
+	endpointUrl := requestUrl + "/fairplay"
+	o, err := s.RestService.List(endpointUrl, offset, limit)
+	if err != nil {
+		return nil, err
+	}
+	var r models.FairPlayDrmListResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
