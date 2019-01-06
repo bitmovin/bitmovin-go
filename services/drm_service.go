@@ -17,7 +17,7 @@ const (
 	Fmp4DrmEndpoint          string = "encoding/encodings/{encoding_id}/muxings/fmp4/{fmp4_id}/drm"
 	TsDrmEndpoint            string = "encoding/encodings/{encoding_id}/muxings/ts/{ts_id}/drm"
 	ProgressiveTsDrmEndpoint string = "encoding/encodings/{encoding_id}/muxings/progressive-ts/{progressive_ts_id}/drm"
-	Mp4DrmEndpoint          string = "encoding/encodings/{encoding_id}/muxings/mp4/{mp4_id}/drm"
+	Mp4DrmEndpoint           string = "encoding/encodings/{encoding_id}/muxings/mp4/{mp4_id}/drm"
 )
 
 func NewDrmService(bitmovin *bitmovin.Bitmovin) *DrmService {

@@ -59,8 +59,8 @@ type PlayReadyCencDrm struct {
 }
 
 type FairPlayCencDrm struct {
-	IV *string `json:"iv,omitEmpty"`
-	URI  *string `json:"uri,omitEmpty"`
+	IV  *string `json:"iv,omitEmpty"`
+	URI *string `json:"uri,omitEmpty"`
 }
 
 type CencDrm struct {
@@ -139,9 +139,9 @@ type CencDrmResponse struct {
 }
 
 type CencDrmListResult struct {
-	TotalCount *int64      `json:"totalCount,omitempty"`
-	Previous   *string     `json:"previous,omitempty"`
-	Next       *string     `json:"next,omitempty"`
+	TotalCount *int64    `json:"totalCount,omitempty"`
+	Previous   *string   `json:"previous,omitempty"`
+	Next       *string   `json:"next,omitempty"`
 	Items      []CencDrm `json:"items,omitempty"`
 }
 
@@ -171,4 +171,3 @@ type FairPlayDrmListResponse struct {
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
 	Data      FairPlayDrmListData            `json:"data,omitempty"`
 }
-	
