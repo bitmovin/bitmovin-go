@@ -95,7 +95,9 @@ type StreamResponse struct {
 }
 
 type StreamListResponse struct {
-	Data StreamListData `json:"data,omitempty"`
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      StreamListData               `json:"data,omitempty"`
 }
 
 type StreamListData struct {
