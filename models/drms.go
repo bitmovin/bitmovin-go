@@ -58,6 +58,11 @@ type PlayReadyCencDrm struct {
 	PSSH  *string `json:"pssh,omitEmpty"`
 }
 
+type FairPlayCencDrm struct {
+	IV  *string `json:"iv,omitEmpty"`
+	URI *string `json:"uri,omitEmpty"`
+}
+
 type CencDrm struct {
 	ID                      *string                `json:"id,omitempty"`
 	Name                    *string                `json:"name,omitempty"`
@@ -66,8 +71,9 @@ type CencDrm struct {
 	Key                     *string                `json:"key,omitempty"`
 	KID                     *string                `json:"kid,omitempty"`
 	Outputs                 []Output               `json:"outputs,omitempty"`
-	Widevine                WidevineCencDrm        `json:"widevine,omitempty"`
-	PlayReady               PlayReadyCencDrm       `json:"playReady,omitEmpty"`
+	Widevine                *WidevineCencDrm       `json:"widevine,omitempty"`
+	PlayReady               *PlayReadyCencDrm      `json:"playReady,omitEmpty"`
+	FairPlay                *FairPlayCencDrm       `json:"fairPlay,omitEmpty"`
 	IvSize                  bitmovintypes.IvSize   `json:"ivSize,omitEmpty"`
 	EnablePiffCompatibility *bool                  `json:"enablePiffCompatibility,omitEmpty"`
 }
@@ -130,4 +136,38 @@ type PlayReadyDrmResponse struct {
 type CencDrmResponse struct {
 	DrmResponse
 	Data CencDrmData `json:"data,omitempty"`
+}
+
+type CencDrmListResult struct {
+	TotalCount *int64    `json:"totalCount,omitempty"`
+	Previous   *string   `json:"previous,omitempty"`
+	Next       *string   `json:"next,omitempty"`
+	Items      []CencDrm `json:"items,omitempty"`
+}
+
+type CencDrmListData struct {
+	Result CencDrmListResult `json:"result,omitempty"`
+}
+
+type CencDrmListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      CencDrmListData              `json:"data,omitempty"`
+}
+
+type FairPlayDrmListResult struct {
+	TotalCount *int64        `json:"totalCount,omitempty"`
+	Previous   *string       `json:"previous,omitempty"`
+	Next       *string       `json:"next,omitempty"`
+	Items      []FairPlayDrm `json:"items,omitempty"`
+}
+
+type FairPlayDrmListData struct {
+	Result FairPlayDrmListResult `json:"result,omitempty"`
+}
+
+type FairPlayDrmListResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      FairPlayDrmListData          `json:"data,omitempty"`
 }
