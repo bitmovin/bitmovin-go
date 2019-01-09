@@ -13,6 +13,7 @@ type FilterService struct {
 
 const (
 	DeinterlaceEndpoint string = "encoding/filters/deinterlace"
+	DenoiseEndpoint     string = "encoding/filters/denoise-hqdn3d"
 )
 
 func NewFilterService(client *bitmovin.Bitmovin) *FilterService {
@@ -30,6 +31,24 @@ func (f *FilterService) CreateDeinterlacingFilter(filter *models.DeinterlacingFi
 	}
 
 	var result models.DeinterlacingFilterResponse
+	err = json.Unmarshal(response, &result)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+func (f *FilterService) CreateDenoiseFilter(filter *models.DenoiseFilter) (*models.DenoiseFilterResponse, error) {
+	b, err := json.Marshal(filter)
+	if err != nil {
+		return nil, err
+	}
+	response, err := f.RestService.Create(DenoiseEndpoint, b)
+	if err != nil {
+		return nil, err
+	}
+
+	var result models.DenoiseFilterResponse
 	err = json.Unmarshal(response, &result)
 	if err != nil {
 		return nil, err
