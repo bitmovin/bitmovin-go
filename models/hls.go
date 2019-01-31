@@ -3,13 +3,13 @@ package models
 import "github.com/bitmovin/bitmovin-go/bitmovintypes"
 
 type HLSManifest struct {
-	ID                       *string                          `json:"id,omitempty"`
-	Name                     *string                          `json:"name,omitempty"`
-	Description              *string                          `json:"description,omitempty"`
-	Outputs                  []Output                         `json:"outputs,omitempty"`
-	ManifestName             *string                          `json:"manifestName,omitempty"`
-	hlsMediaPlaylistVersion  bitmovintypes.HlsPlaylistVersion `json:"hlsMediaPlaylistVersion,omitempty"`
-	hlsMasterPlaylistVersion bitmovintypes.HlsPlaylistVersion `json:"hlsMasterPlaylistVersion,omitempty"`
+	ID                       *string                                `json:"id,omitempty"`
+	Name                     *string                                `json:"name,omitempty"`
+	Description              *string                                `json:"description,omitempty"`
+	Outputs                  []Output                               `json:"outputs,omitempty"`
+	ManifestName             *string                                `json:"manifestName,omitempty"`
+	HlsMediaPlaylistVersion  bitmovintypes.HlsMediaPlaylistVersion  `json:"hlsMediaPlaylistVersion,omitempty"`
+	HlsMasterPlaylistVersion bitmovintypes.HlsMasterPlaylistVersion `json:"hlsMasterPlaylistVersion,omitempty"`
 }
 
 func (h *HLSManifest) AddOutput(output *Output) {
