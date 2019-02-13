@@ -33,6 +33,30 @@ type RotationFilter struct {
 	Rotation *int64 `json:"rotation"`
 }
 
+type DenoiseFilter struct {
+	Filter
+	LumaSpatial   *float64 `json:"lumaSpatial,omitempty"`
+	ChromaSpatial *float64 `json:"chromaSpatial,omitempty"`
+	LumaTmp       *float64 `json:"lumaTmp,omitempty"`
+	ChromaTmp     *float64 `json:"chromaTmp,omitempty"`
+}
+
+type DenoiseFilterResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      DenoiseFilterData            `json:"data,omitempty"`
+}
+
+type DenoiseFilterData struct {
+	Result           DenoiseFilter `json:"result,omitempty"`
+	Messages         []Message     `json:"messages,omitempty"`
+	Code             *int64        `json:"code,omitempty"`
+	Message          *string       `json:"message,omitempty"`
+	DeveloperMessage *string       `json:"developerMessage,omitempty"`
+	Links            []Link        `json:"links,omitempty"`
+	Details          []Detail      `json:"details,omitempty"`
+}
+
 type DeinterlacingFilter struct {
 	Filter
 	Mode   bitmovintypes.DeinterlacingMode  `json:"mode"`
