@@ -121,6 +121,24 @@ func (s *HLSManifestService) AddCustomTagToStreamInfo(manifestID string, streamI
 	return &r, nil
 }
 
+func (s *HLSManifestService) AddIFramePlaylistToStreamInfo(manifestID string, streamInfoID string, a *models.IFramePlaylist) (*models.IFramePlaylistResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := HLSManifestEndpoint + "/" + manifestID + "/streams/" + streamInfoID + "/iframe"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.IFramePlaylistResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, err
+	}
+	return &r, nil
+}
+
 func (s *HLSManifestService) AddCustomTagToMediaInfo(manifestID string, mediaInfoID string, a *models.CustomTag) (*models.CustomTagResponse, error) {
 	b, err := json.Marshal(*a)
 	if err != nil {
