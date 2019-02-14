@@ -80,7 +80,7 @@ func (s *AkamaiNetstorageOutputService) List(offset int64, limit int64) (*models
 }
 
 func (s *AkamaiNetstorageOutputService) RetrieveCustomData(id string) (*models.CustomDataResponse, error) {
-	path := NetstorageOutputEndpoint + "/" + id
+	path := AkamaiNetstorageOutputEndpoint + "/" + id
 	o, err := s.RestService.RetrieveCustomData(path)
 	if err != nil {
 		return nil, err
