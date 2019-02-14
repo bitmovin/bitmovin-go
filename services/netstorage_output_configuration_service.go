@@ -26,7 +26,7 @@ func (s *AkamaiNetstorageOutputService) Create(a *models.AkamaiNetstorageOutput)
 	if err != nil {
 		return nil, err
 	}
-	o, err := s.RestService.Create(NetstorageOutputEndpoint, b)
+	o, err := s.RestService.Create(AkamaiNetstorageOutputEndpoint, b)
 	if err != nil {
 		return nil, err
 	}
@@ -39,7 +39,7 @@ func (s *AkamaiNetstorageOutputService) Create(a *models.AkamaiNetstorageOutput)
 }
 
 func (s *AkamaiNetstorageOutputService) Retrieve(id string) (*models.AkamaiNetstorageOutputResponse, error) {
-	path := NetstorageOutputEndpoint + "/" + id
+	path := AkamaiNetstorageOutputEndpoint + "/" + id
 	o, err := s.RestService.Retrieve(path)
 	if err != nil {
 		return nil, err
@@ -53,7 +53,7 @@ func (s *AkamaiNetstorageOutputService) Retrieve(id string) (*models.AkamaiNetst
 }
 
 func (s *AkamaiNetstorageOutputService) Delete(id string) (*models.AkamaiNetstorageOutputResponse, error) {
-	path := NetstorageOutputEndpoint + "/" + id
+	path := AkamaiNetstorageOutputEndpoint + "/" + id
 	o, err := s.RestService.Delete(path)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (s *AkamaiNetstorageOutputService) Delete(id string) (*models.AkamaiNetstor
 }
 
 func (s *AkamaiNetstorageOutputService) List(offset int64, limit int64) (*models.AkamaiNetstorageOutputListResponse, error) {
-	o, err := s.RestService.List(NetstorageOutputEndpoint, offset, limit)
+	o, err := s.RestService.List(AkamaiNetstorageOutputEndpoint, offset, limit)
 	if err != nil {
 		return nil, err
 	}
