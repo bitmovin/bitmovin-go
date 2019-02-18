@@ -208,28 +208,28 @@ type SFTPOutput struct {
 }
 
 type AkamaiNetstorageOutput struct {
-	ID          *string                      `json:"id,omitempty"`
-	Name        *string                      `json:"name,omitempty"`
-	Description *string                      `json:"description,omitempty"`
-	CustomData  map[string]interface{}       `json:"customData,omitempty"`
-	Host   *string                      `json:"host,omitempty"`
-	Username   *string                      `json:"username,omitempty"`
-	Password  *string                      `json:"password,omitempty"`
+	ID          *string                `json:"id,omitempty"`
+	Name        *string                `json:"name,omitempty"`
+	Description *string                `json:"description,omitempty"`
+	CustomData  map[string]interface{} `json:"customData,omitempty"`
+	Host        *string                `json:"host,omitempty"`
+	Username    *string                `json:"username,omitempty"`
+	Password    *string                `json:"password,omitempty"`
 }
 
 type AkamaiNetstorageOutputItem struct {
-	ID          *string                      `json:"id,omitempty"`
-	Name        *string                      `json:"name,omitempty"`
-	Description *string                      `json:"description,omitempty"`
-	Host  *string                      `json:"host,omitempty"`
-	CreatedAt   *string                      `json:"createdAt,omitempty"`
-	UpdatedAt   *string                      `json:"updatedAt,omitempty"`
+	ID          *string `json:"id,omitempty"`
+	Name        *string `json:"name,omitempty"`
+	Description *string `json:"description,omitempty"`
+	Host        *string `json:"host,omitempty"`
+	CreatedAt   *string `json:"createdAt,omitempty"`
+	UpdatedAt   *string `json:"updatedAt,omitempty"`
 }
 
 type AkamaiNetstorageOutputData struct {
 	//Success fields
 	Result   AkamaiNetstorageOutputItem `json:"result,omitempty"`
-	Messages []Message    `json:"messages,omitempty"`
+	Messages []Message                  `json:"messages,omitempty"`
 
 	//Error fields
 	Code             *int64   `json:"code,omitempty"`
@@ -242,13 +242,13 @@ type AkamaiNetstorageOutputData struct {
 type AkamaiNetstorageOutputResponse struct {
 	RequestID *string                      `json:"requestId,omitempty"`
 	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      AkamaiNetstorageOutputData                 `json:"data,omitempty"`
+	Data      AkamaiNetstorageOutputData   `json:"data,omitempty"`
 }
 
 type AkamaiNetstorageOutputListResult struct {
-	TotalCount *int64         `json:"totalCount,omitempty"`
-	Previous   *string        `json:"previous,omitempty"`
-	Next       *string        `json:"next,omitempty"`
+	TotalCount *int64                       `json:"totalCount,omitempty"`
+	Previous   *string                      `json:"previous,omitempty"`
+	Next       *string                      `json:"next,omitempty"`
 	Items      []AkamaiNetstorageOutputItem `json:"items,omitempty"`
 }
 
@@ -257,7 +257,7 @@ type AkamaiNetstorageOutputListData struct {
 }
 
 type AkamaiNetstorageOutputListResponse struct {
-	RequestID *string                      `json:"requestId,omitempty"`
-	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
-	Data      AkamaiNetstorageOutputListData             `json:"data,omitempty"`
+	RequestID *string                        `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus   `json:"status,omitempty"`
+	Data      AkamaiNetstorageOutputListData `json:"data,omitempty"`
 }
