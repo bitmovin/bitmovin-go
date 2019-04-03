@@ -1,6 +1,6 @@
 package models
 
-import "github.com/bitmovin/bitmovin-go/bitmovintypes"
+import "github.com/streamco/bitmovin-go/bitmovintypes"
 
 type ColorConfig struct {
 	CopyChromaLocationFlag *bool                        `json:"copyChromaLocationFlag,omitempty"`

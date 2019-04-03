@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bitmovin/bitmovin-go/bitmovin"
-	"github.com/bitmovin/bitmovin-go/models"
+	"github.com/streamco/bitmovin-go/bitmovin"
+	"github.com/streamco/bitmovin-go/models"
 )
 
 type AnalyticsService struct {

@@ -3,7 +3,7 @@ package models
 import (
 	"testing"
 
-	"github.com/bitmovin/bitmovin-go/bitmovintypes"
+	"github.com/streamco/bitmovin-go/bitmovintypes"
 )
 
 func TestConditionBuilder(t *testing.T) {

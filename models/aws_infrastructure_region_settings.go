@@ -1,6 +1,6 @@
 package models
 
-import "github.com/bitmovin/bitmovin-go/bitmovintypes"
+import "github.com/streamco/bitmovin-go/bitmovintypes"
 
 type CreateAWSInfrastructureRegionSettingsRequest struct {
 	LimitParallelEncodings                      *int     `json:"limitParallelEncodings,omitempty"`

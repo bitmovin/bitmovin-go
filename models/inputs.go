@@ -1,7 +1,7 @@
 package models
 
 import (
-	"github.com/bitmovin/bitmovin-go/bitmovintypes"
+	"github.com/streamco/bitmovin-go/bitmovintypes"
 )
 
 type AsperaInput struct {

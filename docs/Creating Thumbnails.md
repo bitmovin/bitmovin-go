@@ -2,7 +2,7 @@
 
 Thumbnails can be extracted from a Video on a per-stream basis. So you can extract a 1080p Thumbnail from your 1080p Stream while generating a smaller thumbnail for the 720p representation.
 
-A full example with Thumbnails is available in the Repository at [examples/simple_encoding_thumbnails/main.go](https://github.com/bitmovin/bitmovin-go/blob/master/examples/simple_encoding_thumbnails/main.go).
+A full example with Thumbnails is available in the Repository at [examples/simple_encoding_thumbnails/main.go](https://github.com/streamco/bitmovin-go/blob/master/examples/simple_encoding_thumbnails/main.go).
 
 Thumbnails have 3 mandatory properties (height, positions and output) and are accessible through the `models.NewThumbnail()` constructor (or directly through the `models.Thumbnail` struct).
 

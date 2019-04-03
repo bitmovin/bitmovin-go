@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bitmovin/bitmovin-go/bitmovin"
-	"github.com/bitmovin/bitmovin-go/bitmovintypes"
-	"github.com/bitmovin/bitmovin-go/models"
-	"github.com/bitmovin/bitmovin-go/services"
+	"github.com/streamco/bitmovin-go/bitmovin"
+	"github.com/streamco/bitmovin-go/bitmovintypes"
+	"github.com/streamco/bitmovin-go/models"
+	"github.com/streamco/bitmovin-go/services"
 )
 
 func main() {

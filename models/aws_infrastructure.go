@@ -1,6 +1,6 @@
 package models
 
-import "github.com/bitmovin/bitmovin-go/bitmovintypes"
+import "github.com/streamco/bitmovin-go/bitmovintypes"
 
 type CreateAWSInfrastructureRequest struct {
 	Name          *string `json:"name,omitempty"`
