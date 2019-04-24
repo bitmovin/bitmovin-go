@@ -116,17 +116,18 @@ type StreamItem struct {
 }
 
 type FMP4Muxing struct {
-	ID                   *string                     `json:"id,omitempty"`
-	Name                 *string                     `json:"name,omitempty"`
-	Description          *string                     `json:"description,omitempty"`
-	CustomData           map[string]interface{}      `json:"customData,omitempty"`
-	Streams              []StreamItem                `json:"streams,omitempty"`
-	StreamConditionsMode bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
-	Outputs              []Output                    `json:"outputs,omitempty"`
-	SegmentLength        *float64                    `json:"segmentLength,omitempty"`
-	SegmentNaming        *string                     `json:"segmentNaming,omitempty"`
-	InitSegmentName      *string                     `json:"initSegmentName,omitempty"`
-	AvgBitrate           *int                        `json:"avgBitrate,omitempty"`
+	ID                     *string                     `json:"id,omitempty"`
+	Name                   *string                     `json:"name,omitempty"`
+	Description            *string                     `json:"description,omitempty"`
+	CustomData             map[string]interface{}      `json:"customData,omitempty"`
+	Streams                []StreamItem                `json:"streams,omitempty"`
+	StreamConditionsMode   bitmovintypes.ConditionMode `json:"streamConditionsMode,omitempty"`
+	Outputs                []Output                    `json:"outputs,omitempty"`
+	SegmentLength          *float64                    `json:"segmentLength,omitempty"`
+	SegmentNaming          *string                     `json:"segmentNaming,omitempty"`
+	InitSegmentName        *string                     `json:"initSegmentName,omitempty"`
+	AvgBitrate             *int                        `json:"avgBitrate,omitempty"`
+	WriteDurationPerSample *bool                       `json:"writeDurationPerSample,omitempty"`
 }
 
 type FMP4MuxingData struct {
