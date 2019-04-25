@@ -120,12 +120,13 @@ type VideoAdaptationSetResponse struct {
 }
 
 type FMP4Representation struct {
-	ID                 *string                              `json:"id,omitempty"`
-	Type               bitmovintypes.FMP4RepresentationType `json:"type,omitempty"`
-	MuxingID           *string                              `json:"muxingId,omitempty"`
-	EncodingID         *string                              `json:"encodingId,omitempty"`
-	StartSegmentNumber *int64                               `json:"startSegmentNumber,omitempty"`
-	SegmentPath        *string                              `json:"segmentPath,omitempty"`
+	ID                 *string                                  `json:"id,omitempty"`
+	Type               bitmovintypes.FMP4RepresentationType     `json:"type,omitempty"`
+	Mode               bitmovintypes.FMP4RepresentationTypeMode `json:"mode,omitempty"`
+	MuxingID           *string                                  `json:"muxingId,omitempty"`
+	EncodingID         *string                                  `json:"encodingId,omitempty"`
+	StartSegmentNumber *int64                                   `json:"startSegmentNumber,omitempty"`
+	SegmentPath        *string                                  `json:"segmentPath,omitempty"`
 }
 
 type FMP4RepresentationData struct {
