@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"net/url"
+	"os"
 
 	"github.com/streamco/bitmovin-go/bitmovin"
 	"github.com/streamco/bitmovin-go/models"
@@ -37,11 +39,18 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
 
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
