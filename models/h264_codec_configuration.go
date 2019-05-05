@@ -38,6 +38,7 @@ type H264CodecConfiguration struct {
 	MinKeyframeInterval           *float64                             `json:"minKeyframeInterval,omitempty"`
 	PsyRateDistortionOptimization *float64                             `json:"psyRateDistortionOptimization,omitempty"`
 	PixelFormat                   bitmovintypes.PixelFormat            `json:"pixelFormat,omitempty"`
+	PresetConfiguration           bitmovintypes.PresetConfiguration    `json:"presetConfiguration,omitempty"`
 }
 
 type H264CodecConfigurationData struct {
