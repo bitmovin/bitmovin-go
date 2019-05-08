@@ -45,6 +45,7 @@ type H265CodecConfiguration struct {
 	PsyRateDistortionOptimizedQuantization *float64                          `json:"psyRateDistortionOptimizedQuantization,omitempty"`
 	Cutree                                 *bool                             `json:"cutree,omitempty"`
 	PresetConfiguration                    bitmovintypes.PresetConfiguration `json:"presetConfiguration,omitempty"`
+	SignHide                               *bool                             `json:"signHide,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
