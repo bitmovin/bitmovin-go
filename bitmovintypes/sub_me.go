@@ -13,6 +13,4 @@ const (
 	SubMeRDALL    = `RD_ALL`
 	SubMeRDREFIP  = `RD_REF_IP`
 	SubMeRDREFALL = `RD_REF_ALL`
-	SubMeQPRD     = `QPRD`
-	SubMeFULLRD   = `FULL_RD`
 )
