@@ -77,10 +77,17 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -109,10 +116,17 @@ func (r *RestService) Delete(relativeURL string) ([]byte, error) {
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -140,10 +154,17 @@ func (r *RestService) List(relativeURL string, offset int64, limit int64) ([]byt
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -168,10 +189,17 @@ func (r *RestService) RetrieveCustomData(relativeURL string) ([]byte, error) {
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
+	}
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
@@ -196,12 +224,18 @@ func (r *RestService) Update(relativeURL string, input []byte) ([]byte, error) {
 	}
 	req.Header.Set("X-Api-Client", ClientName)
 	req.Header.Set("X-Api-Client-Version", Version)
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpRequest(req, true)
+		println(string(b))
+	}
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
+	if os.Getenv("DUMP_TRAFFIC") != "" {
+		b, _ := httputil.DumpResponse(resp, true)
+		println(string(b))
+	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
