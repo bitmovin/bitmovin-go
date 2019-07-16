@@ -34,7 +34,7 @@ func (s *EncodingService) Create(a *models.Encoding) (*models.EncodingResponse, 
 	var r models.EncodingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -48,7 +48,7 @@ func (s *EncodingService) Retrieve(id string) (*models.EncodingResponse, error) 
 	var r models.EncodingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -62,7 +62,7 @@ func (s *EncodingService) Delete(id string) (*models.EncodingResponse, error) {
 	var r models.EncodingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -75,7 +75,7 @@ func (s *EncodingService) List(offset int64, limit int64) (*models.EncodingListR
 	var r models.EncodingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -89,7 +89,7 @@ func (s *EncodingService) RetrieveCustomData(id string) (*models.CustomDataRespo
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -107,7 +107,7 @@ func (s *EncodingService) AddStream(encodingID string, a *models.Stream) (*model
 	var r models.StreamResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -121,7 +121,7 @@ func (s *EncodingService) RetrieveStream(encodingID string, streamID string) (*m
 	var r models.StreamResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -135,7 +135,7 @@ func (s *EncodingService) DeleteStream(encodingID string, streamID string) (*mod
 	var r models.StreamResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -149,7 +149,7 @@ func (s *EncodingService) ListStream(encodingID string, offset int64, limit int6
 	var r models.StreamListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -163,7 +163,7 @@ func (s *EncodingService) RetrieveStreamCustomData(encodingID string, streamID s
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -181,7 +181,7 @@ func (s *EncodingService) AddKeyframe(encodingID string, a *models.Keyframe) (*m
 	var r models.KeyframeResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -195,7 +195,7 @@ func (s *EncodingService) RetrieveKeyframe(encodingID string, keyframeID string)
 	var r models.KeyframeResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -209,7 +209,7 @@ func (s *EncodingService) DeleteKeyframe(encodingID string, keyframeID string) (
 	var r models.KeyframeResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -223,7 +223,7 @@ func (s *EncodingService) ListKeyframes(encodingID string, offset int64, limit i
 	var r models.KeyframeListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -237,7 +237,7 @@ func (s *EncodingService) RetrieveStreamInputData(encodingID string, streamID st
 	var r models.StreamInputResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -255,7 +255,7 @@ func (s *EncodingService) AddFMP4Muxing(encodingID string, a *models.FMP4Muxing)
 	var r models.FMP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -269,7 +269,7 @@ func (s *EncodingService) RetrieveFMP4Muxing(encodingID string, fmp4ID string) (
 	var r models.FMP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -283,7 +283,7 @@ func (s *EncodingService) DeleteFMP4Muxing(encodingID string, fmp4ID string) (*m
 	var r models.FMP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -297,7 +297,7 @@ func (s *EncodingService) ListFMP4Muxing(encodingID string, offset int64, limit 
 	var r models.FMP4MuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -311,7 +311,7 @@ func (s *EncodingService) RetrieveFMP4MuxingCustomData(encodingID string, fmp4ID
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -329,7 +329,7 @@ func (s *EncodingService) AddTSMuxing(encodingID string, a *models.TSMuxing) (*m
 	var r models.TSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -343,7 +343,7 @@ func (s *EncodingService) RetrieveTSMuxing(encodingID string, tsID string) (*mod
 	var r models.TSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -357,7 +357,7 @@ func (s *EncodingService) DeleteTSMuxing(encodingID string, tsID string) (*model
 	var r models.TSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -371,7 +371,7 @@ func (s *EncodingService) ListTSMuxing(encodingID string, offset int64, limit in
 	var r models.TSMuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -385,7 +385,7 @@ func (s *EncodingService) RetrieveTSMuxingCustomData(encodingID string, tsID str
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -403,7 +403,7 @@ func (s *EncodingService) AddMP4Muxing(encodingID string, a *models.MP4Muxing) (
 	var r models.MP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -417,7 +417,7 @@ func (s *EncodingService) RetrieveMP4Muxing(encodingID string, mp4ID string) (*m
 	var r models.MP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -431,7 +431,7 @@ func (s *EncodingService) DeleteMP4Muxing(encodingID string, mp4ID string) (*mod
 	var r models.MP4MuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -445,7 +445,7 @@ func (s *EncodingService) ListMP4Muxing(encodingID string, offset int64, limit i
 	var r models.MP4MuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -459,7 +459,7 @@ func (s *EncodingService) RetrieveMP4MuxingCustomData(encodingID string, mp4ID s
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -473,7 +473,7 @@ func (s *EncodingService) RetrieveMP4MuxingInformation(encodingID string, mp4Mux
 	var r models.MP4MuxingInformationResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -491,7 +491,7 @@ func (s *EncodingService) AddProgressiveMOVMuxing(encodingID string, a *models.P
 	var r models.ProgressiveMOVMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -505,7 +505,7 @@ func (s *EncodingService) RetrieveProgressiveMOVMuxing(encodingID string, progre
 	var r models.ProgressiveMOVMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -519,7 +519,7 @@ func (s *EncodingService) DeleteProgressiveMOVMuxing(encodingID string, progress
 	var r models.ProgressiveMOVMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -533,7 +533,7 @@ func (s *EncodingService) ListProgressiveMOVMuxing(encodingID string, offset int
 	var r models.ProgressiveMOVMuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -547,7 +547,7 @@ func (s *EncodingService) RetrieveProgressiveMOVMuxingCustomData(encodingID stri
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -561,7 +561,7 @@ func (s *EncodingService) RetrieveProgressiveMOVMuxingInformation(encodingID str
 	var r models.ProgressiveMOVMuxingInformationResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -579,7 +579,7 @@ func (s *EncodingService) AddProgressiveTSMuxing(encodingID string, a *models.Pr
 	var r models.ProgressiveTSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -593,7 +593,7 @@ func (s *EncodingService) RetrieveProgressiveTSMuxing(encodingID string, progres
 	var r models.ProgressiveTSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -607,7 +607,7 @@ func (s *EncodingService) DeleteProgressiveTSMuxing(encodingID string, progressi
 	var r models.ProgressiveTSMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -621,7 +621,7 @@ func (s *EncodingService) ListProgressiveTSMuxing(encodingID string, offset int6
 	var r models.ProgressiveTSMuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -635,7 +635,7 @@ func (s *EncodingService) RetrieveProgressiveTSMuxingCustomData(encodingID strin
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -649,7 +649,7 @@ func (s *EncodingService) RetrieveProgressiveTSMuxingInformation(encodingID stri
 	var r models.ProgressiveTSMuxingInformationResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -667,7 +667,7 @@ func (s *EncodingService) AddProgressiveWebMMuxing(encodingID string, a *models.
 	var r models.ProgressiveWebMMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -681,7 +681,7 @@ func (s *EncodingService) RetrieveProgressiveWebMMuxing(encodingID string, progr
 	var r models.ProgressiveWebMMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -695,7 +695,7 @@ func (s *EncodingService) DeleteProgressiveWebMMuxing(encodingID string, progres
 	var r models.ProgressiveWebMMuxingResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -709,7 +709,7 @@ func (s *EncodingService) ListProgressiveWebMMuxing(encodingID string, offset in
 	var r models.ProgressiveWebMMuxingListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -723,7 +723,7 @@ func (s *EncodingService) RetrieveProgressiveWebMMuxingCustomData(encodingID str
 	var r models.CustomDataResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -737,7 +737,7 @@ func (s *EncodingService) RetrieveProgressiveWebMMuxingInformation(encodingID st
 	var r models.ProgressiveWebMMuxingInformationResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -751,7 +751,7 @@ func (s *EncodingService) Start(encodingID string) (*models.StartStopResponse, e
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -769,7 +769,7 @@ func (s *EncodingService) StartWithOptions(encodingID string, startOptions *mode
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -784,7 +784,7 @@ func (s *EncodingService) Stop(encodingID string) (*models.StartStopResponse, er
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -802,7 +802,7 @@ func (s *EncodingService) Reschedule(encodingID string, rescheduleEncoding *mode
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -816,7 +816,7 @@ func (s *EncodingService) RetrieveStatus(encodingID string) (*models.StatusRespo
 	var r models.StatusResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -834,7 +834,7 @@ func (s *EncodingService) StartLive(encodingID string, a *models.LiveStreamConfi
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -848,7 +848,7 @@ func (s *EncodingService) StopLive(encodingID string) (*models.StartStopResponse
 	var r models.StartStopResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -862,7 +862,7 @@ func (s *EncodingService) RetrieveLiveStatus(encodingID string) (*models.LiveSta
 	var r models.LiveStatusResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -894,7 +894,7 @@ func (s *EncodingService) ListThumbnails(encodingID, streamID string, offset, li
 	var r models.ThumbnailListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
@@ -926,7 +926,7 @@ func (s *EncodingService) ListSprites(encodingID, streamID string, offset, limit
 	var r models.SpriteListResponse
 	err = json.Unmarshal(o, &r)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
 }
