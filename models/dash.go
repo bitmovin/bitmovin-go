@@ -9,6 +9,7 @@ type DashManifest struct {
 	Outputs      []Output                          `json:"outputs,omitempty"`
 	ManifestName *string                           `json:"manifestName,omitempty"`
 	Profile      bitmovintypes.DASHManifestProfile `json:"profile,omitempty"`
+	CustomData   map[string]interface{}            `json:"customData,omitempty"`
 }
 
 func (h *DashManifest) AddOutput(output *Output) {

@@ -39,6 +39,7 @@ type H264CodecConfiguration struct {
 	PsyRateDistortionOptimization *float64                             `json:"psyRateDistortionOptimization,omitempty"`
 	PixelFormat                   bitmovintypes.PixelFormat            `json:"pixelFormat,omitempty"`
 	PresetConfiguration           bitmovintypes.PresetConfiguration    `json:"presetConfiguration,omitempty"`
+	EncodingMode                  bitmovintypes.EncodingMode           `json:"encodingMode,omitempty"`
 }
 
 type H264CodecConfigurationData struct {

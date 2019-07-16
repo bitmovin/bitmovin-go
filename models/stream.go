@@ -13,6 +13,13 @@ type Stream struct {
 	DecodingErrorMode    bitmovintypes.DecodingErrorMode `json:"decodingErrorMode,omitempty"`
 	Conditions           *StreamCondition                `json:"conditions,omitempty"`
 	Mode                 bitmovintypes.StreamMode        `json:"mode,omitempty"`
+	AppliedSettings      *AppliedSettings                `json:"appliedSettings,omitempty"`
+	PerTitle
+}
+
+type AppliedSettings struct {
+	Width  int64 `json:"width,omitempty"`
+	Height int64 `json:"height,omitempty"`
 }
 
 type StreamCondition struct {

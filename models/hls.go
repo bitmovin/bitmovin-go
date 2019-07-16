@@ -10,6 +10,7 @@ type HLSManifest struct {
 	ManifestName             *string                                `json:"manifestName,omitempty"`
 	HlsMediaPlaylistVersion  bitmovintypes.HlsMediaPlaylistVersion  `json:"hlsMediaPlaylistVersion,omitempty"`
 	HlsMasterPlaylistVersion bitmovintypes.HlsMasterPlaylistVersion `json:"hlsMasterPlaylistVersion,omitempty"`
+	CustomData               map[string]interface{}                 `json:"customData,omitempty"`
 }
 
 func (h *HLSManifest) AddOutput(output *Output) {

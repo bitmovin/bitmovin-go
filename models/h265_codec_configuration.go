@@ -46,6 +46,7 @@ type H265CodecConfiguration struct {
 	Cutree                                 *bool                             `json:"cutree,omitempty"`
 	PresetConfiguration                    bitmovintypes.PresetConfiguration `json:"presetConfiguration,omitempty"`
 	SignHide                               *bool                             `json:"signHide,omitempty"`
+	EncodingMode                           bitmovintypes.EncodingMode        `json:"encodingMode,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
