@@ -14,7 +14,19 @@ type Stream struct {
 	Conditions           *StreamCondition                `json:"conditions,omitempty"`
 	Mode                 bitmovintypes.StreamMode        `json:"mode,omitempty"`
 	AppliedSettings      *AppliedSettings                `json:"appliedSettings,omitempty"`
-	PerTitle
+	PerTitleSettings     *StreamPerTitleSettings         `json:"perTitleSettings,omitempty"`
+}
+
+type StreamPerTitleSettings struct {
+	StreamFixedResolutionAndBitrateSettings `json:"fixedResolutionAndBitrateSettings"`
+}
+
+type StreamFixedResolutionAndBitrateSettings struct {
+	MinBitrate                          *int64                             `json:"minBitrate,omitempty"`
+	MaxBitrate                          *int64                             `json:"maxBitrate,omitempty"`
+	BitrateSelectionMode                bitmovintypes.BitrateSelectionMode `json:"bitrateSelectionMode,omitempty"`
+	LowComplexityBoundaryForMaxBitrate  *int64                             `json:"lowComplexityBoundaryForMaxBitrate,omitempty"`
+	HighComplexityBoundaryForMaxBitrate *int64                             `json:"highComplexityBoundaryForMaxBitrate,omitempty"`
 }
 
 type AppliedSettings struct {
