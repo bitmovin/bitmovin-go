@@ -63,6 +63,9 @@ func (r *RestService) makeRequest(method, url string, input []byte, retries int)
 	if err != nil {
 		return nil, err
 	}
+	if resp.StatusCode == 404 {
+		return nil, formatError(body)
+	}
 	if resp.StatusCode > 399 {
 		if giveUp {
 			log.Printf("makeRequest error, giving up - %s: request %s %s: statusCode %d: body %s: ", err, method, url, resp.StatusCode, string(body))
