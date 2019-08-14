@@ -47,12 +47,10 @@ func (r *RestService) makeRequest(method, url string, input []byte, retries int)
 	resp, err := r.Bitmovin.HTTPClient.Do(req)
 	if err != nil {
 		if giveUp {
-			log.Printf("makeRequest error: %s: %s %s", err, method, url)
-			log.Println("giving up", method, url)
+			log.Printf("makeRequest error, giving up - %s: request %s %s", err, method, url)
 			return nil, err
 		}
-		log.Printf("makeRequest error: %s: %s %s", err, method, url)
-		log.Println("retrying", method, url)
+		log.Printf("makeRequest error %s: retrying %s %s", err, method, url)
 		time.Sleep(1 * time.Second)
 		return r.makeRequest(method, url, input, retries-1)
 	}
@@ -67,12 +65,10 @@ func (r *RestService) makeRequest(method, url string, input []byte, retries int)
 	}
 	if resp.StatusCode > 399 {
 		if giveUp {
-			log.Printf("makeRequest error: %s: %s %s: statusCode: %d", err, method, url, resp.StatusCode)
-			log.Println("giving up", method, url)
+			log.Printf("makeRequest error, giving up - %s: request %s %s: statusCode %d: body %s: ", err, method, url, resp.StatusCode, string(body))
 			return nil, formatError(body)
 		}
-		log.Printf("makeRequest error: %s: %s %s", err, method, url)
-		log.Println("retrying", method, url)
+		log.Printf("makeRequest error: %s: statusCode %d: body %s: retrying %s %s", err, resp.StatusCode, string(body), method, url)
 		time.Sleep(1 * time.Second)
 		return r.makeRequest(method, url, input, retries-1)
 	}
