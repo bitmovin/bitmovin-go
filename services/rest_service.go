@@ -68,10 +68,10 @@ func (r *RestService) makeRequest(method, url string, input []byte, retries int)
 	}
 	if resp.StatusCode > 399 {
 		if giveUp {
-			log.Printf("makeRequest error, giving up - %s: request %s %s: statusCode %d: body %s: ", err, method, url, resp.StatusCode, string(body))
+			log.Printf("makeRequest error, giving up : request %s %s: statusCode %d: body %s: ", method, url, resp.StatusCode, string(body))
 			return nil, formatError(body)
 		}
-		log.Printf("makeRequest error: %s: statusCode %d: body %s: retrying %s %s", err, resp.StatusCode, string(body), method, url)
+		log.Printf("makeRequest error: statusCode %d: body %s: retrying %s %s", resp.StatusCode, string(body), method, url)
 		time.Sleep(1 * time.Second)
 		return r.makeRequest(method, url, input, retries-1)
 	}
@@ -84,7 +84,7 @@ func (r *RestService) Create(relativeURL string, input []byte) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return r.makeRequest("POST", fullURL, input, 2)
+	return r.makeRequest("POST", fullURL, input, 4)
 }
 
 func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
@@ -93,7 +93,7 @@ func (r *RestService) Retrieve(relativeURL string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return r.makeRequest("GET", fullURL, nil, 2)
+	return r.makeRequest("GET", fullURL, nil, 4)
 }
 
 func (r *RestService) Delete(relativeURL string) ([]byte, error) {
