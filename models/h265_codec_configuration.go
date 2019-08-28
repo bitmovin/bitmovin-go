@@ -47,6 +47,13 @@ type H265CodecConfiguration struct {
 	PresetConfiguration                    bitmovintypes.PresetConfiguration `json:"presetConfiguration,omitempty"`
 	SignHide                               *bool                             `json:"signHide,omitempty"`
 	EncodingMode                           bitmovintypes.EncodingMode        `json:"encodingMode,omitempty"`
+	LimitReferences                        string                            `json:"limitReferences,omitempty"`
+	RectangularMotionPartitionsAnalysis    *bool                             `json:"rectangularMotionPartitionsAnalysis,omitempty"`
+	AsymetricMotionPartitionsAnalysis      *bool                             `json:"asymetricMotionPartitionsAnalysis,omitempty"`
+	LimitModes                             *bool                             `json:"limitModes,omitempty"`
+	EarlySkip                              *bool                             `json:"earlySkip,omitempty"`
+	EvaluationOfIntraModesInBSlices        *bool                             `json:"evaluationOfIntraModesInBSlices,omitempty"`
+	TransformSkip                          string                            `json:"transformSkip,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
