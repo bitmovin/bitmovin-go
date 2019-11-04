@@ -3,15 +3,16 @@ package models
 import "github.com/streamco/bitmovin-go/bitmovintypes"
 
 type AACCodecConfiguration struct {
-	ID            *string                        `json:"id,omitempty"`
-	Name          *string                        `json:"name,omitempty"`
-	Description   *string                        `json:"description,omitempty"`
-	CustomData    map[string]interface{}         `json:"customData,omitempty"`
-	Bitrate       *int64                         `json:"bitrate,omitempty"`
-	SamplingRate  *float64                       `json:"rate,omitempty"`
-	ChannelLayout bitmovintypes.AACChannelLayout `json:"channelLayout,omitempty"`
-	VolumeAdjust  *int64                         `json:"volumeAdjust,omitempty"`
-	Normalize     *bool                          `json:"normalize,omitempty"`
+	ID              *string                        `json:"id,omitempty"`
+	Name            *string                        `json:"name,omitempty"`
+	Description     *string                        `json:"description,omitempty"`
+	CustomData      map[string]interface{}         `json:"customData,omitempty"`
+	Bitrate         *int64                         `json:"bitrate,omitempty"`
+	SamplingRate    *float64                       `json:"rate,omitempty"`
+	ChannelLayout   bitmovintypes.AACChannelLayout `json:"channelLayout,omitempty"`
+	VolumeAdjust    *int64                         `json:"volumeAdjust,omitempty"`
+	Normalize       *bool                          `json:"normalize,omitempty"`
+	CutoffFrequency *int64                         `json:"cutoffFrequency,omitempty"`
 }
 
 type AACCodecConfigurationData struct {
