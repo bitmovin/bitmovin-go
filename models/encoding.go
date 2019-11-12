@@ -62,6 +62,7 @@ type InputStream struct {
 	InputPath     *string                     `json:"inputPath,omitempty"`
 	SelectionMode bitmovintypes.SelectionMode `json:"selectionMode,omitempty"`
 	Position      *int64                      `json:"position,omitempty"`
+	InputStreamID *string                     `json:"inputStreamId,omitempty"`
 }
 
 type ACLItem struct {
@@ -113,6 +114,10 @@ type StreamListResult struct {
 
 type StreamItem struct {
 	StreamID *string `json:"streamId,omitempty"`
+}
+
+type DolbyVisionConfiguration struct {
+	TrackSampleEntryName *string `json:"trackSampleEntryName, omitempty"`
 }
 
 type FMP4Muxing struct {
@@ -232,6 +237,7 @@ type MP4Muxing struct {
 	FragmentedMP4MuxingManifestType bitmovintypes.FragmentedMP4MuxingManifestType `json:"fragmentedMP4MuxingManifestType,omitempty"`
 	InternalChunkLength             *InternalChunkLengthConfig                    `json:"internalChunkLength,omitempty"`
 	AverageBitrate                  *int64                                        `json:"avgBitrate,omitempty"`
+	DolbyVisionConfiguration        *DolbyVisionConfiguration                     `json:"dolbyVisionConfiguration,omitempty"`
 }
 
 type MP4MuxingData struct {

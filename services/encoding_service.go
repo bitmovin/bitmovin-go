@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/streamco/bitmovin-go/bitmovin"
+	"github.com/streamco/bitmovin-go/bitmovintypes"
 	"github.com/streamco/bitmovin-go/models"
 )
 
@@ -94,6 +95,26 @@ func (s *EncodingService) RetrieveCustomData(id string) (*models.CustomDataRespo
 	return &r, nil
 }
 
+// not part of the original bitmovin API
+func (s *EncodingService) AddIngestStream(encodingID string, name string, inputID string, inputPath string,
+	selectionMode bitmovintypes.SelectionMode, position int) (*models.StreamResponse, error) {
+
+	b := []byte(fmt.Sprintf(`{"name" : %q, "inputId" : %q, "inputPath": %q, "selectionMode": %q, "position": %d}`,
+		name, inputID, inputPath, selectionMode, position))
+
+	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "ingest"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
+
 func (s *EncodingService) AddStream(encodingID string, a *models.Stream) (*models.StreamResponse, error) {
 	b, err := json.Marshal(*a)
 	if err != nil {
@@ -110,6 +131,42 @@ func (s *EncodingService) AddStream(encodingID string, a *models.Stream) (*model
 		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
 	}
 	return &r, nil
+}
+
+// not part of the original bitmovin API
+func (s *EncodingService) AddDolbyVisionSidecarStream(encodingID string,
+	inputID string, inputPath string) (*models.StreamResponse, error) {
+
+	b := []byte(fmt.Sprintf(`{"type" : "SIDECAR_DOLBY_VISION_METADATA", "inputId" : %q, "inputPath": %q}`, inputID, inputPath))
+
+	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "sidecar" + "/" + "dolby-vision-metadata-ingest"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
+
+// not part of the original bitmovin API
+func (s *EncodingService) MarkStreamDolbyVision(encodingID string, streamID string, dvMetadataStreamID string) error {
+
+	var b []byte
+
+	if dvMetadataStreamID == "" {
+		b = []byte(`{"profile" : "DVHE_05", "metadataSource" : "EMBEDDED"}`)
+	} else {
+		b = []byte(fmt.Sprintf(`{"profile" : "DVHE_05", "metadataSource" : "INPUT_STREAM", "metadataInputStreamId": %q}`,
+			dvMetadataStreamID))
+	}
+
+	path := EncodingEndpoint + "/" + encodingID + "/" + "streams" + "/" + streamID + "/" + "hdr" + "/" + "dolby-vision"
+	_, err := s.RestService.Create(path, b)
+	return err
 }
 
 func (s *EncodingService) RetrieveStream(encodingID string, streamID string) (*models.StreamResponse, error) {
