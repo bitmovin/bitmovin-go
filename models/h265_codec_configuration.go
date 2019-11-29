@@ -57,7 +57,7 @@ type H265CodecConfiguration struct {
 	EarlySkip                              *bool                             `json:"earlySkip,omitempty"`
 	EvaluationOfIntraModesInBSlices        *bool                             `json:"evaluationOfIntraModesInBSlices,omitempty"`
 	TransformSkip                          string                            `json:"transformSkip,omitempty"`
-	DynamicRange                           media.ColorSpace                  `json:"-"` // skip. TODO: refactor
+	DynamicRange                           media.DynamicRange                `json:"-"` // skip. TODO: refactor
 	EnableHrdSignaling                     *bool                             `json:"enableHrdSignaling,omitempty"`
 }
 
