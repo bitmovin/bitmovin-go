@@ -115,6 +115,35 @@ func (s *EncodingService) AddIngestStream(encodingID string, name string, inputI
 	return &r, nil
 }
 
+// not part of the original bitmovin API
+func (s *EncodingService) TrimmingTimeBased(encodingID string, ingestStreamID string, offset *float64, duration *float64) (*models.StreamResponse, error) {
+
+	var offsetStr string
+	var durationStr string
+
+	if offset != nil {
+		offsetStr = fmt.Sprintf(`, "offset": %f`, *offset)
+	}
+
+	if duration != nil {
+		durationStr = fmt.Sprintf(`, "duration": %f`, *duration)
+	}
+
+	b := []byte(fmt.Sprintf(`{"inputStreamId": %q %s %s}`, ingestStreamID, offsetStr, durationStr))
+
+	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "trimming" + "/" + "time-based"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
+
 func (s *EncodingService) AddStream(encodingID string, a *models.Stream) (*models.StreamResponse, error) {
 	b, err := json.Marshal(*a)
 	if err != nil {
