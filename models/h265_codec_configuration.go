@@ -2,7 +2,6 @@ package models
 
 import (
 	"github.com/streamco/bitmovin-go/bitmovintypes"
-	media "github.com/streamco/streamco-media-go"
 )
 
 type H265CodecConfiguration struct {
@@ -57,7 +56,7 @@ type H265CodecConfiguration struct {
 	EarlySkip                              *bool                             `json:"earlySkip,omitempty"`
 	EvaluationOfIntraModesInBSlices        *bool                             `json:"evaluationOfIntraModesInBSlices,omitempty"`
 	TransformSkip                          string                            `json:"transformSkip,omitempty"`
-	DynamicRange                           media.DynamicRange                `json:"-"` // skip. TODO: refactor
+	DynamicRange                           string                            `json:"-"` // skip. TODO: refactor
 	EnableHrdSignaling                     *bool                             `json:"enableHrdSignaling,omitempty"`
 }
 
