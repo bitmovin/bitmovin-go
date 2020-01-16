@@ -118,13 +118,7 @@ func (s *EncodingService) AddIngestStream(encodingID string, name string, inputI
 // not part of the original bitmovin API
 func (s *EncodingService) AddTrimmingTimeBasedStream(encodingID string, ingestStreamID string, offset float64, duration float64) (*models.StreamResponse, error) {
 
-	var b []byte
-
-	if duration == 0 {
-		b = []byte(fmt.Sprintf(`{"inputStreamId": %q, "offset": %f}`, ingestStreamID, offset))
-	} else {
-		b = []byte(fmt.Sprintf(`{"inputStreamId": %q, "offset": %f, "duration": %f}`, ingestStreamID, offset, duration))
-	}
+	b := []byte(fmt.Sprintf(`{"inputStreamId": %q, "offset": %f, "duration": %f}`, ingestStreamID, offset, duration))
 
 	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "trimming" + "/" + "time-based"
 	o, err := s.RestService.Create(path, b)
