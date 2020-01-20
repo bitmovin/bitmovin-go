@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/streamco/bitmovin-go/bitmovin"
 	"github.com/streamco/bitmovin-go/models"
@@ -111,6 +112,32 @@ func (s *DashManifestService) DeletePeriod(manifestID string, streamID string) (
 		return nil, err
 	}
 	return &r, nil
+}
+
+func (s *DashManifestService) AddCustomXMLElement(manifestID string, periodID string, customXMlElement string) error {
+	b, err := json.Marshal(map[string]string{"data": customXMlElement})
+	if err != nil {
+		return err
+	}
+	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + periodID + "/custom-xml-elements"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return err
+	}
+	var r struct {
+		Status string `json:"status,omitempty"`
+		Data   struct {
+			Message string `json:"message,omitempty"`
+		} `json:"data,omitempty"`
+	}
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return err
+	}
+	if r.Status == "ERROR" {
+		return errors.New(r.Data.Message)
+	}
+	return nil
 }
 
 func (s *DashManifestService) AddAudioAdaptationSet(manifestID string, periodID string, a *models.AudioAdaptationSet) (*models.AudioAdaptationSetResponse, error) {
