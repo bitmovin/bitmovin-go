@@ -119,7 +119,7 @@ func (s *DashManifestService) AddCustomXMLElement(manifestID string, periodID st
 	if err != nil {
 		return err
 	}
-	path := DashManifestEndpoint + "/" + manifestID + "/" + "periods" + periodID + "/custom-xml-elements"
+	path := DashManifestEndpoint + "/" + manifestID + "/periods/" + periodID + "/custom-xml-elements"
 	o, err := s.RestService.Create(path, b)
 	if err != nil {
 		return err
@@ -389,4 +389,3 @@ func (s *DashManifestService) AddMP4Representation(manifestID string, periodID s
 	}
 	return &r, nil
 }
-
