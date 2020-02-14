@@ -32,6 +32,7 @@ type GCSOutput struct {
 	SecretKey   *string                         `json:"secretKey,omitempty"`
 	BucketName  *string                         `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.GoogleCloudRegion `json:"cloudRegion,omitempty"`
+	ACL         []ACLItem                       `json:"acl,omitempty"`
 }
 
 type GCSOutputItem struct {
@@ -89,6 +90,7 @@ type S3Output struct {
 	SecretKey   *string                      `json:"secretKey,omitempty"`
 	BucketName  *string                      `json:"bucketName,omitempty"`
 	CloudRegion bitmovintypes.AWSCloudRegion `json:"cloudRegion,omitempty"`
+	ACL         []ACLItem                    `json:"acl,omitemtpy"`
 }
 
 type S3OutputItem struct {
