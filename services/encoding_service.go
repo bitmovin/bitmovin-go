@@ -1024,3 +1024,21 @@ func (s *EncodingService) AddFilter(encodingID, streamID, filterID string, posit
 	}
 	return &r, nil
 }
+
+func (s *EncodingService) AddAudioMixInputStream(encodingID string, a *models.AudioMixInputStream) (*models.AudioMixInputStreamResponse, error) {
+	b, err := json.Marshal(*a)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/input-streams/audio-mix"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.AudioMixInputStreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
