@@ -56,20 +56,22 @@ func (h *HLSAudioGroupConfig) AddGroup(group *HLSAudioGroupDefinition) {
 }
 
 type StreamInfo struct {
-	ID                 *string              `json:"id,omitempty"`
-	URI                *string              `json:"uri,omitempty"`
-	Audio              *string              `json:"audio,omitempty"`
-	AudioGroups        *HLSAudioGroupConfig `json:"audioGroups,omitempty"`
-	Video              *string              `json:"video,omitempty"`
-	Subtitles          *string              `json:"subtitles,omitempty"`
-	ClosedCaptions     *string              `json:"closedCaptions,omitempty"`
-	SegmentPath        *string              `json:"segmentPath,omitempty"`
-	EncodingID         *string              `json:"encodingId,omitempty"`
-	StreamID           *string              `json:"streamId,omitempty"`
-	MuxingID           *string              `json:"muxingId,omitempty"`
-	DRMID              *string              `json:"drmId,omitempty"`
-	StartSegmentNumber *int64               `json:"startSegmentNumber,omitempty"`
-	EndSegmentNumber   *int64               `json:"endSegmentNumber,omitempty"`
+	ID                       *string              `json:"id,omitempty"`
+	URI                      *string              `json:"uri,omitempty"`
+	Audio                    *string              `json:"audio,omitempty"`
+	AudioGroups              *HLSAudioGroupConfig `json:"audioGroups,omitempty"`
+	Video                    *string              `json:"video,omitempty"`
+	Subtitles                *string              `json:"subtitles,omitempty"`
+	ClosedCaptions           *string              `json:"closedCaptions,omitempty"`
+	SegmentPath              *string              `json:"segmentPath,omitempty"`
+	EncodingID               *string              `json:"encodingId,omitempty"`
+	StreamID                 *string              `json:"streamId,omitempty"`
+	MuxingID                 *string              `json:"muxingId,omitempty"`
+	DRMID                    *string              `json:"drmId,omitempty"`
+	StartSegmentNumber       *int64               `json:"startSegmentNumber,omitempty"`
+	EndSegmentNumber         *int64               `json:"endSegmentNumber,omitempty"`
+	ForceFrameRateAttribute  bool                 `json:"forceFrameRateAttribute,omitempty"`
+	ForceVideoRangeAttribute bool                 `json:"forceVideoRangeAttribute,omitempty"`
 }
 
 type StreamInfoData struct {
