@@ -116,10 +116,16 @@ type StreamItem struct {
 	StreamID *string `json:"streamId,omitempty"`
 }
 
+type AudioMixInputStreamSourceChannel struct {
+	ChannelType   string `json:"type"`
+	ChannelNumber int64  `json:"channelNumber"`
+}
+
 type AudioMixInputStreamChannel struct {
-	InputStreamId       *string `json:"inputStreamId"`
-	OutputChannelType   *string `json:"outputChannelType,omitempty"`
-	OutputChannelNumber *int64  `json:"outputChannelNumber,omitempty"`
+	InputStreamId       *string                            `json:"inputStreamId"`
+	OutputChannelType   *string                            `json:"outputChannelType,omitempty"`
+	OutputChannelNumber *int64                             `json:"outputChannelNumber,omitempty"`
+	SourceChannels      []AudioMixInputStreamSourceChannel `json:"sourceChannels,omitempty"`
 }
 
 type AudioMixInputStream struct {
