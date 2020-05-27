@@ -1042,3 +1042,21 @@ func (s *EncodingService) AddAudioMixInputStream(encodingID string, a *models.Au
 	}
 	return &r, nil
 }
+
+func (s *EncodingService) AddDolbyAtmosIngestInputStream(encodingID string, inputStream *models.DolbyAtmosIngestInputStream) (*models.DolbyAtmosIngestInputStreamResponse, error) {
+	b, err := json.Marshal(*inputStream)
+	if err != nil {
+		return nil, err
+	}
+	path := EncodingEndpoint + "/" + encodingID + "/input-streams/dolby-atmos"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.DolbyAtmosIngestInputStreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
