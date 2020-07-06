@@ -187,8 +187,8 @@ type TimeBasedTrimmingInputStream struct {
 	Description   *string                `json:"description,omitempty"`
 	CustomData    map[string]interface{} `json:"customData,omitempty"`
 	InputStreamID *string                `json:"inputStreamId"`
-	Offset        float64                `json:"offset,omitempty"`
-	Duration      float64                `json:"duration,omitempty"`
+	Offset        float64                `json:"offset"`
+	Duration      float64                `json:"duration"`
 }
 
 type TimeBasedTrimmingInputStreamData struct {
