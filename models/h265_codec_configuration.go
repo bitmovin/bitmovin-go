@@ -59,6 +59,8 @@ type H265CodecConfiguration struct {
 	TransformSkip                          string                            `json:"transformSkip,omitempty"`
 	DynamicRange                           string                            `json:"-"` // skip. TODO: refactor
 	EnableHrdSignaling                     *bool                             `json:"enableHrdSignaling,omitempty"`
+	SampleAspectRatioNumerator             *int64                            `json:"sampleAspectRatioNumerator,omitempty"`
+	SampleAspectRatioDenominator           *int64                            `json:"sampleAspectRatioDenominator,omitempty"`
 }
 
 type H265CodecConfigurationData struct {

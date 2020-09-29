@@ -40,6 +40,8 @@ type H264CodecConfiguration struct {
 	PixelFormat                   bitmovintypes.PixelFormat            `json:"pixelFormat,omitempty"`
 	PresetConfiguration           bitmovintypes.PresetConfiguration    `json:"presetConfiguration,omitempty"`
 	EncodingMode                  bitmovintypes.EncodingMode           `json:"encodingMode,omitempty"`
+	SampleAspectRatioNumerator    *int64                               `json:"sampleAspectRatioNumerator,omitempty"`
+	SampleAspectRatioDenominator  *int64                               `json:"sampleAspectRatioDenominator,omitempty"`
 }
 
 type H264CodecConfigurationData struct {
