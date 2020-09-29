@@ -61,6 +61,7 @@ type H265CodecConfiguration struct {
 	EnableHrdSignaling                     *bool                             `json:"enableHrdSignaling,omitempty"`
 	SampleAspectRatioNumerator             *int64                            `json:"sampleAspectRatioNumerator,omitempty"`
 	SampleAspectRatioDenominator           *int64                            `json:"sampleAspectRatioDenominator,omitempty"`
+	DisplayAspectRatio                     *bitmovintypes.AspectRatio        `json:"displayAspectRatio,omitempty"`
 }
 
 type H265CodecConfigurationData struct {
