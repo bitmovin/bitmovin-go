@@ -9,6 +9,7 @@ const (
 	ConditionAttributeBitrate     ConditionAttribute = "BITRATE"
 	ConditionAttributeAspectRatio ConditionAttribute = "ASPECTRATIO"
 	ConditionAttributeInputStream ConditionAttribute = "INPUTSTREAM"
+	ConditionAttributeRotation    ConditionAttribute = "ROTATION"
 )
 
 type ConditionType string
