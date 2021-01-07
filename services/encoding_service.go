@@ -120,7 +120,28 @@ func (s *EncodingService) AddTrimmingTimeBasedStream(encodingID string, ingestSt
 
 	b := []byte(fmt.Sprintf(`{"inputStreamId": %q, "offset": %f, "duration": %f}`, ingestStreamID, offset, duration))
 
-	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "trimming" + "/" + "time-based"
+	path := EncodingEndpoint + "/" + encodingID + "/input-streams/trimming/time-based"
+	o, err := s.RestService.Create(path, b)
+	if err != nil {
+		return nil, err
+	}
+	var r models.StreamResponse
+	err = json.Unmarshal(o, &r)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal response due to error %q. Original text was: %s", err, string(o))
+	}
+	return &r, nil
+}
+
+// not part of the original bitmovin API
+func (s *EncodingService) AddConcatenatioinInputStream(encodingID string, ingestStreams []models.ConcatenationStream) (*models.StreamResponse, error) {
+	postData := struct {
+		Concatenation []models.ConcatenationStream `json:"concatenation"`
+	}{
+		Concatenation: ingestStreams,
+	}
+	b, _ := json.Marshal(postData)
+	path := EncodingEndpoint + "/" + encodingID + "/input-streams/concatenation"
 	o, err := s.RestService.Create(path, b)
 	if err != nil {
 		return nil, err
