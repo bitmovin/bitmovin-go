@@ -117,8 +117,9 @@ type StreamItem struct {
 }
 
 type AudioMixInputStreamSourceChannel struct {
-	ChannelType   string `json:"type"`
-	ChannelNumber int64  `json:"channelNumber"`
+	ChannelType   string  `json:"type"`
+	ChannelNumber int64   `json:"channelNumber"`
+	Gain          float64 `json:"gain,omitempty"`
 }
 
 type AudioMixInputStreamChannel struct {
