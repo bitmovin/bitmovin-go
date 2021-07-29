@@ -11,7 +11,7 @@ type DolbyDigitalPlusCodecConfigurationService struct {
 	RestService *RestService
 }
 
-const DolbyDigitalPlusCodecConfigurationServiceEndpoint string = "encoding/configurations/audio/dolby-digital"
+const DolbyDigitalPlusCodecConfigurationServiceEndpoint string = "encoding/configurations/audio/dolby-digital-plus"
 
 func NewDolbyDigitalPlusCodecConfigurationService(bitmovin *bitmovin.Bitmovin) *DolbyDigitalPlusCodecConfigurationService {
 	r := NewRestService(bitmovin)
