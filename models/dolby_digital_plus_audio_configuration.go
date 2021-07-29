@@ -24,10 +24,18 @@ type DolbyDigitalPlusAudioConfiguration struct {
 	BitstreamInfo *DolbyDigitalPlusBitstreamInfo `json:"bitstreamInfo,omitempty"`
 	// Channel layout of the audio codec configuration.
 	ChannelLayout bitmovintypes.DolbyDigitalPlusChannelLayout `json:"channelLayout,omitempty"`
-	Downmixing    *DolbyDigitalPlusDownmixing   `json:"downmixing,omitempty"`
+	Downmixing    *DolbyDigitalPlusDownmixing                 `json:"downmixing,omitempty"`
 	// It provides a framework for signaling new evolution framework applications, such as Intelligent Loudness, in each Dolby codec.
 	EvolutionFrameworkControl bitmovintypes.DolbyDigitalPlusEvolutionFrameworkControl `json:"evolutionFrameworkControl,omitempty"`
 	// Settings for loudness control (required)
 	LoudnessControl *DolbyDigitalPlusLoudnessControl `json:"loudnessControl,omitempty"`
 	Preprocessing   *DolbyDigitalPlusPreprocessing   `json:"preprocessing,omitempty"`
+}
+
+type DolbyDigitalPlusAudioConfigurationResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      struct {
+		Result DolbyDigitalPlusAudioConfiguration `json:"result,omitempty"`
+	} `json:"data,omitempty"`
 }

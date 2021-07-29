@@ -33,3 +33,11 @@ type DolbyDigitalAudioConfiguration struct {
 	LoudnessControl *DolbyDigitalLoudnessControl `json:"loudnessControl,omitempty"`
 	Preprocessing   *DolbyDigitalPreprocessing   `json:"preprocessing,omitempty"`
 }
+
+type DolbyDigitalAudioConfigurationResponse struct {
+	RequestID *string                      `json:"requestId,omitempty"`
+	Status    bitmovintypes.ResponseStatus `json:"status,omitempty"`
+	Data      struct {
+		Result DolbyDigitalAudioConfiguration `json:"result,omitempty"`
+	} `json:"data,omitempty"`
+}
