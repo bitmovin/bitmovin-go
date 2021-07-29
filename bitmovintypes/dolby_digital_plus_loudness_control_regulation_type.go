@@ -1,0 +1,12 @@
+package bitmovintypes
+
+// DolbyDigitalPlusLoudnessControlRegulationType : DolbyDigitalPlusLoudnessControlRegulationType model
+type DolbyDigitalPlusLoudnessControlRegulationType string
+
+// List of possible DolbyDigitalPlusLoudnessControlRegulationType values
+const (
+	DolbyDigitalPlusLoudnessControlRegulationType_EBU_R128       DolbyDigitalPlusLoudnessControlRegulationType = "EBU_R128"
+	DolbyDigitalPlusLoudnessControlRegulationType_ATSC_A85_FIXED DolbyDigitalPlusLoudnessControlRegulationType = "ATSC_A85_FIXED"
+	DolbyDigitalPlusLoudnessControlRegulationType_ATSC_A85_AGILE DolbyDigitalPlusLoudnessControlRegulationType = "ATSC_A85_AGILE"
+	DolbyDigitalPlusLoudnessControlRegulationType_MANUAL         DolbyDigitalPlusLoudnessControlRegulationType = "MANUAL"
+)
