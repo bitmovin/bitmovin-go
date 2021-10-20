@@ -45,6 +45,8 @@ type H264CodecConfiguration struct {
 	DisplayAspectRatio            *bitmovintypes.AspectRatio               `json:"displayAspectRatio,omitempty"`
 	WeightedPredictionPFrames     *bitmovintypes.WeightedPredictionPFrames `json:"weightedPredictionPFrames,omitempty"`
 	AdaptiveSpatialTransform      *bool                                    `json:"adaptiveSpatialTransform,omitempty"`
+	AdaptiveQuantizationMode      bitmovintypes.H264AQMode                 `json:"adaptiveQuantizationMode,omitempty"`
+	AdaptiveQuantizationStrength  *float64                                 `json:"adaptiveQuantizationStrength,omitempty"`
 }
 
 type H264CodecConfigurationData struct {
