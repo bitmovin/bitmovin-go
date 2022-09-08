@@ -98,9 +98,23 @@ func (s *EncodingService) RetrieveCustomData(id string) (*models.CustomDataRespo
 // not part of the original bitmovin API
 func (s *EncodingService) AddIngestStream(encodingID string, name string, inputID string, inputPath string,
 	selectionMode bitmovintypes.SelectionMode, position int) (*models.StreamResponse, error) {
-
-	b := []byte(fmt.Sprintf(`{"name" : %q, "inputId" : %q, "inputPath": %q, "selectionMode": %q, "position": %d}`,
-		name, inputID, inputPath, selectionMode, position))
+	ingestStream := struct {
+		Name          string `json:"name"`
+		InputID       string `json:"inputId"`
+		InputPath     string `json:"inputPath"`
+		SelectionMode string `json:"selectionMode"`
+		Position      *int   `json:"position,omitempty"`
+	}{
+		Name:          name,
+		InputID:       inputID,
+		InputPath:     inputPath,
+		SelectionMode: string(selectionMode),
+		Position:      &position,
+	}
+	if selectionMode == bitmovintypes.SelectionModeAuto {
+		ingestStream.Position = nil // dont pass position when the selection mode is AUTO
+	}
+	b, err := json.Marshal(ingestStream)
 
 	path := EncodingEndpoint + "/" + encodingID + "/" + "input-streams" + "/" + "ingest"
 	o, err := s.RestService.Create(path, b)
