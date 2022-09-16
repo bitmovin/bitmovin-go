@@ -501,6 +501,7 @@ type ProgressiveTSMuxing struct {
 	SegmentLength        *float64                    `json:"segmentLength,omitempty"`
 	Outputs              []Output                    `json:"outputs,omitempty"`
 	Filename             *string                     `json:"filename,omitempty"`
+	AverageBitrate       *int64                      `json:"avgBitrate,omitempty"`
 	StartOffset          *int64                      `json:"startOffset,omitempty"`
 	InternalChunkLength  *InternalChunkLengthConfig  `json:"internalChunkLength,omitempty"`
 }
